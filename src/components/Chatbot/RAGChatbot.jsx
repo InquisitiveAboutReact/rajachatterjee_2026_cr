@@ -34,7 +34,7 @@ const KNOWLEDGE_BASE = [
   {
     topic: "cv",
     keywords: ["cv", "resume", "download", "pdf", "file"],
-    content: "Recruiters can view and download Raja's official CV (PDF) directly from the top navigation bar or hero section using the 'Download CV' button."
+    content: "Recruiters can view and download Raja's official CV (PDF) directly from the top navigation bar or hero section using the 'Download CV' button !!"
   }
 ];
 
