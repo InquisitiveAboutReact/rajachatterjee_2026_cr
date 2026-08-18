@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/MyWebpage2026_AG/static/css/main.bafd8e4a.css",
+    "main.js": "/MyWebpage2026_AG/static/js/main.d62aa52e.js",
+    "static/media/raja-profile-2026.jpg": "/MyWebpage2026_AG/static/media/raja-profile-2026.e6aa1bcb81d70aaa8a54.jpg",
+    "static/media/oracle-hr-2025.jpg": "/MyWebpage2026_AG/static/media/oracle-hr-2025.b03bf336d66612a67993.jpg",
+    "static/media/oracle-ai-2026.jpg": "/MyWebpage2026_AG/static/media/oracle-ai-2026.0a333d05c60a8bb9dd76.jpg",
+    "static/media/oracle-payroll-2026.jpg": "/MyWebpage2026_AG/static/media/oracle-payroll-2026.a69c54749d640a4ed40c.jpg",
+    "index.html": "/MyWebpage2026_AG/index.html",
+    "main.bafd8e4a.css.map": "/MyWebpage2026_AG/static/css/main.bafd8e4a.css.map",
+    "main.d62aa52e.js.map": "/MyWebpage2026_AG/static/js/main.d62aa52e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bafd8e4a.css",
+    "static/js/main.d62aa52e.js"
+  ]
+}
