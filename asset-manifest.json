@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/rajachatterjee_2026_cr/static/css/main.bafd8e4a.css",
-    "main.js": "/rajachatterjee_2026_cr/static/js/main.90b51bca.js",
+    "main.js": "/rajachatterjee_2026_cr/static/js/main.3c570f11.js",
     "static/media/raja-profile-2026.jpg": "/rajachatterjee_2026_cr/static/media/raja-profile-2026.e6aa1bcb81d70aaa8a54.jpg",
     "static/media/oracle-hr-2025.jpg": "/rajachatterjee_2026_cr/static/media/oracle-hr-2025.b03bf336d66612a67993.jpg",
     "static/media/oracle-ai-2026.jpg": "/rajachatterjee_2026_cr/static/media/oracle-ai-2026.0a333d05c60a8bb9dd76.jpg",
     "static/media/oracle-payroll-2026.jpg": "/rajachatterjee_2026_cr/static/media/oracle-payroll-2026.a69c54749d640a4ed40c.jpg",
     "index.html": "/rajachatterjee_2026_cr/index.html",
     "main.bafd8e4a.css.map": "/rajachatterjee_2026_cr/static/css/main.bafd8e4a.css.map",
-    "main.90b51bca.js.map": "/rajachatterjee_2026_cr/static/js/main.90b51bca.js.map"
+    "main.3c570f11.js.map": "/rajachatterjee_2026_cr/static/js/main.3c570f11.js.map"
   },
   "entrypoints": [
     "static/css/main.bafd8e4a.css",
-    "static/js/main.90b51bca.js"
+    "static/js/main.3c570f11.js"
   ]
 }
