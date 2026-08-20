@@ -1,0 +1,334 @@
+/* Container & Modal Overlay */
+.analytics-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(5, 8, 16, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  
+  .analytics-modal-container {
+    background-color: #080d1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 1080px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    color: #f8fafc;
+    padding: 24px;
+  }
+  
+  /* Header */
+  .analytics-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .dashboard-icon {
+    background: rgba(30, 41, 59, 0.6);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .analytics-modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .wip-tag {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #94a3b8;
+  }
+  
+  .subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 2px 0 0 0;
+  }
+  
+  /* Controls & Date Inputs */
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .date-picker-wrapper {
+    display: inline-flex;
+    align-items: center;
+    background-color: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 6px 12px;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+  }
+  
+  .calendar-icon-svg {
+    filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.5));
+    flex-shrink: 0;
+  }
+  
+  .custom-date-input {
+    background: transparent;
+    border: none;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    outline: none;
+    color-scheme: dark;
+    cursor: pointer;
+    position: relative;
+    padding: 2px 0;
+  }
+  
+  /* Hide native webkit browser calendar indicators */
+  .custom-date-input::-webkit-calendar-picker-indicator {
+    display: none !important;
+    -webkit-appearance: none;
+  }
+  
+  .date-sep {
+    color: #64748b;
+  }
+  
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+  
+  /* Modal Body */
+  .analytics-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* Metric Cards & Grids */
+  .top-metrics-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 16px;
+  }
+  
+  .metric-box {
+    background-color: #0f172a;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .gold-box { border-top: 3px solid #eab308; }
+  .purple-box { border-top: 3px solid #a855f7; }
+  
+  .box-header h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin: 0;
+    color: #e2e8f0;
+  }
+  
+  .box-header span {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+  
+  .sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  
+  .sub-grid.three-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .stat-card {
+    background-color: rgba(30, 41, 59, 0.3);
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 0 0 6px 0;
+  }
+  
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+  }
+  
+  .gold-text { color: #facc15; }
+  .purple-text { color: #c084fc; }
+  
+  .stat-trend {
+    font-size: 0.7rem;
+    color: #22c55e;
+    margin: 4px 0 0 0;
+  }
+  
+  .top-query-banner {
+    margin-top: 12px;
+    background-color: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    display: flex;
+    gap: 8px;
+  }
+  
+  .query-label { color: #c084fc; font-weight: 600; }
+  .query-text { color: #e2e8f0; font-style: italic; }
+  
+  /* Referral Breakdown & Chart */
+  .referral-box {
+    background-color: #0f172a;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .referral-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .time-filters {
+    display: flex;
+    gap: 4px;
+    background-color: #080d1a;
+    padding: 3px;
+    border-radius: 6px;
+  }
+  
+  .filter-btn {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .filter-btn.active {
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+  
+  .referral-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+  }
+  
+  .sources-column h4, .chart-column h4 {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0 0 12px 0;
+  }
+  
+  .source-row {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  
+  .source-name { flex: 1; color: #cbd5e1; }
+  .source-pct { font-weight: 700; margin-right: 12px; color: #f8fafc; }
+  .source-cnt { color: #64748b; width: 32px; text-align: right; }
+  
+  /* Bar Chart Visualization */
+  .bar-chart-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 120px;
+    padding-top: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+    width: 12%;
+  }
+  
+  .bar-fill {
+    width: 100%;
+    background-color: #1e293b;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s ease;
+  }
+  
+  .bar-fill.active {
+    background-color: #3b82f6;
+  }
+  
+  .bar-date {
+    font-size: 0.65rem;
+    color: #64748b;
+    margin-top: 6px;
+  }
+  
+  .bar-tooltip {
+    position: absolute;
+    top: -8px;
+    background-color: #1e293b;
+    border: 1px solid #3b82f6;
+    color: #ffffff;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }

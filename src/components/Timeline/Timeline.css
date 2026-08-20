@@ -1,0 +1,138 @@
+.timeline {
+    position: relative;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px 0 20px 30px;
+    box-sizing: border-box;
+  }
+  
+  /* Vertical Gold Accent Line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 7px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background: rgba(255, 215, 0, 0.25);
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+  }
+  
+  .timeline-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Gold Milestone-Dot Motif */
+  .timeline-dot {
+    position: absolute;
+    left: -30px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    background-color: #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    border: 2px solid var(--bg-color, #090d16);
+    z-index: 2;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .timeline-item:hover .timeline-dot {
+    transform: scale(1.2);
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.9);
+  }
+  
+  .timeline-content {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 18px 22px;
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .timeline-item:hover .timeline-content {
+    border-color: rgba(255, 215, 0, 0.3);
+  }
+  
+  .timeline-date {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #ffd700;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  
+  .timeline-company {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+  }
+  
+  .timeline-project {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+  }
+  
+  .timeline-role {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 2px 0 8px 0;
+  }
+  
+  .timeline-desc {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  /* Mobile & Tablet Optimizations */
+  @media (max-width: 600px) {
+    .timeline {
+      padding-left: 24px;
+    }
+  
+    .timeline::before {
+      left: 4px;
+    }
+  
+    .timeline-dot {
+      left: -24px;
+      width: 12px;
+      height: 12px;
+      top: 8px;
+    }
+  
+    .timeline-content {
+      padding: 14px 16px;
+    }
+  
+    .timeline-company {
+      font-size: 1rem;
+    }
+  
+    .timeline-project {
+      display: block;
+      margin-top: 2px;
+    }
+  }
+  /* Fix Invisible Description Text in Light Mode */
+[data-theme="light"] .timeline-desc,
+[data-theme="light"] .timeline-project,
+[data-theme="light"] .timeline-content p {
+  color: #334155 !important;
+  opacity: 1 !important;
+}
+
+/* Bold and prominent project title styling */
+.timeline-project {
+    font-weight: 700 !important;
+    color: #4338ca !important; /* Rich indigo blue */
+  }

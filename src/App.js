@@ -9,6 +9,8 @@ import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
 import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
+import Timeline from './components/Timeline/Timeline';
+import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -29,6 +31,7 @@ const certifications = [
 function App() {
   const [theme, setTheme] = useState('dark');
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
@@ -111,6 +114,15 @@ function App() {
           </nav>
 
           <div className="nav-controls">
+            <button
+              type="button"
+              className="share-btn"
+              onClick={() => setIsAnalyticsOpen(true)}
+              title="View Portfolio Analytics"
+              aria-label="View Portfolio Analytics"
+            >
+              📊 Analytics
+            </button>
             <button
               type="button"
               className="share-btn"
@@ -333,6 +345,10 @@ function App() {
             </div>
           </div>
         </div>
+
+        <div style={{ marginTop: '50px' }}>
+          <Timeline />
+        </div>
       </section>
 
       <footer id="contact" className="reveal-section">
@@ -360,6 +376,7 @@ function App() {
       </footer>
 
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
+      <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <RAGChatbot />
       <ScrollToTop />
     </main>
