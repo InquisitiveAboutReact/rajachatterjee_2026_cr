@@ -2250,3 +2250,45 @@
     font-size: 0 !important; /* Removes any extra inherited space */
     visibility: hidden !important;
   }
+
+  /* ==========================================================================
+   MOBILE & TABLET BREAKPOINT FIX
+   ========================================================================== */
+
+@media (max-width: 992px) {
+  /* Hide desktop links and action buttons on smaller screens */
+  .nav-links,
+  .share-btn,
+  .theme-toggle-btn,
+  .cv-cta-btn {
+    display: none !important;
+  }
+
+  /* Force hamburger button to display */
+  .mobile-menu-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: 38px !important;
+    height: 38px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+
+  /* Make sure hamburger lines are visible */
+  .mobile-menu-btn span {
+    display: block !important;
+    width: 22px !important;
+    height: 2px !important;
+    background-color: var(--text-primary, #0f172a) !important;
+    border-radius: 2px !important;
+  }
+}
+/* Make Hamburger Menu Lines Gold */
+.mobile-menu-btn span {
+  background-color: #f59e0b !important; /* Gold Accent Color */
+  background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%) !important; /* Matching Gold Gradient */
+}
