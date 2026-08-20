@@ -152,12 +152,13 @@ function App() {
       </header>
 
       <MobileNav
-        isOpen={isMobileNavOpen}
-        onClose={() => setIsMobileNavOpen(false)}
-        onOpenCV={() => setIsCVModalOpen(true)}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+  isOpen={isMobileNavOpen}
+  onClose={() => setIsMobileNavOpen(false)}
+  onOpenCV={() => setIsCVModalOpen(true)}
+  onOpenAnalytics={() => setIsAnalyticsOpen(true)}
+  theme={theme}
+  onToggleTheme={toggleTheme}
+/>
 
       <section className="hero shell" id="top">
         <div className="eyebrow">

@@ -6,16 +6,23 @@ const NAV_LINKS = [
   { href: '#certifications', label: 'Certifications' },
   { href: '#experience', label: 'Experience' },
   { href: '#contact', label: 'Contact' },
+  { href: '#analytics', label: 'Analytics' },
 ];
 
-export default function MobileNav({ isOpen, onClose, onOpenCV, theme, onToggleTheme }) {
+export default function MobileNav({ isOpen, onClose, onOpenCV, onOpenAnalytics, theme, onToggleTheme }) {
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  const handleNavClick = () => {
-    onClose();
+  const handleNavClick = (e, href) => {
+    if (href === '#analytics') {
+      e.preventDefault(); // Prevents default page anchor scrolling
+      onClose();          // Closes the hamburger drawer
+      onOpenAnalytics();  // Triggers the Analytics modal state
+    } else {
+      onClose();
+    }
   };
 
   return (
@@ -40,7 +47,10 @@ export default function MobileNav({ isOpen, onClose, onOpenCV, theme, onToggleTh
         <ul className="mobile-nav-links">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <a href={link.href} onClick={handleNavClick}>
+              <a 
+                href={link.href} 
+                onClick={(e) => handleNavClick(e, link.href)}
+              >
                 {link.label}
               </a>
             </li>

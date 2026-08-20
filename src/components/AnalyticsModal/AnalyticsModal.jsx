@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AnalyticsModal.css';
 
 export default function Analytics({ isOpen, onClose }) {
   // Date Range State (Defaults to static range)
   const [startDate, setStartDate] = useState('2026-05-12');
   const [endDate, setEndDate] = useState('2026-05-18');
+
+  // Prevent background body scrolling when modal is open on mobile
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   // Static Metrics Data
   const staticData = {
@@ -43,9 +55,16 @@ export default function Analytics({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="analytics-modal-overlay">
-      <div className="analytics-modal-container">
-        
+    <div 
+      className="analytics-modal-overlay" 
+      onClick={onClose} 
+      role="dialog" 
+      aria-modal="true"
+    >
+      <div 
+        className="analytics-modal-container" 
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Modal Header */}
         <div className="analytics-modal-header">
           <div className="header-title-group">
@@ -104,10 +123,8 @@ export default function Analytics({ isOpen, onClose }) {
 
         {/* Dashboard Content Grid */}
         <div className="analytics-modal-body">
-          
           {/* Top Row: Metric Boxes */}
           <div className="top-metrics-row">
-            
             {/* 1. Gold / Yellow Metrics */}
             <div className="metric-box gold-box">
               <div className="box-header">
@@ -166,7 +183,6 @@ export default function Analytics({ isOpen, onClose }) {
                 <span className="query-text">{staticData.topQuery}</span>
               </div>
             </div>
-
           </div>
 
           {/* Bottom Row: Referral Breakdown & Chart */}
@@ -184,7 +200,6 @@ export default function Analytics({ isOpen, onClose }) {
             </div>
 
             <div className="referral-grid">
-              
               {/* Traffic Sources List */}
               <div className="sources-column">
                 <h4>Top Traffic Sources</h4>
@@ -216,10 +231,8 @@ export default function Analytics({ isOpen, onClose }) {
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
-
         </div>
 
       </div>

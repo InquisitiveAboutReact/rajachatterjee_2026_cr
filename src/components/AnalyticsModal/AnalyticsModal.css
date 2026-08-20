@@ -1,37 +1,45 @@
-/* Container & Modal Overlay */
-.analytics-modal-overlay {
+/* ==========================================================================
+   ANALYTICS MODAL CONTAINER & OVERLAY (MOBILE RESPONSIVE)
+   ========================================================================== */
+
+   .analytics-modal-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(5, 8, 16, 0.85);
+    z-index: 1000;
+    background-color: rgba(8, 13, 26, 0.85);
     backdrop-filter: blur(8px);
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 1000;
-    padding: 20px;
+    align-items: center;
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .analytics-modal-container {
-    background-color: #080d1a;
+    background-color: #0f172a;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     width: 100%;
-    max-width: 1080px;
+    max-width: 1100px;
     max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
     color: #f8fafc;
-    padding: 24px;
   }
   
   /* Header */
   .analytics-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 16px;
+    flex-wrap: wrap;
+    background-color: #0b1120;
   }
   
   .header-title-group {
@@ -41,71 +49,60 @@
   }
   
   .dashboard-icon {
-    background: rgba(30, 41, 59, 0.6);
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 1.2rem;
+    font-size: 1.75rem;
   }
   
   .analytics-modal-header h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    margin: 0;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
   }
   
   .wip-tag {
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #facc15;
+    background: rgba(250, 204, 21, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(250, 204, 21, 0.2);
   }
   
   .subtitle {
     font-size: 0.85rem;
-    color: #64748b;
-    margin: 2px 0 0 0;
+    color: #94a3b8;
+    margin-top: 2px;
   }
   
-  /* Controls & Date Inputs */
   .header-controls {
     display: flex;
     align-items: center;
     gap: 12px;
   }
   
+  /* Date Picker */
   .date-picker-wrapper {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    background-color: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 8px;
+    gap: 6px;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 6px 12px;
-    gap: 10px;
-    position: relative;
-    z-index: 10;
-    cursor: pointer;
-  }
-  
-  .calendar-icon-svg {
-    filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.5));
-    flex-shrink: 0;
+    border-radius: 8px;
   }
   
   .custom-date-input {
     background: transparent;
     border: none;
-    color: #cbd5e1;
-    font-size: 0.85rem;
+    color: #f8fafc;
+    font-size: 0.8rem;
+    font-family: inherit;
     outline: none;
     color-scheme: dark;
-    cursor: pointer;
-    position: relative;
-    padding: 2px 0;
-  }
-  
-  /* Hide native webkit browser calendar indicators */
-  .custom-date-input::-webkit-calendar-picker-indicator {
-    display: none !important;
-    -webkit-appearance: none;
   }
   
   .date-sep {
@@ -113,62 +110,69 @@
   }
   
   .close-btn {
-    background: transparent;
-    border: none;
-    color: #94a3b8;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     font-size: 1.1rem;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
   }
   
   .close-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: #334155;
+    color: #facc15;
   }
   
   /* Modal Body */
   .analytics-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  /* Metric Boxes */
+  .top-metrics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .metric-box {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 16px;
   }
   
-  /* Metric Cards & Grids */
-  .top-metrics-row {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 16px;
-  }
-  
-  .metric-box {
-    background-color: #0f172a;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-  
-  .gold-box { border-top: 3px solid #eab308; }
-  .purple-box { border-top: 3px solid #a855f7; }
-  
   .box-header h3 {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    margin: 0;
-    color: #e2e8f0;
+    letter-spacing: 0.5px;
+  
   }
   
   .box-header span {
     font-size: 0.75rem;
-    color: #64748b;
+    color: #94a3b8;
+    display: block;
+    margin-top: 2px;
   }
   
   .sub-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    margin-top: 14px;
   }
   
   .sub-grid.three-cols {
@@ -176,82 +180,98 @@
   }
   
   .stat-card {
-    background-color: rgba(30, 41, 59, 0.3);
-    padding: 10px;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px;
     border-radius: 8px;
   }
   
   .stat-label {
     font-size: 0.75rem;
     color: #94a3b8;
-    margin: 0 0 6px 0;
+    margin-bottom: 4px;
   }
   
   .stat-value {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 800;
-    margin: 0;
   }
   
-  .gold-text { color: #facc15; }
-  .purple-text { color: #c084fc; }
+  .gold-text {
+    color: #facc15;
+  }
+  
+  .purple-text {
+    color: #a855f7;
+  }
   
   .stat-trend {
     font-size: 0.7rem;
     color: #22c55e;
-    margin: 4px 0 0 0;
+    margin-top: 4px;
   }
   
   .top-query-banner {
-    margin-top: 12px;
-    background-color: rgba(168, 85, 247, 0.1);
+    background: rgba(168, 85, 247, 0.1);
     border: 1px solid rgba(168, 85, 247, 0.2);
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 0.75rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
     display: flex;
     gap: 8px;
+    align-items: center;
   }
   
-  .query-label { color: #c084fc; font-weight: 600; }
-  .query-text { color: #e2e8f0; font-style: italic; }
+  .query-label {
+    color: #a855f7;
+    font-weight: 600;
+    white-space: nowrap;
+  }
   
-  /* Referral Breakdown & Chart */
+  .query-text {
+    color: #f8fafc;
+    font-style: italic;
+  }
+  
+  /* Referral & Chart Section */
   .referral-box {
-    background-color: #0f172a;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 20px;
   }
   
   .referral-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
   }
   
   .time-filters {
     display: flex;
     gap: 4px;
-    background-color: #080d1a;
-    padding: 3px;
+    background: #0f172a;
+    padding: 4px;
     border-radius: 6px;
   }
   
   .filter-btn {
     background: transparent;
     border: none;
-    color: #64748b;
-    font-size: 0.75rem;
+    color: #94a3b8;
     padding: 4px 10px;
+    font-size: 0.75rem;
     border-radius: 4px;
     cursor: pointer;
   }
   
   .filter-btn.active {
-    background-color: #2563eb;
-    color: #ffffff;
+    background: #334155;
+    color: #f8fafc;
+    font-weight: 600;
   }
   
   .referral-grid {
@@ -260,75 +280,149 @@
     gap: 24px;
   }
   
-  .sources-column h4, .chart-column h4 {
-    font-size: 0.8rem;
+  .sources-column h4,
+  .chart-column h4 {
+    font-size: 0.85rem;
     color: #94a3b8;
-    margin: 0 0 12px 0;
+    margin-bottom: 12px;
+  }
+  
+  .sources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .source-row {
     display: flex;
     align-items: center;
     font-size: 0.8rem;
-    margin-bottom: 8px;
+    gap: 10px;
   }
   
   .dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    margin-right: 8px;
   }
   
-  .source-name { flex: 1; color: #cbd5e1; }
-  .source-pct { font-weight: 700; margin-right: 12px; color: #f8fafc; }
-  .source-cnt { color: #64748b; width: 32px; text-align: right; }
+  .source-name {
+    color: #f8fafc;
+    flex: 1;
+  }
   
-  /* Bar Chart Visualization */
+  .source-pct {
+    color: #94a3b8;
+    width: 40px;
+    text-align: right;
+  }
+  
+  .source-cnt {
+    color: #facc15;
+    font-weight: 600;
+    width: 40px;
+    text-align: right;
+  }
+  
+  /* Bar Chart */
   .bar-chart-container {
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
-    height: 120px;
+    gap: 12px;
+    height: 140px;
     padding-top: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .bar-group {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
     justify-content: flex-end;
     position: relative;
-    width: 12%;
   }
   
   .bar-fill {
     width: 100%;
-    background-color: #1e293b;
+    max-width: 24px;
+    background: #334155;
     border-radius: 4px 4px 0 0;
     transition: height 0.3s ease;
   }
   
   .bar-fill.active {
-    background-color: #3b82f6;
+    background: linear-gradient(to top, #f59e0b, #fef08a);
   }
   
   .bar-date {
     font-size: 0.65rem;
     color: #64748b;
     margin-top: 6px;
+    position: absolute;
+    bottom: -20px;
   }
   
   .bar-tooltip {
     position: absolute;
-    top: -8px;
-    background-color: #1e293b;
-    border: 1px solid #3b82f6;
-    color: #ffffff;
+    top: -24px;
     font-size: 0.65rem;
+    background: #facc15;
+    color: #0f172a;
+    font-weight: 700;
     padding: 2px 6px;
     border-radius: 4px;
     white-space: nowrap;
+  }
+  
+  /* ==========================================================================
+     MOBILE BREAKPOINTS
+     ========================================================================== */
+  
+  @media (max-width: 992px) {
+    .top-metrics-row,
+    .referral-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .sub-grid.three-cols {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .analytics-modal-overlay {
+      padding: 8px;
+    }
+  
+    .analytics-modal-container {
+      max-height: 95vh;
+    }
+  
+    .analytics-modal-header {
+      padding: 14px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .header-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+  
+    .sub-grid,
+    .sub-grid.three-cols {
+      grid-template-columns: 1fr;
+    }
+  
+    .analytics-modal-body {
+      padding: 14px;
+      gap: 16px;
+    }
+  
+    .top-query-banner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }

@@ -2292,3 +2292,14 @@
   background-color: #f59e0b !important; /* Gold Accent Color */
   background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%) !important; /* Matching Gold Gradient */
 }
+
+/* Fix: Ensure Analytics / Dashboard section remains visible on mobile */
+#analytics,
+.analytics-section,
+.dashboard-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  overflow-x: auto; /* Handles responsive chart or data table scrolling */
+}
