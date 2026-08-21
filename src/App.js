@@ -4,6 +4,7 @@ import profileImage from './images/raja-profile-2026.jpg';
 import oracleHrBadge from './images/oracle-hr-2025.jpg';
 import oracleAiBadge from './images/oracle-ai-2026.jpg';
 import oraclePayrollBadge from './images/oracle-payroll-2026.jpg';
+import claudeCCAFBadge from './images/CCAF-O.jpg';
 import CVModal from './components/CVManager/CVModal';
 import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
@@ -11,6 +12,7 @@ import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
+import Footer from './components/BodyComponent/Footer';
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -23,9 +25,10 @@ const NAV_SECTIONS = [
 ];
 
 const certifications = [
-  { image: oracleHrBadge, title: 'Oracle Global Human Resources Cloud', detail: '2025 Certified Implementation Professional', year: '2025' },
+  { image: claudeCCAFBadge, title: 'Claude Certified Associate Foundation', detail: 'Claude Certified Associates - Foundation', year: '2026' },
   { image: oracleAiBadge, title: 'Oracle Cloud Infrastructure', detail: 'Certified Enterprise AI Professional', year: '2026' },
   { image: oraclePayrollBadge, title: 'Oracle Payroll Cloud', detail: '2026 Certified Implementation Professional', year: '2026' },
+  { image: oracleHrBadge, title: 'Oracle Global Human Resources Cloud', detail: '2025 Certified Implementation Professional', year: '2025' },
 ];
 
 function App() {
@@ -372,7 +375,7 @@ function App() {
 
         <div className="shell footer-bottom">
           <span>© 2026 Raja Chatterjee</span>
-          <span>Designed for clarity & impact.</span>
+          <span>Designed & Maintained by Raja for clarity & impact.</span>
         </div>
       </footer>
 
