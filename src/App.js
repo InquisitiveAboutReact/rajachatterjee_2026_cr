@@ -374,8 +374,8 @@ function App() {
         </div>
 
         <div className="shell footer-bottom">
-          <span>© 2026 Raja Chatterjee</span>
-          <span>Designed & Maintained by Raja for clarity & impact.</span>
+          <span>© 2026 Raja Chatterjee ©</span>
+          <span>Designed & Maintained by Raja for clarity & impact !!</span>
         </div>
       </footer>
 
