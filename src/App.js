@@ -12,7 +12,7 @@ import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
-import Footer from './components/BodyComponent/Footer';
+
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
