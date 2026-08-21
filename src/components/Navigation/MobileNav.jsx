@@ -17,9 +17,9 @@ export default function MobileNav({ isOpen, onClose, onOpenCV, onOpenAnalytics, 
 
   const handleNavClick = (e, href) => {
     if (href === '#analytics') {
-      e.preventDefault(); // Prevents default page anchor scrolling
-      onClose();          // Closes the hamburger drawer
-      onOpenAnalytics();  // Triggers the Analytics modal state
+      e.preventDefault();
+      onClose();
+      onOpenAnalytics();
     } else {
       onClose();
     }
@@ -44,29 +44,31 @@ export default function MobileNav({ isOpen, onClose, onOpenCV, onOpenAnalytics, 
           </button>
         </div>
 
-        <ul className="mobile-nav-links">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a 
-                href={link.href} 
-                onClick={(e) => handleNavClick(e, link.href)}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="mobile-nav-scrollable-content">
+          <ul className="mobile-nav-links">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <a 
+                  href={link.href} 
+                  onClick={(e) => handleNavClick(e, link.href)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        <div className="mobile-nav-actions">
-          <button className="theme-toggle-btn mobile-action-btn" onClick={onToggleTheme}>
-            {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-          <button
-            className="cv-cta-btn mobile-action-btn"
-            onClick={() => { onOpenCV(); onClose(); }}
-          >
-            <span>📄</span> Download CV
-          </button>
+          <div className="mobile-nav-actions">
+            <button className="theme-toggle-btn mobile-action-btn" onClick={onToggleTheme}>
+              {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+            </button>
+            <button
+              className="cv-cta-btn mobile-action-btn"
+              onClick={() => { onOpenCV(); onClose(); }}
+            >
+              <span>📄</span> Download CV
+            </button>
+          </div>
         </div>
       </nav>
     </>
