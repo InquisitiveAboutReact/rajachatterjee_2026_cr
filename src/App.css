@@ -2369,3 +2369,22 @@
     align-items: center !important;
     justify-content: center !important;
   }
+
+  /* Restricts the grid to 2 columns matching the top row */
+.articles-grid-fixed {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .articles-grid-fixed {
+    grid-template-columns: 1fr;
+  }
+}
+/* Custom subtle accent glow for Article Cards */
+.article-card-custom:hover {
+  border-color: #10b981 !important; /* Soft Emerald Green accent */
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
