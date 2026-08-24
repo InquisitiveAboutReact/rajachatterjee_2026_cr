@@ -246,7 +246,35 @@ function App() {
             <p>A flexible rendering setup built from first principles with Webpack.</p>
           </a>
         </div>
+             <section className="articles-section">
+              <br/><br/>
+  <h2 style={{ textAlign: 'center', marginBottom: '24px',color: '#b99110', fontWeight: 600 }}>Technical Articles Section </h2>
+  <div className="articles-grid-fixed">
+   <a 
+      className="project-card article-card-custom" 
+      href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" 
+      target="_blank" 
+      rel="noreferrer"
+    >
+      <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>
+        03 / ARTICLE • DEVOPS
+      </div>
+      <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
+        [ Vercel ➔ Git ➔ Deploy ]
+      </div>
+      <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+        <h3>Resolving Vercel Branch Conflicts</h3>
+        <Arrow />
+      </div>
+      <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
+    </a>
+  </div>
+</section>
       </section>
+
+
+  
+
 
       <section className="ai-section reveal-section" id="about">
         <div className="shell ai-grid">
