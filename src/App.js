@@ -392,7 +392,7 @@ function App() {
           </div>
           <div>
             <p className="footer-tagline">Let&apos;s make the complicated parts feel simple.</p>
-            <a href="mailto:rajachatterjee84@gmail.com" className="email-link">
+            <a href="mailto:i.gooner168@gmail.com" className="email-link">
               Say hello <Arrow />
             </a>
             <div className="socials-row">
