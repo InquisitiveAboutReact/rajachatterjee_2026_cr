@@ -12,7 +12,8 @@ import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
-
+import Footer from './components/BodyComponent/Footer';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -411,6 +412,7 @@ function App() {
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <RAGChatbot />
+      <SpeedInsights />
       <ScrollToTop />
     </main>
   );
