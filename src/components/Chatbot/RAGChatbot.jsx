@@ -13,8 +13,8 @@ const KNOWLEDGE_BASE = [
   },
   {
     topic: "certifications",
-    keywords: ["certifications", "certified", "oracle", "azure", "itil", "ibm", "credentials", "badges"],
-    content: "Raja holds top industry certifications:\n1. Oracle Cloud Infrastructure 2026 Certified Enterprise AI Professional\n2. Oracle Global Human Resources Cloud 2025 Certified Implementation Professional\n3. Oracle Payroll Cloud 2026 Certified Implementation Professional\n4. Microsoft AZ-300 Azure Architect Technologies (2020)\n5. ITIL Foundation Service Management (2015)\n6. IBM WebSphere Portal 6.1 Application Development (2011)"
+    keywords: ["certifications", "certified", "oracle", "azure", "itil", "ibm", "credentials", "badges", "claude"],
+    content: "Raja holds top industry certifications:\n1.Claude Certified Associate - Foundations(2026) \n2. Oracle Cloud Infrastructure Certified Enterprise AI Professional (2026) \n3. Oracle Global Human Resources Cloud 2025 Certified Implementation Professional \n4. Oracle Payroll Cloud 2026 Certified Implementation Professional\n5. Microsoft AZ-300 Azure Architect Technologies (2020)\n6. ITIL Foundation Service Management (2015)\n7. IBM WebSphere Portal 6.1 Application Development (2011)"
   },
   {
     topic: "projects",
