@@ -165,7 +165,7 @@ function App() {
 
       <section className="hero shell" id="top">
         <div className="eyebrow">
-          <span className="eyebrow-pulse" /> Available for strategic collaborations
+          <span className="eyebrow-pulse" /><h4> Available for strategic collaborations & open for new opportunities</h4>
         </div>
 
         <div className="hero-grid">
@@ -403,7 +403,8 @@ function App() {
 
         <div className="shell footer-bottom">
           <span>© 2026 Raja Chatterjee ©</span>
-          <span>Designed & Maintained by Raja for clarity & impact !!</span>
+          <span>Designed & Maintained by Raja for clarity & impact</span> <br/>
+          <span>Last Updated on : {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
         </div>
       </footer>
 
