@@ -404,7 +404,7 @@ function App() {
 
         <div className="shell footer-bottom">
           <span>© 2026 Raja Chatterjee ©</span>
-          <span>Designed & Maintained by Raja for clarity & impact</span> <br/>
+          <span>!! Designed & Maintained by Raja for clarity & impact !!</span> <br/>
           <span>Last Updated on : {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
         </div>
       </footer>
