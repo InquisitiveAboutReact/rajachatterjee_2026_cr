@@ -126,7 +126,9 @@ export default function RAGChatbot() {
               <div className="avatar-spark">✦</div>
               <div>
                 <h4>Raja's AI Copilot</h4>
-                <p><span className="live-dot"></span> Grounded Profile RAG Engine</p>
+                <p><span className="live-dot">
+                  </span> Grounded Profile RAG Engine <br />
+                  <span style={{ color: 'orange' }}><h5>Under Training & Can make mistakes</h5></span></p>
               </div>
             </div>
             <button className="close-btn" onClick={() => setIsOpen(false)}>✕</button>
