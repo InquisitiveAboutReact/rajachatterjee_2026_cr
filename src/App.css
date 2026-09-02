@@ -2399,3 +2399,41 @@
   border-color: #10b981 !important; /* Soft Emerald Green accent */
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
 }
+
+/* ==========================================
+   RAG Chatbot Complete Scrollbar Reset
+   ========================================== */
+
+/* 1. Universal WebKit Reset for all elements inside the chatbot modal */
+.rag-chat-modal *::-webkit-scrollbar {
+  width: 5px !important;
+  height: 0px !important; /* Hides horizontal scrollbar tracks completely */
+  display: none !important;
+}
+
+/* 2. Re-enable ONLY vertical scrollbar for the message thread */
+.rag-chat-messages::-webkit-scrollbar {
+  display: block !important;
+  width: 5px !important;
+}
+
+.rag-chat-messages::-webkit-scrollbar-track {
+  background: #0b0f19 !important;
+}
+
+.rag-chat-messages::-webkit-scrollbar-thumb {
+  background: #334155 !important;
+  border-radius: 4px !important;
+}
+
+/* 3. Firefox & IE/Edge Scrollbar Hiding for Quick Prompts */
+.rag-quick-prompts,
+.rag-chat-modal div {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+}
+
+.rag-chat-messages {
+  scrollbar-width: thin !important;
+  scrollbar-color: #334155 #0b0f19 !important;
+}

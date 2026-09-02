@@ -14,7 +14,7 @@ const KNOWLEDGE_BASE = [
   {
     topic: "certifications",
     keywords: ["certifications", "certified", "oracle", "azure", "itil", "ibm", "credentials", "badges", "claude"],
-    content: "Raja holds top industry certifications:\n1.Claude Certified Associate - Foundations(2026) \n2. Oracle Cloud Infrastructure Certified Enterprise AI Professional (2026) \n3. Oracle Global Human Resources Cloud 2025 Certified Implementation Professional \n4. Oracle Payroll Cloud 2026 Certified Implementation Professional\n5. Microsoft AZ-300 Azure Architect Technologies (2020)\n6. ITIL Foundation Service Management (2015)\n7. IBM WebSphere Portal 6.1 Application Development (2011)"
+    content: "Raja holds top industry certifications:\n1. Claude Certified Associate - Foundations (2026)\n2. Oracle Cloud Infrastructure Certified Enterprise AI Professional (2026)\n3. Oracle Global Human Resources Cloud 2025 Certified Implementation Professional\n4. Oracle Payroll Cloud 2026 Certified Implementation Professional\n5. Microsoft AZ-300 Azure Architect Technologies (2020)\n6. ITIL Foundation Service Management (2015)\n7. IBM WebSphere Portal 6.1 Application Development (2011)"
   },
   {
     topic: "projects",
@@ -88,17 +88,20 @@ export default function RAGChatbot() {
   }, [messages, isOpen]);
 
   const handleSend = (textToSend) => {
-    const query = textToSend || inputValue;
-    if (!query.trim()) return;
+    const rawQuery = textToSend || inputValue;
+    if (!rawQuery.trim()) return;
 
-    const userMsg = { id: Date.now(), sender: 'user', text: query };
+    // 🚀 Strip leading and trailing quotation marks (standard & curly)
+    const cleanQuery = rawQuery.replace(/^["“]|["”]$/g, '').trim();
+
+    const userMsg = { id: Date.now(), sender: 'user', text: cleanQuery };
     setMessages(prev => [...prev, userMsg]);
     if (!textToSend) setInputValue('');
 
     setIsTyping(true);
 
     setTimeout(() => {
-      const responseText = retrieveRAGResponse(query);
+      const responseText = retrieveRAGResponse(cleanQuery);
       const assistantMsg = { id: Date.now() + 1, sender: 'assistant', text: responseText };
       setMessages(prev => [...prev, assistantMsg]);
       setIsTyping(false);
@@ -126,9 +129,12 @@ export default function RAGChatbot() {
               <div className="avatar-spark">✦</div>
               <div>
                 <h4>Raja's AI Copilot</h4>
-                <p><span className="live-dot">
-                  </span> Grounded Profile RAG Engine <br />
-                  <span style={{ color: 'orange' }}><h5>Under Training & Can make mistakes</h5></span></p>
+                <p className="status-subtext">
+                  <span className="live-dot"></span> Grounded Profile RAG Engine
+                </p>
+                <span className="training-warning">
+                  Under Training & Can make mistakes
+                </span>
               </div>
             </div>
             <button className="close-btn" onClick={() => setIsOpen(false)}>✕</button>
@@ -138,13 +144,13 @@ export default function RAGChatbot() {
             {messages.map(msg => (
               <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
                 {msg.sender === 'assistant' && <div className="bot-avatar">✦</div>}
-            <div className="chat-bubble">
-              {msg.sender === 'assistant' && msg.text.includes('<a') ? (
-                <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: msg.text }} />
-              ) : (
-                <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
-              )}
-            </div>
+                <div className="chat-bubble">
+                  {msg.sender === 'assistant' && msg.text.includes('<a') ? (
+                    <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: msg.text }} />
+                  ) : (
+                    <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
+                  )}
+                </div>
               </div>
             ))}
             {isTyping && (

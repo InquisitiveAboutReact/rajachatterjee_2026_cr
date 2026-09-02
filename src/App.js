@@ -296,26 +296,27 @@ function App() {
           </div>
 
           <div className="ai-window">
-            <div className="window-top">
-              <span /><span /><span />
-              <label>RAJA / AI DELIVERY COPILOT</label>
-            </div>
-            <div className="prompt-box">
-              <b>Ask the delivery copilot</b>
-              <p>&ldquo;Summarise this week&apos;s program risks and suggest next actions.&rdquo;</p>
-            </div>
-            <div className="response-box">
-              <div className="spark-icon" aria-hidden="true">✦</div>
-              <div>
-                <b>Signal, not noise.</b>
-                <p>Three dependencies need attention. The team has a clear path to unblock each one before Friday.</p>
-                <div className="metrics-row">
-                  <span><strong>03</strong> priority signals</span>
-                  <span><strong>86%</strong> delivery confidence</span>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="window-top">
+    <span /><span /><span />
+    <label>RAJA / AI DELIVERY COPILOT</label>
+  </div>
+  <div className="prompt-box">
+    <b>Ask the delivery copilot</b>
+    <p>&ldquo;How does Raja lead enterprise AI and cloud architecture programs?&rdquo;</p>
+  </div>
+  <div className="response-box">
+    <div className="spark-icon" aria-hidden="true">✦</div>
+    <div>
+      <b>Grounded execution, zero noise.</b>
+      <p>Combines 18+ years of cloud delivery leadership with grounded RAG architectures and high-performance, modular UI pipelines.</p>
+      <div className="metrics-row">
+        <span><strong>18+</strong> yrs leadership</span>
+        <span><strong>99.9%</strong> grounded confidence</span>
+        <span><strong>100</strong> Web Vitals score</span>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
       </section>
 
