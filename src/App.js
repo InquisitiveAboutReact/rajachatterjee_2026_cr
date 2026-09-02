@@ -403,9 +403,9 @@ function App() {
         </div>
 
         <div className="shell footer-bottom">
-          <span>© 2026 Raja Chatterjee ©</span>
-          <span>!! Designed & Maintained by Raja for clarity & impact !!</span> <br/>
-          <span>Last Updated on : {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
+          <span>© 2026 Raja Chatterjee , all rights reserved.</span>
+          <span style={{position: 'absolute', bottom: 40, left: 110, right: 0, textAlign: 'center', color: 'rgba(144, 94, 2, 0.92)'}}>!! Designed & Maintained by Raja for clarity & impact !!</span> <br/>
+          <span style={{ color: 'rgba(144, 94, 2, 0.92)' }}>Last Updated on : {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
         </div>
       </footer>
 
