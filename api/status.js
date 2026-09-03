@@ -1,12 +1,13 @@
 import { Redis } from '@upstash/redis';
 
-// Expressly load the KV_ environment variables provided by Vercel
+// Connect using the KV_ variables provisioned by Vercel
 const redis = new Redis({
   url: process.env.KV_REST_API_URL,
   token: process.env.KV_REST_API_TOKEN,
 });
 
 export default async function handler(req, res) {
+  // CORS configuration for cross-domain access (e.g., GitHub Pages)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');

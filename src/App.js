@@ -17,6 +17,13 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
+// Vercel Domain & Dynamic Routing
+const VERCEL_DOMAIN = 'https://rajachatterjee-2026-cr.vercel.app';
+
+const VERCEL_API_URL = window.location.hostname === 'localhost' || window.location.hostname.includes('github.io')
+  ? `${VERCEL_DOMAIN}/api/status`
+  : '/api/status';
+
 const NAV_SECTIONS = [
   { id: 'work', label: 'Selected Work' },
   { id: 'about', label: 'Intelligence & AI' },
@@ -40,7 +47,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // 1. Automatic Dynamic Status Logic based on local time
+  // Time-based default status fallback
   const getDynamicStatus = () => {
     const currentHour = new Date().getHours();
     if (currentHour >= 9 && currentHour < 20) {
@@ -52,39 +59,56 @@ function App() {
     }
   };
 
-  // Initialize status state from LocalStorage if available, fallback to dynamic time
-  const [currentStatus, setCurrentStatus] = useState(() => {
-    const savedStatus = localStorage.getItem('portfolio_status');
-    if (savedStatus) {
-      try {
-        return JSON.parse(savedStatus);
-      } catch (e) {
-        /* ignore parsing error */
-      }
-    }
-    return getDynamicStatus();
-  });
+  const [currentStatus, setCurrentStatus] = useState(getDynamicStatus);
 
-  // Check for admin query parameter (e.g. yoursite.com/?admin=true)
+  // 1. Detect Admin Mode & Fetch Remote Status from Redis
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') {
       setIsAdmin(true);
     }
+
+    async function fetchGlobalStatus() {
+      try {
+        const response = await fetch(VERCEL_API_URL);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.status) {
+            setCurrentStatus(data);
+          }
+        }
+      } catch (err) {
+        console.warn('Unable to fetch remote status, using local fallback:', err);
+      }
+    }
+
+    fetchGlobalStatus();
   }, []);
 
-  // 2. Manual toggle function for admin usage with LocalStorage persistence
-  const cycleStatus = () => {
+  // 2. Cycle Status and Persist Globally via Upstash Redis
+  const cycleStatus = async () => {
     const statuses = [
       { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true },
       { status: 'busy', label: 'Busy in deep work', color: '#ef4444', ping: false },
       { status: 'away', label: 'Away / Stepped out', color: '#f59e0b', ping: false }
     ];
-    const currentIndex = statuses.findIndex(s => s.status === currentStatus.status);
+
+    const currentIndex = statuses.findIndex((s) => s.status === currentStatus.status);
     const nextStatus = statuses[(currentIndex + 1) % statuses.length];
-    
+
+    // Optimistic UI Update
     setCurrentStatus(nextStatus);
-    localStorage.setItem('portfolio_status', JSON.stringify(nextStatus));
+
+    // Save to Remote Redis Database
+    try {
+      await fetch(VERCEL_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nextStatus),
+      });
+    } catch (err) {
+      console.error('Failed to sync status globally:', err);
+    }
   };
 
   useEffect(() => {
@@ -246,37 +270,25 @@ function App() {
           <aside className="portrait-card-v2">
             <div className="portrait-image-wrapper">
               <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" />
-            </div>
+            </div>            
 
-            {isAdmin ? (
-              /* Admin Mode: Clickable button with gear icon */
-              <button 
-                type="button" 
-                className="status-pill-btn" 
-                onClick={cycleStatus}
-                title="Admin Mode: Click to toggle status"
-              >
-                <span className="status-dot-wrapper">
-                  <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
-                  {currentStatus.ping && (
-                    <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
-                  )}
-                </span>
-                <span className="status-text">{currentStatus.label}</span>
-                <small className="status-toggle-hint">⚙️</small>
-              </button>
-            ) : (
-              /* Visitor View: Read-only display without gear icon */
-              <div className="status-pill-btn readonly">
-                <span className="status-dot-wrapper">
-                  <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
-                  {currentStatus.ping && (
-                    <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
-                  )}
-                </span>
-                <span className="status-text">{currentStatus.label}</span>
-              </div>
-            )}
+            {/* Consolidated Admin / Readonly Status Button */}
+            <div 
+              className={`status-pill-btn ${isAdmin ? 'admin-mode' : 'readonly'}`}
+              onClick={isAdmin ? cycleStatus : undefined}
+              title={isAdmin ? "Admin Mode: Click to toggle status" : undefined}
+              role={isAdmin ? "button" : undefined}
+              tabIndex={isAdmin ? 0 : undefined}
+            >
+              <span className="status-dot-wrapper">
+                <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
+                {currentStatus.ping && (
+                  <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
+                )}
+              </span>
+              <span className="status-text">{currentStatus.label}</span>
+              {isAdmin && <small className="status-toggle-hint">⚙️</small>}
+            </div>
           </aside>
         </div>
       </section>
