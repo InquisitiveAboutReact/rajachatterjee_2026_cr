@@ -2690,3 +2690,61 @@ footer, .footer-bottom {
 .hero .eyebrow {
   margin-bottom: 10px !important; /* Tightens space above the eyebrow tag */
 }
+
+/* --- Mobile Viewport Fixes (iPhone / Small Screens) --- */
+@media (max-width: 900px) {
+  /* Ensure metrics stack neatly with breathing room */
+  .hero div[style*="gridTemplateColumns"],
+  .hero-grid + div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    padding-bottom: 30px !important;
+  }
+
+  /* Prevent the floating AI copilot or bottom widgets from covering text */
+  .ai-copilot-badge, 
+  .rag-chatbot-container {
+    position: relative !important;
+    bottom: auto !important;
+    right: auto !important;
+    margin-top: 20px;
+  }
+}
+/* --- iPhone 17 & Mobile Responsive Layout Fix --- */
+@media (max-width: 900px) {
+  /* Stack the hero grid and ensure text comes before the profile card */
+  .hero .hero-grid {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 25px !important;
+  }
+
+  /* Center align the text content block on mobile */
+  .hero-content {
+    text-align: center !important;
+  }
+
+  .hero-actions {
+    justify-content: center !important;
+  }
+
+  /* Make sure the profile card scales correctly and stays centered */
+  .portrait-card-v2 {
+    width: 100% !important;
+    max-width: 300px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Turn the metrics grid into a clean vertical or dual column list on mobile */
+  .hero .hero-grid + div,
+  .hero [style*="gridTemplateColumns"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 15px !important;
+    text-align: center !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    margin-top: 25px !important;
+    padding-top: 20px !important;
+  }
+}
