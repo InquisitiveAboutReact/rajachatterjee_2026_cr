@@ -2571,21 +2571,18 @@ footer, .footer-bottom {
   }
   
   .portrait-image-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
     border-radius: 50%;
-    overflow: visible; /* Prevents clipping the overlay dot/badge */
-    border: 2px solid rgba(16, 185, 129, 0.6); /* Vibrant ring accent */
-    box-shadow: 0 0 24px rgba(16, 185, 129, 0.2);
+    padding: 5px;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
   }
   
   .portrait-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: top center;
     border-radius: 50%;
+    object-fit: cover;
+    display: block;
   }
   
   /* Status Pill Interactive Button */
@@ -2665,3 +2662,31 @@ footer, .footer-bottom {
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
     z-index: 10;
   }
+
+  /* --- Custom Responsive Fix for Hero Grid Layout --- */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+    text-align: center;
+  }
+  
+  .hero-actions {
+    justify-content: center;
+  }
+  
+  .portrait-card-v2 {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+
+/* --- Tighten Top Spacing for Hero Section --- */
+.hero {
+  padding-top: 20px !important; /* Reduces space right below the header */
+  margin-top: 0px !important;
+}
+
+.hero .eyebrow {
+  margin-bottom: 10px !important; /* Tightens space above the eyebrow tag */
+}
