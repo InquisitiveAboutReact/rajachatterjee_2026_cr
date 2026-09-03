@@ -13,7 +13,7 @@ import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
 import Footer from './components/BodyComponent/Footer';
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -38,6 +38,54 @@ function App() {
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // 1. Automatic Dynamic Status Logic based on local time
+  const getDynamicStatus = () => {
+    const currentHour = new Date().getHours();
+    if (currentHour >= 9 && currentHour < 20) {
+      return { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true };
+    } else if (currentHour >= 20 && currentHour < 23) {
+      return { status: 'away', label: 'Away / Intermittent', color: '#f59e0b', ping: false };
+    } else {
+      return { status: 'busy', label: 'Busy / Do Not Disturb', color: '#ef4444', ping: false };
+    }
+  };
+
+  // Initialize status state from LocalStorage if available, fallback to dynamic time
+  const [currentStatus, setCurrentStatus] = useState(() => {
+    const savedStatus = localStorage.getItem('portfolio_status');
+    if (savedStatus) {
+      try {
+        return JSON.parse(savedStatus);
+      } catch (e) {
+        /* ignore parsing error */
+      }
+    }
+    return getDynamicStatus();
+  });
+
+  // Check for admin query parameter (e.g. yoursite.com/?admin=true)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'true') {
+      setIsAdmin(true);
+    }
+  }, []);
+
+  // 2. Manual toggle function for admin usage with LocalStorage persistence
+  const cycleStatus = () => {
+    const statuses = [
+      { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true },
+      { status: 'busy', label: 'Busy in deep work', color: '#ef4444', ping: false },
+      { status: 'away', label: 'Away / Stepped out', color: '#f59e0b', ping: false }
+    ];
+    const currentIndex = statuses.findIndex(s => s.status === currentStatus.status);
+    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+    
+    setCurrentStatus(nextStatus);
+    localStorage.setItem('portfolio_status', JSON.stringify(nextStatus));
+  };
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -156,22 +204,23 @@ function App() {
       </header>
 
       <MobileNav
-  isOpen={isMobileNavOpen}
-  onClose={() => setIsMobileNavOpen(false)}
-  onOpenCV={() => setIsCVModalOpen(true)}
-  onOpenAnalytics={() => setIsAnalyticsOpen(true)}
-  theme={theme}
-  onToggleTheme={toggleTheme}
-/>
+        isOpen={isMobileNavOpen}
+        onClose={() => setIsMobileNavOpen(false)}
+        onOpenCV={() => setIsCVModalOpen(true)}
+        onOpenAnalytics={() => setIsAnalyticsOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
 
       <section className="hero shell" id="top">
         <div className="eyebrow">
-          <span className="eyebrow-pulse" /><h4> Available for strategic collaborations & open for new opportunities</h4>
+          <span className="eyebrow-pulse" />
+          <h4>Available for strategic collaborations &amp; open for new opportunities</h4>
         </div>
 
         <div className="hero-grid">
           <div className="hero-content">
-            <p className="intro-tag">Technical Delivery Leader | Enterprise AI & Digital Builder</p>
+            <p className="intro-tag">Technical Delivery Leader | Enterprise AI &amp; Digital Builder</p>
             <h1>
               Making complex<br />
               <em>work beautifully</em><br />
@@ -194,13 +243,40 @@ function App() {
             </div>
           </div>
 
-          <aside className="portrait-card">
-            <div className="portrait-glow" />
-            <img src={profileImage} alt="Raja Chatterjee" loading="eager" />
-            <div className="portrait-label">
-              <span>Raja Chatterjee</span>
-              <span>India · Global</span>
+          <aside className="portrait-card-v2">
+            <div className="portrait-image-wrapper">
+              <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" />
             </div>
+
+            {isAdmin ? (
+              /* Admin Mode: Clickable button with gear icon */
+              <button 
+                type="button" 
+                className="status-pill-btn" 
+                onClick={cycleStatus}
+                title="Admin Mode: Click to toggle status"
+              >
+                <span className="status-dot-wrapper">
+                  <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
+                  {currentStatus.ping && (
+                    <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
+                  )}
+                </span>
+                <span className="status-text">{currentStatus.label}</span>
+                <small className="status-toggle-hint">⚙️</small>
+              </button>
+            ) : (
+              /* Visitor View: Read-only display without gear icon */
+              <div className="status-pill-btn readonly">
+                <span className="status-dot-wrapper">
+                  <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
+                  {currentStatus.ping && (
+                    <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
+                  )}
+                </span>
+                <span className="status-text">{currentStatus.label}</span>
+              </div>
+            )}
           </aside>
         </div>
       </section>
@@ -234,48 +310,45 @@ function App() {
               <h3>Server-Side Rendering</h3>
               <Arrow />
             </div>
-            <p>Faster, resilient web experiences with Next.js, Express & React.</p>
+            <p>Faster, resilient web experiences with Next.js, Express &amp; React.</p>
           </a>
 
           <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-CSR-Express-Webpack-React" target="_blank" rel="noreferrer">
             <div className="project-type">02 / Architecture</div>
             <div className="project-visual">[ Client ➔ Server ➔ Build ]</div>
             <div className="project-footer">
-              <h3>React, CSR & SSR</h3>
+              <h3>React, CSR &amp; SSR</h3>
               <Arrow />
             </div>
             <p>A flexible rendering setup built from first principles with Webpack.</p>
           </a>
         </div>
-             <section className="articles-section">
-              <br/><br/>
-  <h2 style={{ textAlign: 'center', marginBottom: '24px',color: '#b99110', fontWeight: 600 }}>Technical Articles Section </h2>
-  <div className="articles-grid-fixed">
-   <a 
-      className="project-card article-card-custom" 
-      href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" 
-      target="_blank" 
-      rel="noreferrer"
-    >
-      <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>
-        03 / ARTICLE • DEVOPS
-      </div>
-      <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
-        [ Vercel ➔ Git ➔ Deploy ]
-      </div>
-      <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-        <h3>Resolving Vercel Branch Conflicts</h3>
-        <Arrow />
-      </div>
-      <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
-    </a>
-  </div>
-</section>
+
+        <section className="articles-section">
+          <br /><br />
+          <h2 style={{ textAlign: 'center', marginBottom: '24px', color: '#b99110', fontWeight: 600 }}>Technical Articles Section </h2>
+          <div className="articles-grid-fixed">
+            <a 
+              className="project-card article-card-custom" 
+              href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" 
+              target="_blank" 
+              rel="noreferrer"
+            >
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>
+                03 / ARTICLE • DEVOPS
+              </div>
+              <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
+                [ Vercel ➔ Git ➔ Deploy ]
+              </div>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+                <h3>Resolving Vercel Branch Conflicts</h3>
+                <Arrow />
+              </div>
+              <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
+            </a>
+          </div>
+        </section>
       </section>
-
-
-  
-
 
       <section className="ai-section reveal-section" id="about">
         <div className="shell ai-grid">
@@ -290,33 +363,33 @@ function App() {
                 Explore my learning path into Salesforce <Arrow />
               </a>
               <a className="btn-secondary" href="#certifications">
-                Explore my learning path into Oracle HCM & OIC Enterprise AI <Arrow />
+                Explore my learning path into Oracle HCM &amp; OIC Enterprise AI <Arrow />
               </a>
             </div>
           </div>
 
           <div className="ai-window">
-  <div className="window-top">
-    <span /><span /><span />
-    <label>RAJA / AI DELIVERY COPILOT</label>
-  </div>
-  <div className="prompt-box">
-    <b>Ask the delivery copilot</b>
-    <p>&ldquo;How does Raja lead enterprise AI and cloud architecture programs?&rdquo;</p>
-  </div>
-  <div className="response-box">
-    <div className="spark-icon" aria-hidden="true">✦</div>
-    <div>
-      <b>Grounded execution, zero noise.</b>
-      <p>Combines 18+ years of cloud delivery leadership with grounded RAG architectures and high-performance, modular UI pipelines.</p>
-      <div className="metrics-row">
-        <span><strong>18+</strong> yrs leadership</span>
-        <span><strong>99.9%</strong> grounded confidence</span>
-        <span><strong>100</strong> Web Vitals score</span>
-      </div>
-    </div>
-  </div>
-</div>
+            <div className="window-top">
+              <span /><span /><span />
+              <label>RAJA / AI DELIVERY COPILOT</label>
+            </div>
+            <div className="prompt-box">
+              <b>Ask the delivery copilot</b>
+              <p>&ldquo;How does Raja lead enterprise AI and cloud architecture programs?&rdquo;</p>
+            </div>
+            <div className="response-box">
+              <div className="spark-icon" aria-hidden="true">✦</div>
+              <div>
+                <b>Grounded execution, zero noise.</b>
+                <p>Combines 18+ years of cloud delivery leadership with grounded RAG architectures and high-performance, modular UI pipelines.</p>
+                <div className="metrics-row">
+                  <span><strong>18+</strong> yrs leadership</span>
+                  <span><strong>99.9%</strong> grounded confidence</span>
+                  <span><strong>100</strong> Web Vitals score</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -361,7 +434,7 @@ function App() {
             <div className="tags-cloud">
               <span className="tag-pill">Salesforce</span>
               <span className="tag-pill">React / Node</span>
-              <span className="tag-pill">Cloud & CI/CD</span>
+              <span className="tag-pill">Cloud &amp; CI/CD</span>
               <span className="tag-pill">Agile delivery</span>
               <span className="tag-pill">Guidewire</span>
               <span className="tag-pill">Azure</span>
@@ -404,16 +477,16 @@ function App() {
         </div>
 
         <div className="shell footer-bottom">
-  <div className="footer-meta">
-    <span>© 2026 Raja Chatterjee, all rights reserved.</span>
-    <span className="footer-tagline">
-      Designed &amp; Maintained by Raja for clarity &amp; impact
-    </span>
-    <span className="footer-date">
-      Last Updated: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-    </span>
-  </div>
-</div>
+          <div className="footer-meta">
+            <span>© 2026 Raja Chatterjee, all rights reserved.</span>
+            <span className="footer-tagline">
+              Designed &amp; Maintained by Raja for clarity &amp; impact
+            </span>
+            <span className="footer-date">
+              Last Updated: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+          </div>
+        </div>
       </footer>
 
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
