@@ -47,7 +47,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Time-based default status fallback
+  // Time-based default engine
   const getDynamicStatus = () => {
     const currentHour = new Date().getHours();
     if (currentHour >= 9 && currentHour < 20) {
@@ -61,7 +61,7 @@ function App() {
 
   const [currentStatus, setCurrentStatus] = useState(getDynamicStatus);
 
-  // 1. Detect Admin Mode & Fetch Remote Status from Redis
+  // 1. Detect Admin Mode & Fetch Remote Status with 15-Minute Expiration Validation
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') {
@@ -73,28 +73,44 @@ function App() {
         const response = await fetch(VERCEL_API_URL);
         if (response.ok) {
           const data = await response.json();
-          if (data && data.status) {
-            setCurrentStatus(data);
+          
+          // Check if remote payload has a timestamp and TTL
+          if (data && data.updatedAt && data.ttlHours) {
+            const now = Date.now();
+            const ageInHours = (now - data.updatedAt) / (1000 * 60 * 60);
+
+            // If manual status was updated less than 15 mins (0.25 hrs) ago, use it
+            if (ageInHours < data.ttlHours) {
+              setCurrentStatus(data);
+              return;
+            }
           }
         }
       } catch (err) {
-        console.warn('Unable to fetch remote status, using local fallback:', err);
+        console.warn('Unable to fetch remote status, falling back to dynamic time:', err);
       }
+
+      // Expired or invalid response -> fallback to local time schedule
+      setCurrentStatus(getDynamicStatus());
     }
 
     fetchGlobalStatus();
   }, []);
 
-  // 2. Cycle Status and Persist Globally via Upstash Redis
+  // 2. Cycle Status with 15-Minute Expiration Metadata
   const cycleStatus = async () => {
     const statuses = [
       { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true },
-      { status: 'busy', label: 'Busy in deep work', color: '#ef4444', ping: false },
-      { status: 'away', label: 'Away / Stepped out', color: '#f59e0b', ping: false }
+      { status: 'busy', label: 'Busy. Please wait or contact me via email', color: '#ef4444', ping: false },
+      { status: 'away', label: 'Away. Send me a mail instead? Click on "Say Hello" below in the page', color: '#f59e0b', ping: false }
     ];
 
     const currentIndex = statuses.findIndex((s) => s.status === currentStatus.status);
-    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+    const nextStatus = {
+      ...statuses[(currentIndex + 1) % statuses.length],
+      updatedAt: Date.now(),
+      ttlHours: 2 // 2 hours
+    };
 
     // Optimistic UI Update
     setCurrentStatus(nextStatus);
@@ -272,7 +288,7 @@ function App() {
               <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" />
             </div>            
 
-            {/* Consolidated Admin / Readonly Status Button */}
+            {/* Single Wrapper Admin / Readonly Status Button */}
             <div 
               className={`status-pill-btn ${isAdmin ? 'admin-mode' : 'readonly'}`}
               onClick={isAdmin ? cycleStatus : undefined}
@@ -352,7 +368,7 @@ function App() {
               <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
                 [ Vercel ➔ Git ➔ Deploy ]
               </div>
-              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', items: 'center', gap: '8px', textAlign: 'center' }}>
                 <h3>Resolving Vercel Branch Conflicts</h3>
                 <Arrow />
               </div>
