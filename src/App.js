@@ -32,6 +32,25 @@ const NAV_SECTIONS = [
   { id: 'contact', label: 'Contact' },
 ];
 
+const STATUS_OPTIONS = [
+  { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true },
+  { status: 'busy', label: 'Busy. Please wait or contact me via email', color: '#ef4444', ping: false },
+  { 
+    status: 'away', 
+    label: (
+      <>
+        Away. Send me a mail instead? Click on{' '}
+        <a href="mailto:i.gooner168@gmail.com" style={{ color: '#f59e0b', textDecoration: 'underline' }}>
+          Say Hello <span aria-hidden="true">↗</span>
+        </a>{' '}
+        below in the page
+      </>
+    ), 
+    color: '#f59e0b', 
+    ping: false 
+  }
+];
+
 const certifications = [
   { image: claudeCCAFBadge, title: 'Claude Certified Associate Foundation', detail: 'Claude Certified Associates - Foundation', year: '2026' },
   { image: oracleAiBadge, title: 'Oracle Cloud Infrastructure', detail: 'Certified Enterprise AI Professional', year: '2026' },
@@ -51,17 +70,17 @@ function App() {
   const getDynamicStatus = () => {
     const currentHour = new Date().getHours();
     if (currentHour >= 9 && currentHour < 20) {
-      return { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true };
+      return STATUS_OPTIONS[0]; // Available
     } else if (currentHour >= 20 && currentHour < 23) {
-      return { status: 'away', label: 'Away / Intermittent', color: '#f59e0b', ping: false };
+      return STATUS_OPTIONS[2]; // Away
     } else {
-      return { status: 'busy', label: 'Busy / Do Not Disturb', color: '#ef4444', ping: false };
+      return STATUS_OPTIONS[1]; // Busy
     }
   };
 
   const [currentStatus, setCurrentStatus] = useState(getDynamicStatus);
 
-  // 1. Detect Admin Mode & Fetch Remote Status with 15-Minute Expiration Validation
+  // 1. Detect Admin Mode & Fetch Remote Status with Expiration Validation
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') {
@@ -74,14 +93,13 @@ function App() {
         if (response.ok) {
           const data = await response.json();
           
-          // Check if remote payload has a timestamp and TTL
           if (data && data.updatedAt && data.ttlHours) {
             const now = Date.now();
             const ageInHours = (now - data.updatedAt) / (1000 * 60 * 60);
 
-            // If manual status was updated less than 15 mins (0.25 hrs) ago, use it
             if (ageInHours < data.ttlHours) {
-              setCurrentStatus(data);
+              const matched = STATUS_OPTIONS.find((s) => s.status === data.status);
+              setCurrentStatus(matched || data);
               return;
             }
           }
@@ -90,37 +108,31 @@ function App() {
         console.warn('Unable to fetch remote status, falling back to dynamic time:', err);
       }
 
-      // Expired or invalid response -> fallback to local time schedule
       setCurrentStatus(getDynamicStatus());
     }
 
     fetchGlobalStatus();
   }, []);
 
-  // 2. Cycle Status with 15-Minute Expiration Metadata
-  const cycleStatus = async () => {
-    const statuses = [
-      { status: 'available', label: 'Available to chat / discuss', color: '#10b981', ping: true },
-      { status: 'busy', label: 'Busy. Please wait or contact me via email', color: '#ef4444', ping: false },
-      { status: 'away', label: 'Away. Send me a mail instead? Click on "Say Hello" below in the page', color: '#f59e0b', ping: false }
-    ];
+  // 2. Handle Dropdown Selection Change in Admin Mode
+  const handleStatusSelect = async (e) => {
+    const selectedKey = e.target.value;
+    const selected = STATUS_OPTIONS.find((s) => s.status === selectedKey);
+    if (!selected) return;
 
-    const currentIndex = statuses.findIndex((s) => s.status === currentStatus.status);
     const nextStatus = {
-      ...statuses[(currentIndex + 1) % statuses.length],
+      ...selected,
       updatedAt: Date.now(),
-      ttlHours: 2 // 2 hours
+      ttlHours: 2 
     };
 
-    // Optimistic UI Update
     setCurrentStatus(nextStatus);
 
-    // Save to Remote Redis Database
     try {
       await fetch(VERCEL_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(nextStatus),
+        body: JSON.stringify({ ...selected, updatedAt: nextStatus.updatedAt, ttlHours: nextStatus.ttlHours }),
       });
     } catch (err) {
       console.error('Failed to sync status globally:', err);
@@ -288,23 +300,110 @@ function App() {
               <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" />
             </div>            
 
-            {/* Single Wrapper Admin / Readonly Status Button */}
-            <div 
-              className={`status-pill-btn ${isAdmin ? 'admin-mode' : 'readonly'}`}
-              onClick={isAdmin ? cycleStatus : undefined}
-              title={isAdmin ? "Admin Mode: Click to toggle status" : undefined}
-              role={isAdmin ? "button" : undefined}
-              tabIndex={isAdmin ? 0 : undefined}
-            >
-              <span className="status-dot-wrapper">
-                <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
-                {currentStatus.ping && (
-                  <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
-                )}
-              </span>
-              <span className="status-text">{currentStatus.label}</span>
-              {isAdmin && <small className="status-toggle-hint">⚙️</small>}
-            </div>
+            {/* Admin Controller View */}
+            {isAdmin ? (
+              <div style={{ background: '#1e293b', padding: '12px', borderRadius: '12px', border: '1px solid #475569', width: '100%', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
+                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#cbd5e1' }}>⚙️ Admin Status Override</span>
+                </div>
+                <select 
+                  value={currentStatus.status} 
+                  onChange={handleStatusSelect}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    background: '#0f172a',
+                    color: '#fff',
+                    border: '1px solid #64748b',
+                    cursor: 'pointer',
+                    fontSize: '13px'
+                  }}
+                >
+                  <option value="available">🟢 Available to chat / discuss</option>
+                  <option value="busy">🔴 Busy. Please wait or contact via email</option>
+                  <option value="away">🟡 Away. Send me a mail instead</option>
+                </select>
+              </div>
+            ) : null}
+
+            {/* WhatsApp-Style Widget when Available, standard pill otherwise */}
+            {currentStatus.status === 'available' ? (
+              <div style={{
+                background: '#0b141a',
+                border: '1px solid #222d34',
+                borderRadius: '12px',
+                padding: '14px',
+                width: '100%',
+                color: '#e9edef',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+                textAlign: 'left'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid #222d34', paddingBottom: '8px', marginBottom: '10px' }}>
+                  <span style={{ width: '8px', height: '8px', backgroundColor: '#00a884', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 6px #00a884' }} />
+                  <span style={{ fontSize: '12px', fontWeight: 'bold' }}>Chat with Raja • Online</span>
+                </div>
+
+                <div style={{ background: '#202c33', padding: '8px 12px', borderRadius: '8px', fontSize: '12px', marginBottom: '8px', width: 'fit-content', maxWidth: '90%' }}>
+                  👋 Hi! I am available. Drop a note below:
+                </div>
+
+                <form onSubmit={(e) => {
+  e.preventDefault();
+  const msg = e.target.elements.message.value;
+  if (!msg) return;
+  
+  // Reads safely from your Vercel configuration
+  const phoneNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "";
+  
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+}}>
+  <input 
+    type="text" 
+    name="message"
+    placeholder="Type message..." 
+    style={{
+      width: '100%',
+      padding: '8px 10px',
+      borderRadius: '6px',
+      background: '#2a3942',
+      border: 'none',
+      color: '#fff',
+      fontSize: '12px',
+      marginBottom: '8px',
+      outline: 'none'
+    }}
+  />
+  <button 
+    type="submit"
+    style={{
+      width: '100%',
+      padding: '8px',
+      borderRadius: '6px',
+      background: '#00a884',
+      color: '#111b21',
+      fontWeight: 'bold',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '12px'
+    }}
+  >
+    Send via WhatsApp ➔
+  </button>
+</form>
+              </div>
+            ) : (
+              <div className="status-pill-btn readonly">
+                <span className="status-dot-wrapper">
+                  <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
+                  {currentStatus.ping && (
+                    <span className="status-pulse-ring" style={{ backgroundColor: currentStatus.color }} />
+                  )}
+                </span>
+                <span className="status-text">{currentStatus.label}</span>
+              </div>
+            )}
           </aside>
         </div>
       </section>
@@ -368,7 +467,7 @@ function App() {
               <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
                 [ Vercel ➔ Git ➔ Deploy ]
               </div>
-              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', items: 'center', gap: '8px', textAlign: 'center' }}>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
                 <h3>Resolving Vercel Branch Conflicts</h3>
                 <Arrow />
               </div>
