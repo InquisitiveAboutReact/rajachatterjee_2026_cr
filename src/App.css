@@ -2437,3 +2437,122 @@
   scrollbar-width: thin !important;
   scrollbar-color: #334155 #0b0f19 !important;
 }
+
+/* ==========================================
+   Responsive Dark Footer Fixes (Safari Safe)
+   ========================================== */
+.footer-bottom {
+  padding: 24px 16px 80px; /* Extra bottom padding prevents floating Copilot overlap */
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  color: #94a3b8; /* Clear readable slate grey */
+  font-size: 0.875rem;
+}
+
+.footer-tagline {
+  color: #fbbf24; /* Warm amber glow for prominence */
+  font-weight: 500;
+}
+
+.footer-date {
+  color: #38bdf8; /* Bright sky blue for sharp date contrast */
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Mobile Safari safe viewport spacing */
+@media (max-width: 768px) {
+  .footer-bottom {
+    padding-bottom: 100px; /* Space for Mobile Safari address bar + floating trigger */
+  }
+}
+
+/* ==========================================
+   Universal Responsive Footer & Floating Trigger Fixes
+   ========================================== */
+
+/* 1. Ensure Full-Width Footer Layout */
+footer, .footer-bottom {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.shell.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  padding: 32px 20px 110px !important; /* Bottom clearance prevents Copilot overlap on ALL screens */
+  margin: 0 auto;
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.footer-tagline {
+  color: #fbbf24;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.footer-date {
+  color: #38bdf8;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+/* 2. Floating Copilot Button Z-Index & Safe Offset */
+.rag-chatbot-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999; /* Higher priority than footer text */
+}
+
+/* 3. Tablet & Mobile Specific Breakpoint Hardening */
+@media (max-width: 1024px) {
+  /* Fix CTA Grid Alignment on iPad Pro & Surface Pro 7 */
+  .footer-cta-grid, 
+  footer .grid {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .rag-chat-trigger {
+    transform: scale(0.95); /* Slight scale down on mobile viewports */
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .shell.footer-bottom {
+    padding-bottom: 120px !important; /* Extra clearance for mobile safe area */
+  }
+}
+
+/* Landscape Hub / Nest Hub (1024x600) Safe Clearance */
+@media (max-height: 650px) {
+  .shell.footer-bottom {
+    padding-bottom: 90px !important;
+  }
+  .rag-chat-trigger {
+    bottom: 12px;
+    right: 12px;
+  }
+}
