@@ -13,6 +13,7 @@ import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react"
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -266,31 +267,32 @@ function App() {
 
         {/* INTEGRATED COMPACT METRICS BAR */}
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '16px', 
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)', 
-          marginTop: '40px', 
-          paddingTop: '24px',
-          textAlign: 'left'
-        }}>
-          <div>
-            <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#10b981' }}>18+</span>
-            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Years Experience</p>
-          </div>
-          <div>
-            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#3b82f6' }}>Enterprise</span>
-            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Cloud & Architecture</p>
-          </div>
-          <div>
-            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#a855f7' }}>AI Focused</span>
-            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Building Intelligent Solutions</p>
-          </div>
-          <div>
-            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#10b981' }}>Global Teams</span>
-            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Delivery Leadership</p>
-          </div>
-        </div>
+  display: 'flex', 
+  justifyContent: 'space-between', /* Changed from flex-start to space-between */
+  flexWrap: 'wrap', 
+  gap: '16px', /* Reduced gap */
+  borderTop: '1px solid rgba(255, 255, 255, 0.08)', 
+  marginTop: '40px', 
+  paddingTop: '24px',
+  textAlign: 'left'
+}}>
+  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
+    <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#10b981' }}>18+</span>
+    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Years of IT Experience</p>
+  </div>
+  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
+    <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#3b82f6' }}>Enterprise Apps</span>
+    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Oracle Cloud & UI Full Stack Architecture</p>
+  </div>
+  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
+    <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#a855f7' }}>AI Focused</span>
+    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Claude & OIC Enterprise AI certified. Building Intelligent Solutions</p>
+  </div>
+  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
+    <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#10b981' }}>Global Teams</span>
+    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Delivery Leadership, Global Customers, Stakeholder Management</p>
+  </div>
+</div>
       </section>
 
       <section className="ticker-bar" aria-label="Core Capabilities">
@@ -449,6 +451,7 @@ function App() {
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <RAGChatbot />
       <SpeedInsights />
+      <Analytics />
       <ScrollToTop />
     </main>
   );
