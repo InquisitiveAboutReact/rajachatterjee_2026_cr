@@ -127,13 +127,20 @@
     align-items: center;
     justify-content: space-between;
     height: 80px;
+    gap: 32px;
   }
   
   .brand {
     font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 1.15rem;
-    letter-spacing: 0.05em;
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-decoration: none;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #FFE082 0%, #FFB300 50%, #FF8F00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    word-spacing: 5px;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -141,12 +148,15 @@
   }
   
   .brand span {
-    color: var(--accent-primary);
+    display: inline-block;
+    width: 1px;
+    font-size: 0;
+    visibility: hidden;
   }
   
   .nav-links {
     display: flex;
-    gap: 32px;
+    gap: 24px;
     align-items: center;
   }
   
@@ -157,11 +167,30 @@
     transition: all 0.2s ease;
     padding: 6px 12px;
     border-radius: var(--radius-sm);
+    white-space: nowrap;
+    display: inline-block;
   }
   
   .nav-links a:hover {
     color: var(--text-main);
     background: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-links a.active {
+    color: var(--text-main);
+    position: relative;
+  }
+  
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-primary);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--accent-primary);
   }
   
   .nav-controls {
@@ -210,13 +239,32 @@
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 28px rgba(168, 85, 247, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.6);
   }
+
+  .share-btn {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  .share-btn:hover {
+    color: var(--text-main);
+    border-color: var(--border-highlight);
+  }
   
   /* ==========================================================================
      HERO SECTION
      ========================================================================== */
   
   .hero {
-    padding: 90px 0 70px;
+    padding: 20px 0 70px;
+    margin-top: 0px;
   }
   
   .eyebrow {
@@ -231,7 +279,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--accent-emerald);
-    margin-bottom: 32px;
+    margin-bottom: 10px;
     box-shadow: var(--shadow-card);
   }
   
@@ -255,6 +303,10 @@
     grid-template-columns: 1.2fr 0.8fr;
     gap: 48px;
     align-items: center;
+  }
+
+  .hero-content {
+    text-align: left;
   }
   
   .intro-tag {
@@ -339,7 +391,7 @@
     transform: translateY(-2px);
   }
   
-  /* Portrait Card GLOSS */
+  /* Portrait Card GLOSS & V2 */
   .portrait-card {
     position: relative;
     background: var(--bg-card);
@@ -349,6 +401,46 @@
     padding: 16px;
     overflow: hidden;
     box-shadow: var(--shadow-card), var(--shadow-glow);
+  }
+
+  .portrait-card-v2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 280px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .portrait-image-wrapper {
+    border-radius: 50%;
+    padding: 5px;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+    position: relative;
+  }
+  
+  .portrait-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .portrait-image-wrapper .status-dot-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 18px;
+    height: 18px;
+    background-color: #10b981;
+    border: 3px solid #060911;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    z-index: 10;
   }
   
   .portrait-glow {
@@ -361,24 +453,22 @@
     pointer-events: none;
   }
   
-  /* Base styles (Mobile / Tablet / iPad) */
-.portrait-card img {
-  width: 100%;
-  height: 380px;
-  object-fit: cover;
-  display: block;
-  transform: scale(1.18);
-  transform-origin: 45% 35%;
-}
-
-/* 🚀 Desktop Browser Fix (Screen widths 1024px and wider) */
-@media (min-width: 1024px) {
   .portrait-card img {
-    height: 440px; /* Gives more vertical room on wide screens */
-    transform: scale(1.12); /* Slightly reduces zoom so head isn't cut off */
-    transform-origin: 45% 15%; /* Anchors the zoom higher up near your head */
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.18);
+    transform-origin: 45% 35%;
   }
-}
+
+  @media (min-width: 1024px) {
+    .portrait-card img {
+      height: 440px;
+      transform: scale(1.12);
+      transform-origin: 45% 15%;
+    }
+  }
   
   .portrait-label {
     display: flex;
@@ -393,6 +483,72 @@
   .portrait-label span:last-child {
     color: var(--accent-cyan);
     font-size: 0.85rem;
+  }
+
+  /* Status Pill Interactive Button */
+  .status-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    color: #f1f5f9;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .status-pill-btn:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(30, 41, 59, 0.95);
+    transform: translateY(-1px);
+  }
+  
+  .status-dot-wrapper {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 2;
+  }
+  
+  .status-pulse-ring {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.75;
+    animation: pulse-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  
+  @keyframes pulse-ring {
+    75%, 100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+  
+  .status-text {
+    white-space: nowrap;
+  }
+  
+  .status-toggle-hint {
+    opacity: 0.4;
+    font-size: 0.75rem;
+    margin-left: 2px;
   }
   
   /* ==========================================================================
@@ -550,6 +706,19 @@
     color: var(--text-muted);
     font-size: 0.95rem;
   }
+
+  /* Articles Grid Fixed & Custom Card */
+  .articles-grid-fixed {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    width: 100%;
+  }
+
+  .article-card-custom:hover {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+  }
   
   /* ==========================================================================
      AI COPILOT SECTION
@@ -619,6 +788,13 @@
   
   .window-top span:nth-child(2) { background: #f59e0b; }
   .window-top span:nth-child(3) { background: #10b981; }
+
+  .window-top label {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-dim);
+  }
   
   .prompt-box {
     padding: 24px;
@@ -632,6 +808,12 @@
     letter-spacing: 0.05em;
     display: block;
     margin-bottom: 6px;
+  }
+
+  .prompt-box p,
+  .response-box p {
+    color: var(--text-muted);
+    margin-top: 4px;
   }
   
   .response-box {
@@ -761,7 +943,7 @@
   }
   
   /* ==========================================================================
-     EXPERIENCE SUMMARY
+     EXPERIENCE SUMMARY & CAREER TIMELINE STYLING
      ========================================================================== */
   
   .cred-grid {
@@ -823,15 +1005,104 @@
     font-size: 0.9rem;
     font-weight: 500;
   }
+
+  .career-hierarchy-heading {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    color: var(--text-main);
+    position: relative;
+    display: inline-block;
+  }
+  
+  .career-hierarchy-heading::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: var(--gradient-accent);
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+
+  /* Career Timeline Light Mode Overrides */
+  [data-theme="light"] .timeline-container,
+  [data-theme="light"] .career-timeline {
+    background: var(--bg-card);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+  
+  [data-theme="light"] .timeline-line,
+  [data-theme="light"] .career-timeline::before {
+    background: linear-gradient(180deg, var(--accent-primary) 0%, rgba(79, 70, 229, 0.15) 100%);
+  }
+  
+  [data-theme="light"] .timeline-card,
+  [data-theme="light"] .timeline-item {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  }
+  
+  [data-theme="light"] .timeline-card:hover {
+    background: #ffffff;
+    border-color: var(--border-highlight);
+    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.12);
+  }
+  
+  [data-theme="light"] .timeline-role,
+  [data-theme="light"] .timeline-title {
+    color: var(--text-main);
+    font-weight: 700;
+  }
+  
+  [data-theme="light"] .timeline-company {
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+  
+  [data-theme="light"] .timeline-date,
+  [data-theme="light"] .timeline-period {
+    color: #475569;
+    background: rgba(79, 70, 229, 0.08);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    font-weight: 600;
+  }
+  
+  [data-theme="light"] .timeline-description,
+  [data-theme="light"] .timeline-details {
+    color: #334155;
+  }
+  
+  [data-theme="light"] .timeline-node,
+  [data-theme="light"] .timeline-dot {
+    background: var(--accent-primary);
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+  }
+
+  [data-theme="light"] .career-timeline p,
+  [data-theme="light"] .career-timeline span,
+  [data-theme="light"] .career-timeline div,
+  [data-theme="light"] .timeline-card p,
+  [data-theme="light"] .timeline-card span,
+  [data-theme="light"] .timeline-card div {
+    color: #334155 !important;
+    opacity: 1 !important;
+  }
   
   /* ==========================================================================
-     FOOTER
+     FOOTER & UNIVERSAL BOTTOM CLEARANCE
      ========================================================================== */
   
   footer {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
     padding: 80px 0 40px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .footer-inner {
@@ -885,6 +1156,39 @@
     color: var(--text-dim);
     font-size: 0.85rem;
   }
+
+  .shell.footer-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    padding: 32px 20px 110px !important;
+    margin: 0 auto;
+  }
+  
+  .footer-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+  
+  .footer-tagline {
+    color: #fbbf24;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-top: 16px;
+  }
+  
+  .footer-date {
+    color: #38bdf8;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
   
   /* ==========================================================================
      CV MODAL STYLES (GLOSSY DIALOG)
@@ -924,6 +1228,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
   }
   
   .cv-header-title {
@@ -1096,6 +1401,11 @@
     padding: 40px 24px;
     margin-bottom: 32px;
   }
+
+  .upload-box.dragging {
+    border-color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.08);
+  }
   
   .upload-icon {
     font-size: 3rem;
@@ -1113,17 +1423,39 @@
     margin-bottom: 24px;
   }
   
-  .file-select-label {
+  .file-select-label,
+  .file-select-btn {
     background: var(--gradient-accent);
     color: #ffffff;
     font-weight: 600;
-    padding: 12px 24px;
+    padding: 14px 28px;
     border-radius: 30px;
     cursor: pointer;
     display: inline-block;
+    border: none;
+    font-size: 1rem;
+    min-height: 48px;
+    min-width: 200px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     box-shadow: 0 4px 16px var(--accent-glow);
   }
+
+  .file-select-btn:active {
+    transform: scale(0.98);
+  }
   
+  .cv-file-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
   .current-file-badge {
     margin-top: 20px;
     font-size: 0.9rem;
@@ -1134,6 +1466,10 @@
     margin-top: 12px;
     font-size: 0.85rem;
     color: var(--accent-emerald);
+  }
+
+  .upload-status-msg.error {
+    color: #ef4444;
   }
   
   .repo-sync-guide {
@@ -1167,16 +1503,71 @@
     cursor: pointer;
     font-size: 0.8rem;
   }
+
+  .cv-open-tab-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cv-mobile-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    height: 100%;
+    gap: 16px;
+  }
+  
+  .cv-mobile-preview-icon {
+    font-size: 4rem;
+  }
+  
+  .cv-mobile-preview h4 {
+    font-size: 1.1rem;
+    word-break: break-word;
+  }
+  
+  .cv-mobile-preview p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 320px;
+    line-height: 1.6;
+  }
+  
+  .cv-mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 280px;
+    margin-top: 8px;
+  }
+  
+  .cv-mobile-actions .btn-primary,
+  .cv-mobile-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
   
   /* ==========================================================================
-     RAG CHATBOT WIDGET STYLES
+     RAG CHATBOT WIDGET STYLES & COMPLETE SCROLLBAR RESET
      ========================================================================== */
   
   .rag-chatbot-wrapper {
     position: fixed;
-    bottom: 28px;
-    right: 28px;
-    z-index: 1500;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
   }
   
   .rag-chat-trigger {
@@ -1223,6 +1614,44 @@
     flex-direction: column;
     overflow: hidden;
   }
+
+  /* Universal WebKit Scrollbar Reset inside Chat Modal */
+  .rag-chat-modal *::-webkit-scrollbar {
+    width: 5px !important;
+    height: 0px !important;
+    display: none !important;
+  }
+  
+  .rag-chat-messages::-webkit-scrollbar {
+    display: block !important;
+    width: 5px !important;
+  }
+  
+  .rag-chat-messages::-webkit-scrollbar-track {
+    background: #0b0f19 !important;
+  }
+  
+  .rag-chat-messages::-webkit-scrollbar-thumb {
+    background: #334155 !important;
+    border-radius: 4px !important;
+  }
+  
+  .rag-quick-prompts,
+  .rag-chat-modal div {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  
+  .rag-chat-messages {
+    scrollbar-width: thin !important;
+    scrollbar-color: #334155 #0b0f19 !important;
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
   
   .rag-chat-header {
     padding: 16px 20px;
@@ -1268,15 +1697,6 @@
     color: var(--text-muted);
     font-size: 1.1rem;
     cursor: pointer;
-  }
-  
-  .rag-chat-messages {
-    flex: 1;
-    padding: 16px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
   }
   
   .chat-bubble-row {
@@ -1447,29 +1867,27 @@
   }
   
   /* ==========================================================================
-     MOBILE NAVIGATION
+     MOBILE NAVIGATION DRAWER
      ========================================================================== */
   
   .mobile-menu-btn {
     display: none;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
-    width: 44px;
-    height: 44px;
-    padding: 10px;
-    background: var(--bg-card);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    align-items: center;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    background: transparent;
+    border: none;
     cursor: pointer;
   }
   
   .mobile-menu-btn span {
     display: block;
-    width: 100%;
+    width: 22px;
     height: 2px;
-    background: var(--text-main);
+    background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%);
     border-radius: 2px;
     transition: all 0.2s ease;
   }
@@ -1495,7 +1913,7 @@
     top: 0;
     right: 0;
     width: min(320px, 85vw);
-    height: 100%;
+    height: 100vh;
     height: 100dvh;
     background: var(--bg-secondary);
     backdrop-filter: blur(20px);
@@ -1505,7 +1923,6 @@
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) 0;
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
   }
   
@@ -1541,12 +1958,20 @@
     font-size: 1.3rem;
     cursor: pointer;
   }
+
+  .mobile-nav-scrollable-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
   
   .mobile-nav-links {
     list-style: none;
-    flex: 1;
     padding: 16px 0;
-    overflow-y: auto;
   }
   
   .mobile-nav-links li a {
@@ -1568,82 +1993,25 @@
   }
   
   .mobile-nav-actions {
-    padding: 20px 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 20px 24px;
+    margin-top: auto;
     border-top: 1px solid var(--border-color);
   }
   
   .mobile-action-btn {
     width: 100%;
+    display: flex;
+    align-items: center;
     justify-content: center;
     min-height: 48px;
   }
   
   /* ==========================================================================
-     ENHANCED NAV & UTILITIES
+     UTILITIES & ANIMATIONS
      ========================================================================== */
-  
-  .nav-links a.active {
-    color: var(--text-main);
-    position: relative;
-  }
-  
-  .nav-links a.active::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--accent-primary);
-    border-radius: 2px;
-    box-shadow: 0 0 8px var(--accent-primary);
-  }
-  
-  .share-btn {
-    background: var(--bg-card);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    padding: 8px 14px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-  }
-  
-  .share-btn:hover {
-    color: var(--text-main);
-    border-color: var(--border-highlight);
-  }
-  
-  .ai-links {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .experience-copy,
-  .footer-tagline {
-    color: var(--text-muted);
-    margin-top: 16px;
-  }
-  
-  .prompt-box p,
-  .response-box p {
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-  
-  .window-top label {
-    margin-left: auto;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-dim);
-  }
   
   .reveal-section {
     animation: fadeInUp 0.6s ease both;
@@ -1661,200 +2029,99 @@
   }
   
   /* ==========================================================================
-     CV MODAL — MOBILE ENHANCEMENTS
-     ========================================================================== */
-  
-  .cv-open-tab-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  
-  .cv-file-input-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-  }
-  
-  .file-select-btn {
-    background: var(--gradient-accent);
-    color: #ffffff;
-    font-weight: 600;
-    padding: 14px 28px;
-    border-radius: 30px;
-    cursor: pointer;
-    border: none;
-    font-size: 1rem;
-    min-height: 48px;
-    min-width: 200px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 4px 16px var(--accent-glow);
-  }
-  
-  .file-select-btn:active {
-    transform: scale(0.98);
-  }
-  
-  .upload-box.dragging {
-    border-color: var(--accent-primary);
-    background: rgba(99, 102, 241, 0.08);
-  }
-  
-  .pin-hint {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 16px;
-  }
-  
-  .pin-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .pin-cancel-btn {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-weight: 600;
-    min-height: 44px;
-  }
-  
-  .pin-prompt-container {
-    padding: 40px 24px;
-    text-align: center;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-  
-  .pin-input {
-    width: 100%;
-    max-width: 280px;
-    padding: 14px 16px;
-    font-size: 1.1rem;
-    text-align: center;
-    letter-spacing: 0.2em;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    color: var(--text-main);
-    margin-bottom: 16px;
-    min-height: 48px;
-  }
-  
-  .pin-verify-btn {
-    background: var(--gradient-accent);
-    color: #ffffff;
-    font-weight: 600;
-    padding: 12px 24px;
-    border-radius: var(--radius-sm);
-    border: none;
-    cursor: pointer;
-    min-height: 44px;
-  }
-  
-  .upload-status-msg.error {
-    color: #ef4444;
-  }
-  
-  .cv-mobile-preview {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
-    height: 100%;
-    gap: 16px;
-  }
-  
-  .cv-mobile-preview-icon {
-    font-size: 4rem;
-  }
-  
-  .cv-mobile-preview h4 {
-    font-size: 1.1rem;
-    word-break: break-word;
-  }
-  
-  .cv-mobile-preview p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    max-width: 320px;
-    line-height: 1.6;
-  }
-  
-  .cv-mobile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 280px;
-    margin-top: 8px;
-  }
-  
-  .cv-mobile-actions .btn-primary,
-  .cv-mobile-actions .btn-secondary {
-    width: 100%;
-    justify-content: center;
-    min-height: 48px;
-  }
-  
-  /* ==========================================================================
-     RESPONSIVE BREAKPOINTS
+     RESPONSIVE BREAKPOINTS & MOBILE FIXES
      ========================================================================== */
   
   @media (max-width: 1024px) {
-    .nav-links {
-      gap: 20px;
+    .nav-links,
+    .share-btn,
+    .theme-toggle-btn,
+    .cv-cta-btn {
+      display: none !important;
+    }
+
+    .mobile-menu-btn {
+      display: flex !important;
+    }
+
+    .footer-cta-grid, 
+    footer .grid {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .rag-chat-trigger {
+      transform: scale(0.95);
+      bottom: 16px;
+      right: 16px;
+    }
+
+    .shell.footer-bottom {
+      padding-bottom: 120px !important;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .nav-links,
+    .share-btn,
+    .theme-toggle-btn,
+    .cv-cta-btn {
+      display: none !important;
+    }
+
+    .mobile-menu-btn {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 4px !important;
+      width: 38px !important;
+      height: 38px !important;
+      background: transparent !important;
+      border: none !important;
+      cursor: pointer !important;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      display: flex !important;
+      flex-direction: column-reverse !important;
+      gap: 25px !important;
+      text-align: center;
+    }
+
+    .hero-content {
+      text-align: center !important;
     }
   
-    .nav-links a {
-      font-size: 0.85rem;
+    .hero-actions {
+      justify-content: center !important;
+    }
+
+    .portrait-card-v2 {
+      width: 100% !important;
+      max-width: 300px !important;
+      margin: 0 auto !important;
     }
   
-    .share-btn {
-      display: none;
-    }
-  
-    .hero h1 {
-      font-size: 3.2rem;
-    }
-  
-    .cred-grid {
-      padding: 40px;
+    .hero .hero-grid + div,
+    .hero [style*="gridTemplateColumns"] {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 15px !important;
+      text-align: center !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+      margin-top: 25px !important;
+      padding-top: 20px !important;
     }
   }
   
   @media (max-width: 768px) {
     .shell {
       padding: 0 20px;
-    }
-  
-    .nav-links,
-    .nav-controls .theme-toggle-btn,
-    .nav-controls .cv-cta-btn {
-      display: none;
-    }
-  
-    .mobile-menu-btn {
-      display: flex;
     }
   
     .nav-inner {
@@ -1871,11 +2138,6 @@
     .footer-inner {
       grid-template-columns: 1fr;
       gap: 32px;
-    }
-  
-    .hero-grid {
-      display: flex;
-      flex-direction: column;
     }
   
     .portrait-card {
@@ -1919,7 +2181,8 @@
       font-size: 2rem;
     }
   
-    .projects-grid {
+    .projects-grid,
+    .articles-grid-fixed {
       grid-template-columns: 1fr;
       gap: 20px;
     }
@@ -1980,6 +2243,7 @@
       flex-direction: column;
       gap: 8px;
       text-align: center;
+      padding-bottom: 100px;
     }
   
     .ticker-bar {
@@ -1994,7 +2258,7 @@
   
     .cv-modal-container {
       max-width: 100%;
-      height: 100%;
+      height: 100vh;
       height: 100dvh;
       border-radius: 0;
       border: none;
@@ -2006,6 +2270,8 @@
       gap: 16px;
       padding: 16px 20px;
       padding-top: calc(16px + env(safe-area-inset-top));
+      position: relative;
+      padding-right: 56px;
     }
   
     .cv-header-title h3 {
@@ -2037,11 +2303,6 @@
       right: 16px;
     }
   
-    .cv-modal-header {
-      position: relative;
-      padding-right: 56px;
-    }
-  
     .tab-btn {
       font-size: 0.8rem;
       padding: 12px 8px;
@@ -2056,7 +2317,7 @@
       padding: 32px 16px;
     }
   
-    /* Chatbot — mobile friendly */
+    /* Chatbot mobile layout */
     .rag-chatbot-wrapper {
       bottom: calc(16px + env(safe-area-inset-bottom));
       right: 16px;
@@ -2095,11 +2356,21 @@
     }
   
     .brand {
-      font-size: 0.9rem;
+      font-size: 1.1rem;
     }
   
     .tab-btn span {
       display: none;
+    }
+  }
+
+  @media (max-height: 650px) {
+    .shell.footer-bottom {
+      padding-bottom: 90px !important;
+    }
+    .rag-chat-trigger {
+      bottom: 12px;
+      right: 12px;
     }
   }
   
@@ -2117,634 +2388,3 @@
       scroll-behavior: auto;
     }
   }
-
-  /* Career Hierarchy Section Heading */
-.career-hierarchy-heading {
-  font-size: 2.2rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 32px;
-  color: var(--text-main);
-  position: relative;
-  display: inline-block;
-}
-
-.career-hierarchy-heading::after {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 3px;
-  background: var(--gradient-accent);
-  border-radius: 2px;
-  margin-top: 8px;
-}
-
-/* ==========================================================================
-   CAREER TIMELINE LIGHT MODE OVERRIDES
-   ========================================================================== */
-
-   [data-theme="light"] .timeline-container,
-   [data-theme="light"] .career-timeline {
-     background: var(--bg-card);
-     border-color: rgba(0, 0, 0, 0.1);
-     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-   }
-   
-   /* Timeline Vertical Connector Line */
-   [data-theme="light"] .timeline-line,
-   [data-theme="light"] .career-timeline::before {
-     background: linear-gradient(180deg, var(--accent-primary) 0%, rgba(79, 70, 229, 0.15) 100%);
-   }
-   
-   /* Timeline Cards */
-   [data-theme="light"] .timeline-card,
-   [data-theme="light"] .timeline-item {
-     background: rgba(255, 255, 255, 0.85);
-     border: 1px solid rgba(0, 0, 0, 0.08);
-     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-   }
-   
-   [data-theme="light"] .timeline-card:hover {
-     background: #ffffff;
-     border-color: var(--border-highlight);
-     box-shadow: 0 12px 28px rgba(79, 70, 229, 0.12);
-   }
-   
-   /* Text & Labels inside Timeline */
-   [data-theme="light"] .timeline-role,
-   [data-theme="light"] .timeline-title {
-     color: var(--text-main); /* Deep Slate #0f172a */
-     font-weight: 700;
-   }
-   
-   [data-theme="light"] .timeline-company {
-     color: var(--accent-primary);
-     font-weight: 600;
-   }
-   
-   [data-theme="light"] .timeline-date,
-   [data-theme="light"] .timeline-period {
-     color: #475569;
-     background: rgba(79, 70, 229, 0.08);
-     border: 1px solid rgba(79, 70, 229, 0.2);
-     font-weight: 600;
-   }
-   
-   [data-theme="light"] .timeline-description,
-   [data-theme="light"] .timeline-details {
-     color: #334155; /* High contrast dark slate */
-   }
-   
-   /* Node Markers / Bullets */
-   [data-theme="light"] .timeline-node,
-   [data-theme="light"] .timeline-dot {
-     background: var(--accent-primary);
-     border: 3px solid #ffffff;
-     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
-   }
-
-  /* LIGHT MODE TIMELINE TEXT CONTRAST FIX */
-[data-theme="light"] .career-timeline p,
-[data-theme="light"] .career-timeline span,
-[data-theme="light"] .career-timeline div,
-[data-theme="light"] .timeline-card p,
-[data-theme="light"] .timeline-card span,
-[data-theme="light"] .timeline-card div {
-  color: #334155 !important;
-  opacity: 1 !important;
-}
-
-/* Fix line breaking on header links */
-.nav-links a {
-  white-space: nowrap !important; /* Prevents "Selected Work" and "Intelligence & AI" from breaking onto two lines */
-  display: inline-block !important;
-}
-
-/* Adjust spacing between links and brand */
-.nav-links {
-  display: flex !important;
-  align-items: center !important;
-  gap: 24px !important; /* Spacing between nav links */
-}
-
-.nav-inner {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 32px !important; /* Spacing between Brand, Links, and Controls */
-}
-
-/* ==========================================================================
-   BRAND LOGO STYLING (GOLD, LARGER & OPTIMIZED SPACING)
-   ========================================================================== */
-
-   .brand {
-    font-size: 1.45rem !important; /* Slightly increased font size */
-    font-weight: 800 !important;
-    letter-spacing: 1.2px !important;
-    text-decoration: none !important;
-    white-space: nowrap !important;
-    
-    /* Metallic Gold Gradient */
-    background: linear-gradient(135deg, #FFE082 0%, #FFB300 50%, #FF8F00 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-  
-    /* Tightened space between first and last name */
-    word-spacing: 5px !important;
-  }
-  
-  /* Reduced width of the spacer element */
-  .brand span {
-    display: inline-block !important;
-    width: 1px !important; /* Forces the gap to be exactly 4px */
-    font-size: 0 !important; /* Removes any extra inherited space */
-    visibility: hidden !important;
-  }
-
-  /* ==========================================================================
-   MOBILE & TABLET BREAKPOINT FIX
-   ========================================================================== */
-
-@media (max-width: 992px) {
-  /* Hide desktop links and action buttons on smaller screens */
-  .nav-links,
-  .share-btn,
-  .theme-toggle-btn,
-  .cv-cta-btn {
-    display: none !important;
-  }
-
-  /* Force hamburger button to display */
-  .mobile-menu-btn {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 4px !important;
-    width: 38px !important;
-    height: 38px !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-  }
-
-  /* Make sure hamburger lines are visible */
-  .mobile-menu-btn span {
-    display: block !important;
-    width: 22px !important;
-    height: 2px !important;
-    background-color: var(--text-primary, #0f172a) !important;
-    border-radius: 2px !important;
-  }
-}
-/* Make Hamburger Menu Lines Gold */
-.mobile-menu-btn span {
-  background-color: #f59e0b !important; /* Gold Accent Color */
-  background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%) !important; /* Matching Gold Gradient */
-}
-
-/* Fix: Ensure Analytics / Dashboard section remains visible on mobile */
-#analytics,
-.analytics-section,
-.dashboard-container {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  width: 100% !important;
-  overflow-x: auto; /* Handles responsive chart or data table scrolling */
-}
-
-/* Enable vertical layout & scrolling for mobile drawer */
-.mobile-nav-drawer {
-  display: flex !important;
-  flex-direction: column !important;
-  max-height: 100vh !important;
-}
-
-.mobile-nav-scrollable-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-}
-
-.mobile-nav-actions {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 12px !important;
-  padding: 16px 24px !important;
-  margin-top: auto !important;
-}
-
-.mobile-action-btn {
-  width: 100% !important;
-  justify-content: center !important;
-}
-
-/* ==========================================================================
-   MOBILE NAV DRAWER FIX (APPEND TO BOTTOM OF ORIGINAL APP.CSS)
-   ========================================================================== */
-
-   .mobile-nav-drawer {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-  }
-  
-  .mobile-nav-scrollable-content {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    flex: 1 !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  
-  .mobile-nav-actions {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    padding: 20px 24px !important;
-    margin-top: auto !important;
-    flex-shrink: 0 !important;
-  }
-  
-  .mobile-action-btn {
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  /* Restricts the grid to 2 columns matching the top row */
-.articles-grid-fixed {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .articles-grid-fixed {
-    grid-template-columns: 1fr;
-  }
-}
-/* Custom subtle accent glow for Article Cards */
-.article-card-custom:hover {
-  border-color: #10b981 !important; /* Soft Emerald Green accent */
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
-}
-
-/* ==========================================
-   RAG Chatbot Complete Scrollbar Reset
-   ========================================== */
-
-/* 1. Universal WebKit Reset for all elements inside the chatbot modal */
-.rag-chat-modal *::-webkit-scrollbar {
-  width: 5px !important;
-  height: 0px !important; /* Hides horizontal scrollbar tracks completely */
-  display: none !important;
-}
-
-/* 2. Re-enable ONLY vertical scrollbar for the message thread */
-.rag-chat-messages::-webkit-scrollbar {
-  display: block !important;
-  width: 5px !important;
-}
-
-.rag-chat-messages::-webkit-scrollbar-track {
-  background: #0b0f19 !important;
-}
-
-.rag-chat-messages::-webkit-scrollbar-thumb {
-  background: #334155 !important;
-  border-radius: 4px !important;
-}
-
-/* 3. Firefox & IE/Edge Scrollbar Hiding for Quick Prompts */
-.rag-quick-prompts,
-.rag-chat-modal div {
-  scrollbar-width: none !important; /* Firefox */
-  -ms-overflow-style: none !important; /* IE/Edge */
-}
-
-.rag-chat-messages {
-  scrollbar-width: thin !important;
-  scrollbar-color: #334155 #0b0f19 !important;
-}
-
-/* ==========================================
-   Responsive Dark Footer Fixes (Safari Safe)
-   ========================================== */
-.footer-bottom {
-  padding: 24px 16px 80px; /* Extra bottom padding prevents floating Copilot overlap */
-}
-
-.footer-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
-  color: #94a3b8; /* Clear readable slate grey */
-  font-size: 0.875rem;
-}
-
-.footer-tagline {
-  color: #fbbf24; /* Warm amber glow for prominence */
-  font-weight: 500;
-}
-
-.footer-date {
-  color: #38bdf8; /* Bright sky blue for sharp date contrast */
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-/* Mobile Safari safe viewport spacing */
-@media (max-width: 768px) {
-  .footer-bottom {
-    padding-bottom: 100px; /* Space for Mobile Safari address bar + floating trigger */
-  }
-}
-
-/* ==========================================
-   Universal Responsive Footer & Floating Trigger Fixes
-   ========================================== */
-
-/* 1. Ensure Full-Width Footer Layout */
-footer, .footer-bottom {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.shell.footer-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 10px;
-  padding: 32px 20px 110px !important; /* Bottom clearance prevents Copilot overlap on ALL screens */
-  margin: 0 auto;
-}
-
-.footer-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-}
-
-.footer-tagline {
-  color: #fbbf24;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.footer-date {
-  color: #38bdf8;
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-}
-
-/* 2. Floating Copilot Button Z-Index & Safe Offset */
-.rag-chatbot-wrapper {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 9999; /* Higher priority than footer text */
-}
-
-/* 3. Tablet & Mobile Specific Breakpoint Hardening */
-@media (max-width: 1024px) {
-  /* Fix CTA Grid Alignment on iPad Pro & Surface Pro 7 */
-  .footer-cta-grid, 
-  footer .grid {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-  }
-
-  .rag-chat-trigger {
-    transform: scale(0.95); /* Slight scale down on mobile viewports */
-    bottom: 16px;
-    right: 16px;
-  }
-
-  .shell.footer-bottom {
-    padding-bottom: 120px !important; /* Extra clearance for mobile safe area */
-  }
-}
-
-/* Landscape Hub / Nest Hub (1024x600) Safe Clearance */
-@media (max-height: 650px) {
-  .shell.footer-bottom {
-    padding-bottom: 90px !important;
-  }
-  .rag-chat-trigger {
-    bottom: 12px;
-    right: 12px;
-  }
-}
-
-/* ==========================================
-   Portrait Card & Dynamic Status Pill Fixes
-   ========================================== */
-   .portrait-card-v2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    max-width: 280px; /* Reduced slightly from 320px for a sleeker circular proportion */
-    width: 100%;
-    margin: 0 auto;
-  }
-  
-  .portrait-image-wrapper {
-    border-radius: 50%;
-    padding: 5px;
-    background: linear-gradient(135deg, #10b981, #3b82f6);
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
-  }
-  
-  .portrait-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-  }
-  
-  /* Status Pill Interactive Button */
-  .status-pill-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 18px;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 30px;
-    color: #f1f5f9;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  .status-pill-btn:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    background: rgba(30, 41, 59, 0.95);
-    transform: translateY(-1px);
-  }
-  
-  .status-dot-wrapper {
-    position: relative;
-    width: 10px;
-    height: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    z-index: 2;
-  }
-  
-  .status-pulse-ring {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    opacity: 0.75;
-    animation: pulse-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-  }
-  
-  @keyframes pulse-ring {
-    75%, 100% {
-      transform: scale(2.6);
-      opacity: 0;
-    }
-  }
-  
-  .status-text {
-    white-space: nowrap;
-  }
-  
-  .status-toggle-hint {
-    opacity: 0.4;
-    font-size: 0.75rem;
-    margin-left: 2px;
-  }
-  .portrait-image-wrapper .status-dot-badge {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    width: 18px;
-    height: 18px;
-    background-color: #10b981;
-    border: 3px solid #060911; /* Matches main dark background */
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
-    z-index: 10;
-  }
-
-  /* --- Custom Responsive Fix for Hero Grid Layout --- */
-@media (max-width: 900px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    gap: 40px !important;
-    text-align: center;
-  }
-  
-  .hero-actions {
-    justify-content: center;
-  }
-  
-  .portrait-card-v2 {
-    max-width: 320px;
-    margin: 0 auto;
-  }
-}
-
-/* --- Tighten Top Spacing for Hero Section --- */
-.hero {
-  padding-top: 20px !important; /* Reduces space right below the header */
-  margin-top: 0px !important;
-}
-
-.hero .eyebrow {
-  margin-bottom: 10px !important; /* Tightens space above the eyebrow tag */
-}
-
-/* --- Mobile Viewport Fixes (iPhone / Small Screens) --- */
-@media (max-width: 900px) {
-  /* Ensure metrics stack neatly with breathing room */
-  .hero div[style*="gridTemplateColumns"],
-  .hero-grid + div {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-    padding-bottom: 30px !important;
-  }
-
-  /* Prevent the floating AI copilot or bottom widgets from covering text */
-  .ai-copilot-badge, 
-  .rag-chatbot-container {
-    position: relative !important;
-    bottom: auto !important;
-    right: auto !important;
-    margin-top: 20px;
-  }
-}
-/* --- iPhone 17 & Mobile Responsive Layout Fix --- */
-@media (max-width: 900px) {
-  /* Stack the hero grid and ensure text comes before the profile card */
-  .hero .hero-grid {
-    display: flex !important;
-    flex-direction: column-reverse !important;
-    gap: 25px !important;
-  }
-
-  /* Center align the text content block on mobile */
-  .hero-content {
-    text-align: center !important;
-  }
-
-  .hero-actions {
-    justify-content: center !important;
-  }
-
-  /* Make sure the profile card scales correctly and stays centered */
-  .portrait-card-v2 {
-    width: 100% !important;
-    max-width: 300px !important;
-    margin: 0 auto !important;
-  }
-
-  /* Turn the metrics grid into a clean vertical or dual column list on mobile */
-  .hero .hero-grid + div,
-  .hero [style*="gridTemplateColumns"] {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 15px !important;
-    text-align: center !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    margin-top: 25px !important;
-    padding-top: 20px !important;
-  }
-}
