@@ -248,7 +248,8 @@ function App() {
                   const msg = e.target.elements.message.value;
                   if (!msg) return;
                   const phoneNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "";
-                  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+                //  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+                window.open(`https://wa.me/${phoneNumber}?text=Hi%20Raja,%20I%20saw%20your%20portfolio%20and%20wanted%20to%20connect`, '_blank');
                 }}>
                   <input type="text" name="message" placeholder="Type message..." style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', background: '#2a3942', border: 'none', color: '#fff', fontSize: '11px', marginBottom: '6px', outline: 'none' }} />
                   <button type="submit" style={{ width: '100%', padding: '6px', borderRadius: '4px', background: '#00a884', color: '#111b21', fontWeight: 'bold', border: 'none', cursor: 'pointer', fontSize: '11px' }}>Send via WhatsApp ➔</button>
