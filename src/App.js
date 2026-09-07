@@ -62,6 +62,9 @@ function App() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  
+  // State for the interactive WhatsApp widget message input
+  const [userMessage, setUserMessage] = useState('');
 
   const getDynamicStatus = () => {
     const currentHour = new Date().getHours();
@@ -156,6 +159,14 @@ function App() {
     }
   };
 
+  const handleWhatsAppSubmit = (e) => {
+    e.preventDefault();
+    const phoneNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "";
+    // Use the dynamic text typed by the user, with fallback if empty
+    const messageToSend = userMessage.trim() || "Hi Raja, I saw your portfolio and wanted to connect";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageToSend)}`, '_blank');
+  };
+
   return (
     <main className="app-root">
       <ScrollProgress />
@@ -191,11 +202,11 @@ function App() {
           <h4>Available for strategic collaborations &amp; open for new opportunities</h4>
         </div>
 
-                <div className="hero-grid" style={{ 
+        <div className="hero-grid" style={{ 
           display: 'grid', 
           gridTemplateColumns: 'minmax(0, 1.2fr) minmax(280px, 360px)', 
           alignItems: 'center', 
-          gap: '30px' // Tighter gap between text and profile card
+          gap: '30px'
         }}>
           <div className="hero-content">
             <p className="intro-tag">Technical Delivery Leader | Enterprise AI &amp; Digital Builder</p>
@@ -243,15 +254,14 @@ function App() {
                 <div style={{ background: '#202c33', padding: '6px 10px', borderRadius: '6px', fontSize: '11px', marginBottom: '6px' }}>
                   👋 Hi! Drop a note below:
                 </div>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const msg = e.target.elements.message.value;
-                  if (!msg) return;
-                  const phoneNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "";
-                //  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-                window.open(`https://wa.me/${phoneNumber}?text=Hi%20Raja,%20I%20saw%20your%20portfolio%20and%20wanted%20to%20connect`, '_blank');
-                }}>
-                  <input type="text" name="message" placeholder="Type message..." style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', background: '#2a3942', border: 'none', color: '#fff', fontSize: '11px', marginBottom: '6px', outline: 'none' }} />
+                <form onSubmit={handleWhatsAppSubmit}>
+                  <input 
+                    type="text" 
+                    value={userMessage}
+                    onChange={(e) => setUserMessage(e.target.value)}
+                    placeholder="Hi Raja, I'd love to connect regarding..." 
+                    style={{ width: '100%', padding: '6px 8px', borderRadius: '4px', background: '#2a3942', border: 'none', color: '#fff', fontSize: '11px', marginBottom: '6px', outline: 'none' }} 
+                  />
                   <button type="submit" style={{ width: '100%', padding: '6px', borderRadius: '4px', background: '#00a884', color: '#111b21', fontWeight: 'bold', border: 'none', cursor: 'pointer', fontSize: '11px' }}>Send via WhatsApp ➔</button>
                 </form>
               </div>
@@ -268,32 +278,32 @@ function App() {
 
         {/* INTEGRATED COMPACT METRICS BAR */}
         <div style={{ 
-  display: 'flex', 
-  justifyContent: 'space-between', /* Changed from flex-start to space-between */
-  flexWrap: 'wrap', 
-  gap: '16px', /* Reduced gap */
-  borderTop: '1px solid rgba(255, 255, 255, 0.08)', 
-  marginTop: '40px', 
-  paddingTop: '24px',
-  textAlign: 'left'
-}}>
-  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
-    <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#10b981' }}>18+</span>
-    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Years of IT Experience</p>
-  </div>
-  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
-    <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#3b82f6' }}>Enterprise Apps</span>
-    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Oracle Cloud & UI Full Stack Architecture</p>
-  </div>
-  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
-    <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#a855f7' }}>AI Focused</span>
-    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Claude & OIC Enterprise AI certified. Building Intelligent Solutions</p>
-  </div>
-  <div style={{ minWidth: '140px' }}> {/* Removed flex: 1 */}
-    <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#10b981' }}>Global Teams</span>
-    <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Delivery Leadership, Global Customers, Stakeholder Management</p>
-  </div>
-</div>
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          flexWrap: 'wrap', 
+          gap: '16px', 
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)', 
+          marginTop: '40px', 
+          paddingTop: '24px',
+          textAlign: 'left'
+        }}>
+          <div style={{ minWidth: '140px' }}>
+            <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#10b981' }}>18+</span>
+            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Years of IT Experience</p>
+          </div>
+          <div style={{ minWidth: '140px' }}>
+            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#3b82f6' }}>Enterprise Apps</span>
+            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Oracle Cloud & UI Full Stack Architecture</p>
+          </div>
+          <div style={{ minWidth: '140px' }}>
+            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#a855f7' }}>AI Focused</span>
+            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Claude & OIC Enterprise AI certified. Building Intelligent Solutions</p>
+          </div>
+          <div style={{ minWidth: '140px' }}>
+            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#10b981' }}>Global Teams</span>
+            <p style={{ color: '#9ca3af', fontSize: '12px', margin: '2px 0 0 0' }}>Delivery Leadership, Global Customers, Stakeholder Management</p>
+          </div>
+        </div>
       </section>
 
       <section className="ticker-bar" aria-label="Core Capabilities">
