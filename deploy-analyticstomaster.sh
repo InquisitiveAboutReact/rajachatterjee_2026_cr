@@ -25,10 +25,17 @@ git pull origin master
 git merge feature-analytics -m "merge: $commit_message"
 git push origin master
 
-echo "📦 Building and bundling for production..."
+echo "📦 Building project for production..."
 npm run build
+
+# --- NEW: Deploy directly to GitHub Pages ---
+echo "🌐 Deploying built assets to GitHub Pages (gh-pages branch)..."
+# If you use the 'gh-pages' npm package, this command handles it automatically:
+npx gh-pages -d build
+# Note: If your build output folder is 'dist' instead of 'build', change it to: npx gh-pages -d dist
+# ---------------------------------------------
 
 echo "🔄 Switching back to feature-analytics branch..."
 git checkout feature-analytics
 
-echo "✨ All steps completed successfully! Your live analytics backend and frontend changes are now merged into master and deploying to production on Vercel."
+echo "✨ All steps completed successfully! Vercel is building master, and GitHub Pages has been updated."
