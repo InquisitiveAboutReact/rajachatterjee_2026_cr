@@ -13,7 +13,7 @@ import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -55,6 +55,23 @@ const certifications = [
   { image: oracleHrBadge, title: 'Oracle Global Human Resources Cloud', detail: '2025 Certified Implementation Professional', year: '2025' },
 ];
 
+// Helper function to track live metrics to Upstash Redis database
+const trackAnalyticsEvent = async (metricName) => {
+  try {
+    const trackingUrl = window.location.hostname === 'localhost' || window.location.hostname.includes('github.io')
+      ? `${VERCEL_DOMAIN}/api/analytics`
+      : '/api/analytics';
+
+    await fetch(trackingUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metric: metricName })
+    });
+  } catch (err) {
+    console.error('Tracking error:', err);
+  }
+};
+
 function App() {
   const [theme, setTheme] = useState('dark');
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
@@ -63,7 +80,6 @@ function App() {
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   
-  // State for the interactive WhatsApp widget message input
   const [userMessage, setUserMessage] = useState('');
 
   const getDynamicStatus = () => {
@@ -74,6 +90,12 @@ function App() {
   };
 
   const [currentStatus, setCurrentStatus] = useState(getDynamicStatus);
+
+  // Track CV Downloads live
+  const handleOpenCV = () => {
+    trackAnalyticsEvent('cvDownloads');
+    setIsCVModalOpen(true);
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -159,10 +181,12 @@ function App() {
     }
   };
 
+  // Track Hire Requests / Contact submissions live
   const handleWhatsAppSubmit = (e) => {
     e.preventDefault();
+    trackAnalyticsEvent('hireRequests');
+
     const phoneNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "";
-    // Use the dynamic text typed by the user, with fallback if empty
     const messageToSend = userMessage.trim() || "Hi Raja, I saw your portfolio and wanted to connect";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageToSend)}`, '_blank');
   };
@@ -185,7 +209,7 @@ function App() {
             <button type="button" className="share-btn" onClick={() => setIsAnalyticsOpen(true)} title="Analytics">📊 Analytics</button>
             <button type="button" className="share-btn" onClick={handleShare} title="Share">↗ Share</button>
             <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button>
-            <button type="button" className="cv-cta-btn" onClick={() => setIsCVModalOpen(true)}>📄 Download CV</button>
+            <button type="button" className="cv-cta-btn" onClick={handleOpenCV}>📄 Download CV</button>
             <button type="button" className="mobile-menu-btn" onClick={() => setIsMobileNavOpen(true)} aria-label="Open menu">
               <span /><span /><span />
             </button>
@@ -193,7 +217,7 @@ function App() {
         </div>
       </header>
 
-      <MobileNav isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} onOpenCV={() => setIsCVModalOpen(true)} onOpenAnalytics={() => setIsAnalyticsOpen(true)} theme={theme} onToggleTheme={toggleTheme} />
+      <MobileNav isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} onOpenCV={handleOpenCV} onOpenAnalytics={() => setIsAnalyticsOpen(true)} theme={theme} onToggleTheme={toggleTheme} />
 
       {/* COMPACT & SOLID HERO SECTION */}
       <section className="hero shell" id="top" style={{ paddingBottom: '30px' }}>
@@ -220,7 +244,7 @@ function App() {
             </p>
 
             <div className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-              <button type="button" className="btn-primary" onClick={() => setIsCVModalOpen(true)}>📄 Download CV (PDF)</button>
+              <button type="button" className="btn-primary" onClick={handleOpenCV}>📄 Download CV (PDF)</button>
               <a href="#work" className="btn-secondary">View Selected Work ↓</a>
               <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" className="btn-secondary">Connect on LinkedIn <Arrow /></a>
             </div>
