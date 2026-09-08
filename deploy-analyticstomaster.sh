@@ -12,23 +12,23 @@ if [ -z "$commit_message" ]; then
   commit_message="feat: integrate live Upstash Redis analytics and tracking"
 fi
 
-echo "🚀 Staging and committing changes on current branch..."
+echo "🚀 Staging and committing changes on analytics branch..."
 git add .
 git commit -m "$commit_message"
 
-echo "📤 Pushing current branch to remote..."
-git push origin vercel-config
+echo "📤 Pushing analytics branch to remote..."
+git push origin analytics
 
 echo "🔀 Merging changes into master..."
 git checkout master
 git pull origin master
-git merge vercel-config -m "merge: $commit_message"
+git merge analytics -m "merge: $commit_message"
 git push origin master
 
 echo "📦 Building and deploying to GitHub Pages..."
 npm run deploy
 
-echo "🔄 Switching back to vercel-config branch..."
-git checkout vercel-config
+echo "🔄 Switching back to analytics branch..."
+git checkout analytics
 
-echo "✨ All steps completed successfully! Your live analytics backend and frontend updates are pushed and deploying."
+echo "✨ All steps completed successfully! Your changes are pushed from analytics -> master."
