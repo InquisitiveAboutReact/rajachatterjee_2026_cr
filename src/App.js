@@ -55,7 +55,6 @@ const certifications = [
   { image: oracleHrBadge, title: 'Oracle Global Human Resources Cloud', detail: '2025 Certified Implementation Professional', year: '2025' },
 ];
 
-// Helper function to track live metrics to Upstash Redis database
 const trackAnalyticsEvent = async (metricName) => {
   try {
     const trackingUrl = window.location.hostname === 'localhost' || window.location.hostname.includes('github.io')
@@ -79,7 +78,6 @@ function App() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  
   const [userMessage, setUserMessage] = useState('');
 
   const getDynamicStatus = () => {
@@ -91,7 +89,6 @@ function App() {
 
   const [currentStatus, setCurrentStatus] = useState(getDynamicStatus);
 
-  // Track CV Downloads live
   const handleOpenCV = () => {
     trackAnalyticsEvent('cvDownloads');
     setIsCVModalOpen(true);
@@ -181,7 +178,6 @@ function App() {
     }
   };
 
-  // Track Hire Requests / Contact submissions live
   const handleWhatsAppSubmit = (e) => {
     e.preventDefault();
     trackAnalyticsEvent('hireRequests');
@@ -206,6 +202,7 @@ function App() {
             ))}
           </nav>
           <div className="nav-controls">
+            {/* Analytics Desktop Trigger */}
             <button type="button" className="share-btn" onClick={() => setIsAnalyticsOpen(true)} title="Analytics">📊 Analytics</button>
             <button type="button" className="share-btn" onClick={handleShare} title="Share">↗ Share</button>
             <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button>
@@ -217,9 +214,18 @@ function App() {
         </div>
       </header>
 
-      <MobileNav isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} onOpenCV={handleOpenCV} onOpenAnalytics={() => setIsAnalyticsOpen(true)} theme={theme} onToggleTheme={toggleTheme} />
+      <MobileNav 
+        isOpen={isMobileNavOpen} 
+        onClose={() => setIsMobileNavOpen(false)} 
+        onOpenCV={handleOpenCV} 
+        onOpenAnalytics={() => {
+          setIsMobileNavOpen(false);
+          setIsAnalyticsOpen(true);
+        }} 
+        theme={theme} 
+        onToggleTheme={toggleTheme} 
+      />
 
-      {/* COMPACT & SOLID HERO SECTION */}
       <section className="hero shell" id="top" style={{ paddingBottom: '30px' }}>
         <div className="eyebrow" style={{ marginBottom: '16px' }}>
           <span className="eyebrow-pulse" />
@@ -300,7 +306,6 @@ function App() {
           </aside>
         </div>
 
-        {/* INTEGRATED COMPACT METRICS BAR */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -483,6 +488,7 @@ function App() {
       </footer>
 
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
+      {/* Analytics Modal Component properly bound to state */}
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <RAGChatbot />
       <SpeedInsights />
