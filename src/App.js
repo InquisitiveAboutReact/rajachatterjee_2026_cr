@@ -94,6 +94,15 @@ function App() {
     setIsCVModalOpen(true);
   };
 
+  // Automatically track real unique visits once per browser session
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('portfolio_visited');
+    if (!hasVisited) {
+      sessionStorage.setItem('portfolio_visited', 'true');
+      trackAnalyticsEvent('totalVisitors');
+    }
+  }, []);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') setIsAdmin(true);
@@ -252,7 +261,7 @@ function App() {
             <div className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
               <button type="button" className="btn-primary" onClick={handleOpenCV}>📄 Download CV (PDF)</button>
               <a href="#work" className="btn-secondary">View Selected Work ↓</a>
-              <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" className="btn-secondary">Connect on LinkedIn <Arrow /></a>
+              <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" className="btn-secondary" onClick={() => trackAnalyticsEvent('ref_linkedin')}>Connect on LinkedIn <Arrow /></a>
             </div>
           </div>
 
@@ -353,7 +362,7 @@ function App() {
         </div>
 
         <div className="projects-grid">
-          <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-NextJS-Heroku" target="_blank" rel="noreferrer">
+          <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-NextJS-Heroku" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>
             <div className="project-type">01 / Engineering</div>
             <div className="project-visual">&lt;/&gt; SSR Next.js</div>
             <div className="project-footer">
@@ -363,7 +372,7 @@ function App() {
             <p>Faster, resilient web experiences with Next.js, Express &amp; React.</p>
           </a>
 
-          <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-CSR-Express-Webpack-React" target="_blank" rel="noreferrer">
+          <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-CSR-Express-Webpack-React" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>
             <div className="project-type">02 / Architecture</div>
             <div className="project-visual">[ Client ➔ Server ➔ Build ]</div>
             <div className="project-footer">
@@ -377,7 +386,7 @@ function App() {
         <section className="articles-section" style={{ marginTop: '40px' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#b99110', fontWeight: 600, fontSize: '1.5rem' }}>Technical Articles Section</h2>
           <div className="articles-grid-fixed">
-            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" target="_blank" rel="noreferrer">
+            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
               <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>03 / ARTICLE • DEVOPS</div>
               <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>[ Vercel ➔ Git ➔ Deploy ]</div>
               <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
@@ -474,8 +483,8 @@ function App() {
             <p className="footer-tagline">Let&apos;s make the complicated parts feel simple.</p>
             <a href="mailto:i.gooner168@gmail.com" className="email-link">Say hello <Arrow /></a>
             <div className="socials-row">
-              <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer">LinkedIn</a>
-              <a href="https://github.com/InquisitiveAboutReact" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_linkedin')}>LinkedIn</a>
+              <a href="https://github.com/InquisitiveAboutReact" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>GitHub</a>
             </div>
           </div>
         </div>
@@ -490,7 +499,7 @@ function App() {
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
       {/* Analytics Modal Component properly bound to state */}
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
-      <RAGChatbot />
+      <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
       <Analytics />
       <ScrollToTop />
