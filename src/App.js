@@ -190,7 +190,7 @@ function App() {
   const handleWhatsAppSubmit = (e) => {
     e.preventDefault();
     trackAnalyticsEvent('hireRequests');
-
+    trackAnalyticsEvent('ref_whatsapp');
     const phoneNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "";
     const messageToSend = userMessage.trim() || "Hi Raja, I saw your portfolio and wanted to connect";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageToSend)}`, '_blank');
