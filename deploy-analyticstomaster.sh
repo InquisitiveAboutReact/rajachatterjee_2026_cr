@@ -25,7 +25,7 @@ git pull origin master
 git merge feature-analytics -m "merge: $commit_message"
 git push origin master
 
-echo "📦 Building and deploying..."
+echo "📦 Building and bundling for production..."
 npm run build
 
 echo "🔄 Switching back to feature-analytics branch..."
