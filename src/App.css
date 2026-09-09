@@ -436,11 +436,26 @@
     right: 12px;
     width: 18px;
     height: 18px;
-    background-color: #10b981;
     border: 3px solid #060911;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
     z-index: 10;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Status specific glowing badge colors */
+  .portrait-image-wrapper .status-dot-badge.available {
+    background-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+  }
+
+  .portrait-image-wrapper .status-dot-badge.busy {
+    background-color: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+  }
+
+  .portrait-image-wrapper .status-dot-badge.away {
+    background-color: #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
   }
   
   .portrait-glow {

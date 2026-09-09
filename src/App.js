@@ -282,10 +282,32 @@ function App() {
           </div>
 
           <aside className="portrait-card-v2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-            <div className="portrait-image-wrapper" style={{ width: '220px', height: '220px', borderRadius: '50%', padding: '4px', background: 'linear-gradient(135deg, #10b981, #3b82f6)', boxShadow: '0 0 25px rgba(16, 185, 129, 0.25)' }}>
+          <div 
+  className="portrait-image-wrapper" 
+  style={{ 
+    width: '220px', 
+    height: '220px', 
+    borderRadius: '50%', 
+    padding: '4px', 
+    background: currentStatus.status === 'away' 
+      ? 'linear-gradient(135deg, #f59e0b, #3b82f6)' 
+      : currentStatus.status === 'busy' 
+      ? 'linear-gradient(135deg, #ef4444, #f97316)' 
+      : 'linear-gradient(135deg, #10b981, #3b82f6)',
+    boxShadow: currentStatus.status === 'away' 
+      ? '0 0 25px rgba(245, 158, 11, 0.25)' 
+      : currentStatus.status === 'busy' 
+      ? '0 0 25px rgba(239, 68, 68, 0.25)' 
+      : '0 0 25px rgba(16, 185, 129, 0.25)', 
+    position: 'relative' 
+  }}
+>
+              
               <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+            {/* Dynamic Status Dot over DP (Green / Red / Orange) */}
+            <span className={`status-dot-badge ${currentStatus.status}`} />
             </div>            
-
+            
             {isAdmin && (
               <div style={{ background: '#1e293b', padding: '10px', borderRadius: '10px', border: '1px solid #475569', width: '100%' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
