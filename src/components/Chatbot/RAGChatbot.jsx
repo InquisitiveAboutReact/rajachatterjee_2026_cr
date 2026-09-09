@@ -39,22 +39,30 @@ const KNOWLEDGE_BASE = [
 ];
 
 function getDynamicGreeting() {
-  const hour = new Date().getHours();
+  const hour = new Date().getHours(); // Fetches user's local device hour (0 - 23)[cite: 3]
   let timeOfDay = "Good Evening";
-  if (hour >= 5 && hour < 12) {
-    timeOfDay = "Good Morning";
+  
+  if (hour >= 4 && hour < 12) {
+    timeOfDay = "Good Morning"; // 04:00 AM - 11:59 AM
   } else if (hour >= 12 && hour < 17) {
-    timeOfDay = "Good Afternoon";
+    timeOfDay = "Good Afternoon"; // 12:00 PM - 04:59 PM
+  } else if (hour >= 17 && hour < 24) {
+    timeOfDay = "Good Evening"; // 05:00 PM - 11:59 PM
+  } else {
+    timeOfDay = "Good Morning"; // 00:00 AM - 03:59 AM (Late night / Early morning)
   }
+  
   return `Hello ${timeOfDay}, how can I help you today with Raja's information?`;
 }
 
 function retrieveRAGResponse(query) {
   const lower = query.toLowerCase().trim();
 
-  // Check if user says hello or general greetings
+  // Flexible greeting check to catch variations like "hii", "hey there", etc.
   const greetingTriggers = ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening"];
-  if (greetingTriggers.some(trigger => lower === trigger || lower.startsWith(trigger + " "))) {
+  const isGreeting = greetingTriggers.some(trigger => lower === trigger || lower.startsWith(trigger));
+
+  if (isGreeting) {
     return getDynamicGreeting();
   }
 
@@ -159,7 +167,7 @@ export default function RAGChatbot({ onQuery }) {
             <button className="close-btn" onClick={() => setIsOpen(false)}>✕</button>
           </div>
 
-        <div className="rag-chat-messages">
+          <div className="rag-chat-messages">
             {messages.map(msg => (
               <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
                 {msg.sender === 'assistant' && <div className="bot-avatar">✦</div>}
