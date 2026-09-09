@@ -38,8 +38,26 @@ const KNOWLEDGE_BASE = [
   }
 ];
 
+function getDynamicGreeting() {
+  const hour = new Date().getHours();
+  let timeOfDay = "Good Evening";
+  if (hour >= 5 && hour < 12) {
+    timeOfDay = "Good Morning";
+  } else if (hour >= 12 && hour < 17) {
+    timeOfDay = "Good Afternoon";
+  }
+  return `Hello ${timeOfDay}, how can I help you today with Raja's information?`;
+}
+
 function retrieveRAGResponse(query) {
-  const lower = query.toLowerCase();
+  const lower = query.toLowerCase().trim();
+
+  // Check if user says hello or general greetings
+  const greetingTriggers = ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening"];
+  if (greetingTriggers.some(trigger => lower === trigger || lower.startsWith(trigger + " "))) {
+    return getDynamicGreeting();
+  }
+
   let bestMatch = null;
   let maxScore = 0;
 
@@ -63,10 +81,10 @@ function retrieveRAGResponse(query) {
     if (contactEntry) return contactEntry.content;
   }
 
-  return "I can help with Raja's experience, certifications, projects, skills, CV download, and contact info. Try asking about one of those topics!";
+  return "I don't have sufficient knowledge for this question, I am still under training";
 }
 
-export default function RAGChatbot() {
+export default function RAGChatbot({ onQuery }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -91,12 +109,15 @@ export default function RAGChatbot() {
     const rawQuery = textToSend || inputValue;
     if (!rawQuery.trim()) return;
 
-    // 🚀 Strip leading and trailing quotation marks (standard & curly)
     const cleanQuery = rawQuery.replace(/^["“]|["”]$/g, '').trim();
 
     const userMsg = { id: Date.now(), sender: 'user', text: cleanQuery };
     setMessages(prev => [...prev, userMsg]);
     if (!textToSend) setInputValue('');
+
+    if (typeof onQuery === 'function') {
+      onQuery();
+    }
 
     setIsTyping(true);
 
@@ -110,7 +131,6 @@ export default function RAGChatbot() {
 
   return (
     <div className="rag-chatbot-wrapper">
-      {/* Floating Toggle Button */}
       <button 
         className={`rag-chat-trigger ${isOpen ? 'active' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -121,7 +141,6 @@ export default function RAGChatbot() {
         <span className="status-dot"></span>
       </button>
 
-      {/* RAG Chat Window */}
       {isOpen && (
         <div className="rag-chat-modal">
           <div className="rag-chat-header">
@@ -140,7 +159,7 @@ export default function RAGChatbot() {
             <button className="close-btn" onClick={() => setIsOpen(false)}>✕</button>
           </div>
 
-          <div className="rag-chat-messages">
+        <div className="rag-chat-messages">
             {messages.map(msg => (
               <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
                 {msg.sender === 'assistant' && <div className="bot-avatar">✦</div>}
@@ -164,7 +183,6 @@ export default function RAGChatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Prompts */}
           <div className="rag-quick-prompts">
             <button onClick={() => handleSend("What is Raja's experience?")}>Experience (18+ yrs)</button>
             <button onClick={() => handleSend("What certifications does he hold?")}>Certifications</button>
@@ -172,7 +190,6 @@ export default function RAGChatbot() {
             <button onClick={() => handleSend("How can I contact Raja?")}>Contact Info</button>
           </div>
 
-          {/* Input Area */}
           <form className="rag-chat-input-form" onSubmit={(e) => { e.preventDefault(); handleSend(); }}>
             <input
               type="text"
