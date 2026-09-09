@@ -359,6 +359,136 @@
 // }
 
 // Update - 8 .. Data change as per dynamic calendar date filter 
+// import { Redis } from '@upstash/redis';
+
+// const redis = Redis.fromEnv();
+
+// export default async function handler(req, res) {
+//   // Enable CORS headers
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
+//   res.setHeader(
+//     'Access-Control-Allow-Headers',
+//     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+//   );
+
+//   if (req.method === 'OPTIONS') {
+//     return res.status(200).end();
+//   }
+
+//   // Handle incrementing counters via POST request from real visitors
+//   if (req.method === 'POST') {
+//     try {
+//       const { metric } = req.body; 
+//       if (metric) {
+//         await redis.incr(`portfolio:${metric}`);
+//       }
+//       return res.status(200).json({ success: true });
+//     } catch (error) {
+//       console.error('Failed to increment metric in Redis:', error);
+//       return res.status(500).json({ success: false, error: error.message });
+//     }
+//   }
+
+//   // Handle fetching metrics via GET request for the dashboard modal
+//   if (req.method === 'GET') {
+//     try {
+//       const { startDate, endDate } = req.query;
+
+//       const [
+//         cvDownloads, 
+//         copilotQueries, 
+//         hireRequests, 
+//         totalVisitors,
+//         refLinkedin,
+//         refGithub,
+//         refDirect,
+//         refWhatsapp,
+//         refOthers
+//       ] = await Promise.all([
+//         redis.get('portfolio:cvDownloads'),
+//         redis.get('portfolio:copilotQueries'),
+//         redis.get('portfolio:hireRequests'),
+//         redis.get('portfolio:totalVisitors'),
+//         redis.get('portfolio:ref_linkedin'),
+//         redis.get('portfolio:ref_github'),
+//         redis.get('portfolio:ref_direct'),
+//         redis.get('portfolio:ref_whatsapp'),
+//         redis.get('portfolio:ref_others'),
+//       ]);
+
+//       const lCount = Number(refLinkedin) || 0;
+//       const gCount = Number(refGithub) || 0;
+//       const dCount = Number(refDirect) || 0;
+//       const wCount = Number(refWhatsapp) || 0;
+//       const oCount = Number(refOthers) || 0;
+      
+//       const totalRefSum = (lCount + gCount + dCount + wCount + oCount) || 1; // Prevent division by zero
+
+//       // Generate dynamic chart bars based on the selected date range window
+//       let chartData = [];
+//       if (startDate && endDate) {
+//         const start = new Date(startDate);
+//         const end = new Date(endDate);
+        
+//         if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && start <= end) {
+//           const diffTime = Math.abs(end - start);
+//           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          
+//           let currentDate = new Date(start);
+//           for (let i = 0; i < diffDays; i++) {
+//             const formattedDateStr = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+//             const isLast = (i === diffDays - 1);
+            
+//             chartData.push({
+//               date: formattedDateStr,
+//               height: `${Math.floor(Math.random() * 60) + 40}%`,
+//               active: isLast,
+//               label: isLast ? 'Range Peak' : undefined
+//             });
+//             currentDate.setDate(currentDate.getDate() + 1);
+//           }
+//         }
+//       }
+
+//       if (chartData.length === 0) {
+//         chartData = [
+//           { date: 'Selected Start', height: '50%' },
+//           { date: 'Selected End', height: '100%', active: true, label: 'Range End' }
+//         ];
+//       }
+
+//       return res.status(200).json({
+//         success: true,
+//         data: {
+//           cvDownloads: Number(cvDownloads) || 0,
+//           copilotQueries: Number(copilotQueries) || 0,
+//           hireRequests: Number(hireRequests) || 0,
+//           totalVisitors: Number(totalVisitors) || 0,
+//           avgScrollDepth: '72%',
+//           timelineEngagement: '68%',
+//           projectsEngagement: '75%',
+//           referrals: [
+//             { source: 'LinkedIn Post', count: lCount, percent: `${Math.round((lCount / totalRefSum) * 100)}%`, color: '#3b82f6' },
+//             { source: 'GitHub Profile', count: gCount, percent: `${Math.round((gCount / totalRefSum) * 100)}%`, color: '#10b981' },
+//             { source: 'Direct / Bookmark', count: dCount, percent: `${Math.round((dCount / totalRefSum) * 100)}%`, color: '#a855f7' },
+//             { source: 'WhatsApp / Personal Share', count: wCount, percent: `${Math.round((wCount / totalRefSum) * 100)}%`, color: '#f97316' },
+//             { source: 'Other Websites', count: oCount, percent: `${Math.round((oCount / totalRefSum) * 100)}%`, color: '#eab308' }
+//           ],
+//           chartData
+//         }
+//       });
+//     } catch (error) {
+//       console.error('Redis fetch error:', error);
+//       return res.status(500).json({ success: false, error: error.message });
+//     }
+//   }
+
+//   return res.status(405).json({ error: 'Method not allowed' });
+// }
+
+// Update - 9 .. Capture live data for Gold / yellow metrics 
 import { Redis } from '@upstash/redis';
 
 const redis = Redis.fromEnv();
@@ -380,8 +510,12 @@ export default async function handler(req, res) {
   // Handle incrementing counters via POST request from real visitors
   if (req.method === 'POST') {
     try {
-      const { metric } = req.body; 
-      if (metric) {
+      const { metric, value } = req.body; 
+      if (metric === 'scrollDepthScore' && typeof value === 'number') {
+        // Maintain running total and submission count to compute average live scroll depth accurately
+        await redis.incrby('portfolio:totalScrollScore', value);
+        await redis.incr('portfolio:scrollSubmissions');
+      } else if (metric) {
         await redis.incr(`portfolio:${metric}`);
       }
       return res.status(200).json({ success: true });
@@ -401,6 +535,10 @@ export default async function handler(req, res) {
         copilotQueries, 
         hireRequests, 
         totalVisitors,
+        timelineEngagement,
+        projectsEngagement,
+        totalScrollScore,
+        scrollSubmissions,
         refLinkedin,
         refGithub,
         refDirect,
@@ -411,6 +549,10 @@ export default async function handler(req, res) {
         redis.get('portfolio:copilotQueries'),
         redis.get('portfolio:hireRequests'),
         redis.get('portfolio:totalVisitors'),
+        redis.get('portfolio:timelineEngagement'),
+        redis.get('portfolio:projectsEngagement'),
+        redis.get('portfolio:totalScrollScore'),
+        redis.get('portfolio:scrollSubmissions'),
         redis.get('portfolio:ref_linkedin'),
         redis.get('portfolio:ref_github'),
         redis.get('portfolio:ref_direct'),
@@ -418,15 +560,27 @@ export default async function handler(req, res) {
         redis.get('portfolio:ref_others'),
       ]);
 
+      // Calculate dynamic average scroll depth
+      const tScore = Number(totalScrollScore) || 0;
+      const sSubs = Number(scrollSubmissions) || 0;
+      const calculatedAvgScroll = sSubs > 0 ? Math.round(tScore / sSubs) : 72;
+
+      // Calculate relative percentage views for sections if compared against total visitors
+      const visitorsCount = Number(totalVisitors) || 1;
+      const tViews = Number(timelineEngagement) || 0;
+      const pViews = Number(projectsEngagement) || 0;
+
+      const timelinePercent = Math.min(Math.round((tViews / visitorsCount) * 100), 100);
+      const projectsPercent = Math.min(Math.round((pViews / visitorsCount) * 100), 100);
+
       const lCount = Number(refLinkedin) || 0;
       const gCount = Number(refGithub) || 0;
       const dCount = Number(refDirect) || 0;
       const wCount = Number(refWhatsapp) || 0;
       const oCount = Number(refOthers) || 0;
       
-      const totalRefSum = (lCount + gCount + dCount + wCount + oCount) || 1; // Prevent division by zero
+      const totalRefSum = (lCount + gCount + dCount + wCount + oCount) || 1;
 
-      // Generate dynamic chart bars based on the selected date range window
       let chartData = [];
       if (startDate && endDate) {
         const start = new Date(startDate);
@@ -466,9 +620,9 @@ export default async function handler(req, res) {
           copilotQueries: Number(copilotQueries) || 0,
           hireRequests: Number(hireRequests) || 0,
           totalVisitors: Number(totalVisitors) || 0,
-          avgScrollDepth: '72%',
-          timelineEngagement: '68%',
-          projectsEngagement: '75%',
+          avgScrollDepth: `${calculatedAvgScroll}%`,
+          timelineEngagement: `${timelinePercent > 0 ? timelinePercent : 68}%`,
+          projectsEngagement: `${projectsPercent > 0 ? projectsPercent : 75}%`,
           referrals: [
             { source: 'LinkedIn Post', count: lCount, percent: `${Math.round((lCount / totalRefSum) * 100)}%`, color: '#3b82f6' },
             { source: 'GitHub Profile', count: gCount, percent: `${Math.round((gCount / totalRefSum) * 100)}%`, color: '#10b981' },

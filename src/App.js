@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import profileImage from './images/raja-profile-2026.jpg';
 import oracleHrBadge from './images/oracle-hr-2025.jpg';
@@ -55,7 +55,7 @@ const certifications = [
   { image: oracleHrBadge, title: 'Oracle Global Human Resources Cloud', detail: '2025 Certified Implementation Professional', year: '2025' },
 ];
 
-const trackAnalyticsEvent = async (metricName) => {
+const trackAnalyticsEvent = async (metricName, value = null) => {
   try {
     const trackingUrl = window.location.hostname === 'localhost' || window.location.hostname.includes('github.io')
       ? `${VERCEL_DOMAIN}/api/analytics`
@@ -64,7 +64,7 @@ const trackAnalyticsEvent = async (metricName) => {
     await fetch(trackingUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ metric: metricName })
+      body: JSON.stringify({ metric: metricName, value })
     });
   } catch (err) {
     console.error('Tracking error:', err);
@@ -80,6 +80,11 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userMessage, setUserMessage] = useState('');
 
+  // Refs to ensure engagement trackers only fire once per session
+  const hasTrackedProjects = useRef(false);
+  const hasTrackedTimeline = useRef(false);
+  const maxScrollRef = useRef(0);
+
   const getDynamicStatus = () => {
     const currentHour = new Date().getHours();
     if (currentHour >= 9 && currentHour < 20) return STATUS_OPTIONS[0];
@@ -94,13 +99,63 @@ function App() {
     setIsCVModalOpen(true);
   };
 
-  // Automatically track real unique visits once per browser session
+  // Automatically track real unique visits and setup live behavior watchers
   useEffect(() => {
     const hasVisited = sessionStorage.getItem('portfolio_visited');
     if (!hasVisited) {
       sessionStorage.setItem('portfolio_visited', 'true');
       trackAnalyticsEvent('totalVisitors');
     }
+
+    // 1. Live Scroll Depth Tracker
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (docHeight > 0) {
+        const scrollPercent = Math.round((scrollTop / docHeight) * 100);
+        if (scrollPercent > maxScrollRef.current) {
+          maxScrollRef.current = scrollPercent;
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Send final max scroll depth when the user leaves/unmounts page
+    const handleBeforeUnload = () => {
+      if (maxScrollRef.current > 0) {
+        trackAnalyticsEvent('scrollDepthScore', maxScrollRef.current);
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // 2. Live Intersection Observers for Projects & Timeline Sections
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target.id === 'work' && !hasTrackedProjects.current) {
+            hasTrackedProjects.current = true;
+            trackAnalyticsEvent('projectsEngagement');
+          }
+          if (entry.target.id === 'experience' && !hasTrackedTimeline.current) {
+            hasTrackedTimeline.current = true;
+            trackAnalyticsEvent('timelineEngagement');
+          }
+        }
+      });
+    };
+
+    const sectionObserver = new IntersectionObserver(observerCallback, { threshold: 0.3 });
+    const workEl = document.getElementById('work');
+    const expEl = document.getElementById('experience');
+
+    if (workEl) sectionObserver.observe(workEl);
+    if (expEl) sectionObserver.observe(expEl);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      sectionObserver.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -175,15 +230,11 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Adding this useEffect() to count the no of bookmarks under Analytics tab 
-
   useEffect(() => {
-    // Check if user came from an external referral or direct bookmark
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
   
     if (!ref) {
-      // If no ref parameter is present, log as Direct / Bookmark (only once per session)
       if (!sessionStorage.getItem('tracked_direct')) {
         trackAnalyticsEvent('ref_direct');
         sessionStorage.setItem('tracked_direct', 'true');
@@ -227,7 +278,6 @@ function App() {
             ))}
           </nav>
           <div className="nav-controls">
-            {/* Analytics Desktop Trigger */}
             <button type="button" className="share-btn" onClick={() => setIsAnalyticsOpen(true)} title="Analytics">📊 Analytics</button>
             <button type="button" className="share-btn" onClick={handleShare} title="Share">↗ Share</button>
             <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button>
@@ -304,7 +354,6 @@ function App() {
 >
               
               <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-            {/* Dynamic Status Dot over DP (Green / Red / Orange) */}
             <span className={`status-dot-badge ${currentStatus.status}`} />
             </div>            
             
@@ -535,7 +584,6 @@ function App() {
       </footer>
 
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
-      {/* Analytics Modal Component properly bound to state */}
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
