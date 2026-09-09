@@ -175,6 +175,22 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Adding this useEffect() to count the no of bookmarks under Analytics tab 
+
+  useEffect(() => {
+    // Check if user came from an external referral or direct bookmark
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+  
+    if (!ref) {
+      // If no ref parameter is present, log as Direct / Bookmark (only once per session)
+      if (!sessionStorage.getItem('tracked_direct')) {
+        trackAnalyticsEvent('ref_direct');
+        sessionStorage.setItem('tracked_direct', 'true');
+      }
+    }
+  }, []);
+
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
   const handleShare = async () => {
@@ -501,7 +517,7 @@ function App() {
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
-      <Analytics />
+      <Analytics /> 
       <ScrollToTop />
     </main>
   );
