@@ -145,7 +145,7 @@ export default function RAGChatbot({ onQuery }) {
         aria-label="Toggle RAG AI Assistant"
       >
         <span className="sparkle-icon">✦</span>
-        <span className="trigger-label">{isOpen ? 'Close Copilot' : 'Raja AI Copilot'}</span>
+        <span className="trigger-label">{isOpen ? 'Close Chatbot' : 'Raja AI Chatbot'}</span>
         <span className="status-dot"></span>
       </button>
 
@@ -155,7 +155,7 @@ export default function RAGChatbot({ onQuery }) {
             <div className="header-info">
               <div className="avatar-spark">✦</div>
               <div>
-                <h4>Raja's AI Copilot</h4>
+                <h4>Raja's AI Chatbot</h4>
                 <p className="status-subtext">
                   <span className="live-dot"></span> Grounded Profile RAG Engine
                 </p>
