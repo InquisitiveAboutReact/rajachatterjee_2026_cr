@@ -12,6 +12,9 @@ import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
+import SkillMatcherWidget from './SkillMatcherWidget'; // Assuming your matcher component is imported or defined
+//import profileData from './data/profileData';
+import { RAJA_PROFILE } from './data/profileData';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -24,6 +27,7 @@ const VERCEL_API_URL = window.location.hostname === 'localhost' || window.locati
 
 const NAV_SECTIONS = [
   { id: 'work', label: 'Selected Work' },
+  { id: 'matcher', label: 'JD Matcher' },
   { id: 'about', label: 'Intelligence & AI' },
   { id: 'certifications', label: 'Certifications' },
   { id: 'experience', label: 'Experience' },
@@ -80,7 +84,6 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userMessage, setUserMessage] = useState('');
 
-  // Refs to ensure engagement trackers only fire once per session
   const hasTrackedProjects = useRef(false);
   const hasTrackedTimeline = useRef(false);
   const maxScrollRef = useRef(0);
@@ -99,7 +102,6 @@ function App() {
     setIsCVModalOpen(true);
   };
 
-  // Automatically track real unique visits and setup live behavior watchers
   useEffect(() => {
     const hasVisited = sessionStorage.getItem('portfolio_visited');
     if (!hasVisited) {
@@ -107,7 +109,6 @@ function App() {
       trackAnalyticsEvent('totalVisitors');
     }
 
-    // 1. Live Scroll Depth Tracker
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -120,7 +121,6 @@ function App() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Send final max scroll depth when the user leaves/unmounts page
     const handleBeforeUnload = () => {
       if (maxScrollRef.current > 0) {
         trackAnalyticsEvent('scrollDepthScore', maxScrollRef.current);
@@ -128,7 +128,6 @@ function App() {
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    // 2. Live Intersection Observers for Projects & Timeline Sections
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -332,29 +331,28 @@ function App() {
           </div>
 
           <aside className="portrait-card-v2" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-          <div 
-  className="portrait-image-wrapper" 
-  style={{ 
-    width: '220px', 
-    height: '220px', 
-    borderRadius: '50%', 
-    padding: '4px', 
-    background: currentStatus.status === 'away' 
-      ? 'linear-gradient(135deg, #f59e0b, #3b82f6)' 
-      : currentStatus.status === 'busy' 
-      ? 'linear-gradient(135deg, #ef4444, #f97316)' 
-      : 'linear-gradient(135deg, #10b981, #3b82f6)',
-    boxShadow: currentStatus.status === 'away' 
-      ? '0 0 25px rgba(245, 158, 11, 0.25)' 
-      : currentStatus.status === 'busy' 
-      ? '0 0 25px rgba(239, 68, 68, 0.25)' 
-      : '0 0 25px rgba(16, 185, 129, 0.25)', 
-    position: 'relative' 
-  }}
->
-              
+            <div 
+              className="portrait-image-wrapper" 
+              style={{ 
+                width: '220px', 
+                height: '220px', 
+                borderRadius: '50%', 
+                padding: '4px', 
+                background: currentStatus.status === 'away' 
+                  ? 'linear-gradient(135deg, #f59e0b, #3b82f6)' 
+                  : currentStatus.status === 'busy' 
+                  ? 'linear-gradient(135deg, #ef4444, #f97316)' 
+                  : 'linear-gradient(135deg, #10b981, #3b82f6)',
+                boxShadow: currentStatus.status === 'away' 
+                  ? '0 0 25px rgba(245, 158, 11, 0.25)' 
+                  : currentStatus.status === 'busy' 
+                  ? '0 0 25px rgba(239, 68, 68, 0.25)' 
+                  : '0 0 25px rgba(16, 185, 129, 0.25)', 
+                position: 'relative' 
+              }}
+            >
               <img src={profileImage} alt="Raja Chatterjee" loading="eager" className="portrait-img" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-            <span className={`status-dot-badge ${currentStatus.status}`} />
+              <span className={`status-dot-badge ${currentStatus.status}`} />
             </div>            
             
             {isAdmin && (
@@ -484,6 +482,37 @@ function App() {
             </a>
           </div>
         </section>
+      </section>
+
+    {/* Recruiter Job Description Matcher Section */}
+    <section className="shell reveal-section" id="matcher" style={{ margin: '60px auto' }}>
+        <div className="section-kicker">
+          <span>01.5</span> <h2>Recruiter Portal</h2>
+        </div>
+        <div className="work-heading">
+          <h2>
+            AI Enabled Live Job Description<br />
+            <em>Skill Matcher.</em>
+          </h2>
+          <p>Paste a target job description below to verify dynamic skill alignment against my enterprise profile.</p>
+        </div>
+        <div 
+          style={{ 
+            background: '#1e293b', 
+            padding: '32px', 
+            borderRadius: '16px', 
+            border: '1px solid #334155',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}
+        >
+          <SkillMatcherWidget 
+            profileData={RAJA_PROFILE} 
+            onMatchRun={() => trackAnalyticsEvent('jd_match_executed')} 
+          />
+        </div>
       </section>
 
       <section className="ai-section reveal-section" id="about">
