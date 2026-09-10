@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* /* /* /* ==========================================================================
    RAJA CHATTERJEE PORTFOLIO - HIGH-GLOSS & GLASSMORPHISM DESIGN SYSTEM
    ========================================================================== */
 
@@ -2402,4 +2402,16 @@
     html {
       scroll-behavior: auto;
     }
-  }
+  }   
+
+  /* Add only these rules to the very bottom of your original App.css */
+.articles-grid-fixed {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.article-card-custom {
+  background: linear-gradient(145deg, var(--card-bg), rgba(16, 185, 129, 0.03));
+}

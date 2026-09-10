@@ -22,13 +22,13 @@ git push origin feature-analytics
 echo "🔀 Merging changes into master..."
 git checkout master
 git pull origin master
-git merge feature-analytics -m "merge: $commit_message"
+git merge feature-analytics --no-ff -m "merge: $commit_message" || true
 git push origin master
 
 echo "📦 Building project for production..."
 npm run build
 
-# --- NEW: Deploy directly to GitHub Pages ---
+# --- Deploy directly to GitHub Pages ---
 echo "🌐 Deploying built assets to GitHub Pages (gh-pages branch)..."
 # If you use the 'gh-pages' npm package, this command handles it automatically:
 npx gh-pages -d build
