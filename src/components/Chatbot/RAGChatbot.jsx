@@ -7,8 +7,13 @@ const KNOWLEDGE_BASE = [
     content: "Raja Chatterjee is a Technical Delivery Leader & Digital Builder with over 18+ years of experience across technical delivery, program management, and full-stack cloud development. He leads global teams through ambitious technology programs, combining delivery discipline, technical depth, and AI-enabled workflows."
   },
   {
+    topic: "companies",
+    keywords: ["companies", "company", "employer", "employers", "worked", "organization", "organizations", "where", "firms", "previous", "raja's", "rajesh"],
+    content: "Raja's previous companies before he joined TCS, were Cognizant, IBM, Intelligroup, Sanguine IT Solutions and Hinnovation Research Center"
+  },
+  {
     topic: "experience",
-    keywords: ["experience", "years", "management", "leadership", "teams", "delivery", "history", "career"],
+    keywords: ["years", "management", "leadership", "teams", "delivery", "history", "career"],
     content: "Raja has 18+ years of experience in technology leadership, program delivery ownership, cloud architecture, and multi-disciplinary software engineering. He has managed distributed global teams across complex enterprise initiatives."
   },
   {
@@ -56,13 +61,25 @@ function getDynamicGreeting() {
 }
 
 function retrieveRAGResponse(query) {
-  const lower = query.toLowerCase().trim();
+  const lower = query.toLowerCase().replace(/rajesh/g, "raja's").trim();
 
   const greetingTriggers = ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening"];
   const isGreeting = greetingTriggers.some(trigger => lower === trigger || lower.startsWith(trigger));
 
   if (isGreeting) {
     return getDynamicGreeting();
+  }
+
+  if (
+    lower.includes('company') || 
+    lower.includes('companies') || 
+    lower.includes('employer') || 
+    lower.includes('employers') || 
+    lower.includes('worked') ||
+    lower.includes('previous')
+  ) {
+    const companyEntry = KNOWLEDGE_BASE.find(e => e.topic === 'companies');
+    if (companyEntry) return companyEntry.content;
   }
 
   let bestMatch = null;
@@ -73,7 +90,7 @@ function retrieveRAGResponse(query) {
     entry.keywords.forEach(kw => {
       if (lower.includes(kw)) score += 2;
     });
-    if (score >= maxScore) {
+    if (score > maxScore) {
       maxScore = score;
       bestMatch = entry;
     }
@@ -103,11 +120,13 @@ export default function RAGChatbot({ onQuery }) {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   
-  // Voice states
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const messagesEndRef = useRef(null);
+
+  // Check if speech recognition is natively supported by the browser
+  const isSpeechSupported = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -117,12 +136,10 @@ export default function RAGChatbot({ onQuery }) {
     if (isOpen) scrollToBottom();
   }, [messages, isOpen]);
 
-  // Handle Text-to-Speech (AI Speaking)
   const speakText = (text) => {
     if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel(); // Stop any ongoing speech
+    window.speechSynthesis.cancel();
 
-    // Strip out HTML tags for clean speech playback
     const plainText = text.replace(/<[^>]*>?/gm, '');
     const utterance = new SpeechSynthesisUtterance(plainText);
     utterance.rate = 1.0;
@@ -142,11 +159,12 @@ export default function RAGChatbot({ onQuery }) {
     }
   };
 
-  // Handle Speech-to-Text (Microphone listening)
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    // Graceful fallback for Safari or unsupported environments
     if (!SpeechRecognition) {
-      alert("Speech recognition is not supported in this browser. Please use Google Chrome or Edge.");
+      alert("Voice input is currently optimized for Chrome/Edge. Please type your question or use the quick prompt buttons below!");
       return;
     }
 
@@ -155,22 +173,33 @@ export default function RAGChatbot({ onQuery }) {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => setIsListening(true);
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
     
     recognition.onresult = (event) => {
       const speechToText = event.results[0][0].transcript;
-      setInputValue(speechToText);
-      handleSend(speechToText); // Automatically submit on speech end
+      if (speechToText) {
+        setInputValue('');
+        handleSend(speechToText);
+      }
     };
 
     recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
+      console.warn("Speech recognition notice:", event.error);
       setIsListening(false);
     };
 
-    recognition.onend = () => setIsListening(false);
+    recognition.onend = () => {
+      setIsListening(false);
+    };
 
-    recognition.start();
+    try {
+      recognition.start();
+    } catch (err) {
+      console.error("Recognition start failed:", err);
+      setIsListening(false);
+    }
   };
 
   const handleSend = (textToSend) => {
@@ -181,7 +210,7 @@ export default function RAGChatbot({ onQuery }) {
 
     const userMsg = { id: Date.now(), sender: 'user', text: cleanQuery };
     setMessages(prev => [...prev, userMsg]);
-    if (!textToSend) setInputValue('');
+    setInputValue('');
 
     if (typeof onQuery === 'function') {
       onQuery();
@@ -195,7 +224,6 @@ export default function RAGChatbot({ onQuery }) {
       setMessages(prev => [...prev, assistantMsg]);
       setIsTyping(false);
 
-      // Trigger text-to-speech automatically on response
       speakText(responseText);
     }, 600);
   };
@@ -231,30 +259,30 @@ export default function RAGChatbot({ onQuery }) {
           </div>
 
           <div className="rag-chat-messages">
-          {messages.map(msg => (
-  <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
-    {msg.sender === 'assistant' && (
-      <div className={`bot-avatar ${isSpeaking ? 'speaking' : ''}`}>✦</div>
-    )}
-    <div className="chat-bubble">
-      {msg.sender === 'assistant' && msg.text.includes('<a') ? (
-        <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: msg.text }} />
-      ) : (
-        <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
-      )}
-      {msg.sender === 'assistant' && (
-        <button 
-          className="speak-audio-btn" 
-          onClick={() => speakText(msg.text)}
-          title="Read aloud"
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', marginTop: '4px' }}
-        >
-          🔊
-        </button>
-      )}
-    </div>
-  </div>
-))}
+            {messages.map(msg => (
+              <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
+                {msg.sender === 'assistant' && (
+                  <div className={`bot-avatar ${isSpeaking ? 'speaking' : ''}`}>✦</div>
+                )}
+                <div className="chat-bubble">
+                  {msg.sender === 'assistant' && msg.text.includes('<a') ? (
+                    <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: msg.text }} />
+                  ) : (
+                    <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
+                  )}
+                  {msg.sender === 'assistant' && (
+                    <button 
+                      className="speak-audio-btn" 
+                      onClick={() => speakText(msg.text)}
+                      title="Read aloud"
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', marginTop: '4px' }}
+                    >
+                      🔊
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
             {isTyping && (
               <div className="chat-bubble-row assistant">
                 <div className="bot-avatar">✦</div>
@@ -267,7 +295,7 @@ export default function RAGChatbot({ onQuery }) {
           </div>
 
           <div className="rag-quick-prompts">
-            <button onClick={() => handleSend("What is Raja's experience?")}>Experience (18+ yrs)</button>
+            <button onClick={() => handleSend("What companies did Raja work for?")}>Companies</button>
             <button onClick={() => handleSend("What certifications does he hold?")}>Certifications</button>
             <button onClick={() => handleSend("Show selected projects")}>Projects</button>
             <button onClick={() => handleSend("How can I contact Raja?")}>Contact Info</button>
@@ -276,23 +304,23 @@ export default function RAGChatbot({ onQuery }) {
           <form className="rag-chat-input-form" onSubmit={(e) => { e.preventDefault(); handleSend(); }}>
             <input
               type="text"
-              placeholder={isListening ? "Listening to your voice..." : "Ask about Raja's experience, certifications..."}
+              placeholder={isListening ? "Listening to your voice..." : "Ask about Raja's experience, companies..."}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
 
-            {/* Microphone Button for Voice Input */}
-            <button 
-              type="button" 
-              onClick={startListening} 
-              className={`mic-btn ${isListening ? 'listening' : ''}`}
-              title="Speak to Assistant"
-              style={{ background: isListening ? '#ef4444' : 'transparent', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '0 6px' }}
-            >
-              {isListening ? '🔴' : '🎤'}
-            </button>
+            {isSpeechSupported && (
+              <button 
+                type="button" 
+                onClick={startListening} 
+                className={`mic-btn ${isListening ? 'listening' : ''}`}
+                title="Speak to Assistant"
+                style={{ background: isListening ? '#ef4444' : 'transparent', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '0 6px' }}
+              >
+                {isListening ? '🔴' : '🎤'}
+              </button>
+            )}
 
-            {/* Stop Speech Button (appears when assistant is talking) */}
             {isSpeaking && (
               <button 
                 type="button" 
