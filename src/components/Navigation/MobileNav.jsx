@@ -75,7 +75,7 @@
 //   );
 // }
 
-// Update -2 .. Fixing the visibility of Theme change + Download CV option in Mobile / tab device
+// Update -3 .. Fixing the Analytics Modal option as a Parent Child style + Update 2
 
 import React, { useEffect } from 'react';
 
@@ -86,7 +86,6 @@ const NAV_LINKS = [
   { href: '#certifications', label: 'Certifications' },
   { href: '#experience', label: 'Experience' },
   { href: '#contact', label: 'Contact' },
-  { href: '#analytics-widget', label: 'Traffic Analytics' },
 ];
 
 export default function MobileNav({ 
@@ -131,8 +130,8 @@ export default function MobileNav({
           width: '85%',
           maxWidth: '360px',
           height: '100%',
-          background: '#0f172a',
-          color: '#fff',
+          background: 'var(--bg-secondary, #0f172a)',
+          color: 'inherit',
           zIndex: 99999,
           padding: '24px',
           display: 'flex',
@@ -145,14 +144,15 @@ export default function MobileNav({
         <div>
           {/* Header Branding & Close Button */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <span style={{ fontWeight: 'bold', letterSpacing: '0.5px' }}>
-  RAJA<span style={{ color: '#3b82f6' }}> </span>CHATTERJEE
-  </span>
+            <span style={{ fontWeight: 'bold', letterSpacing: '0.5px' }}>
+              RAJA CHATTERJEE
+            </span>
             <button 
               type="button" 
               onClick={onClose} 
               aria-label="Close menu"
-              style={{ background: 'transparent', border: 'none', color: '#fff', fontSize: '22px', cursor: 'pointer', padding: '4px' }}
+              className="close-btn"
+              style={{ background: 'transparent', border: 'none', fontSize: '22px', cursor: 'pointer', padding: '4px' }}
             >
               ✕
             </button>
@@ -165,28 +165,58 @@ export default function MobileNav({
                 key={link.href}
                 href={link.href} 
                 onClick={onClose}
-                style={{ color: '#cbd5e1', textDecoration: 'none', fontSize: '15px', fontWeight: '500' }}
+                className="nav-item"
+                style={{ textDecoration: 'none', fontSize: '15px', fontWeight: '500' }}
               >
                 {link.label}
               </a>
             ))}
-            <button 
-              type="button" 
-              onClick={() => { onClose(); onOpenAnalytics(); }}
-              style={{ background: 'transparent', border: 'none', color: '#3b82f6', textAlign: 'left', padding: 0, fontSize: '15px', fontWeight: '500', cursor: 'pointer' }}
-            >
-              📊 Analytics Modal
-            </button>
+
+            {/* Tree Mode Group: Traffic Analytics (Parent Header) & Analytics Modal (Child) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+              <span 
+                style={{ 
+                  fontSize: '15px', 
+                  fontWeight: '600', 
+                  opacity: 0.75,
+                  cursor: 'default',
+                  letterSpacing: '0.3px'
+                }}
+              >
+                Traffic Analytics
+              </span>
+              <button 
+                type="button" 
+                onClick={() => { onClose(); onOpenAnalytics(); }}
+                className="nav-sub-item"
+                style={{ 
+                  background: 'transparent', 
+                  border: 'none', 
+                  textAlign: 'left', 
+                  padding: 0, 
+                  paddingLeft: '14px',
+                  fontSize: '14px', 
+                  fontWeight: '500', 
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+             <span style={{ color: '#fac2b4' }}>📊 Analytics Modal</span>   
+              </button>
+            </div>
           </nav>
         </div>
 
         {/* Bottom Actions: Theme Toggle, CV Download, Socials & Last Updated */}
-        <div style={{ borderTop: '1px solid #1e293b', paddingTop: '16px', marginTop: '16px' }}>
+        <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '16px', marginTop: '16px' }}>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
             <button 
               type="button" 
               onClick={() => { onToggleTheme(); onClose(); }} 
-              style={{ flex: 1, padding: '8px', borderRadius: '8px', background: '#1e293b', border: '1px solid #334155', color: '#fff', cursor: 'pointer', fontSize: '12px' }}
+              className="dark-mode-btn"
+              style={{ flex: 1, padding: '8px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
             >
               {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
             </button>
@@ -200,11 +230,11 @@ export default function MobileNav({
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '8px', fontSize: '13px' }}>
-            <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" onClick={onClose} style={{ color: '#94a3b8', textDecoration: 'none' }}>LinkedIn ↗</a>
-            <a href="https://github.com/InquisitiveAboutReact" target="_blank" rel="noreferrer" onClick={onClose} style={{ color: '#94a3b8', textDecoration: 'none' }}>GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" onClick={onClose} style={{ textDecoration: 'none' }}>LinkedIn ↗</a>
+            <a href="https://github.com/InquisitiveAboutReact" target="_blank" rel="noreferrer" onClick={onClose} style={{ textDecoration: 'none' }}>GitHub ↗</a>
           </div>
 
-          <div style={{ textAlign: 'center', fontSize: '11px', color: '#64748b' }}>
+          <div style={{ textAlign: 'center', fontSize: '11px', opacity: 0.7 }}>
             Last Updated: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
           </div>
         </div>
