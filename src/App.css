@@ -1793,7 +1793,7 @@
     visibility: visible;
   }
   
-  /* FIXED ISSUE 2: Mobile Navigation Drawer Scrolling & Padding */
+  /* FIXED ISSUE 2: Mobile Navigation Drawer Scrolling, Padding & dvh Height */
   .mobile-nav-drawer {
     position: fixed;
     top: 0;
