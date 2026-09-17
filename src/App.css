@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RAJA CHATTERJEE PORTFOLIO - Updated App.css - 17-09-2026
+   RAJA CHATTERJEE PORTFOLIO - Unified App.css - 17-09-2026
    ========================================================================== */
 
    :root {
@@ -8,7 +8,6 @@
     --bg-secondary: #0b1120;
     --bg-card: rgba(15, 23, 42, 0.55);
     --bg-card-hover: rgba(255, 255, 255, 0.08);
-    --bg-chatbot: #162c61;
     
     --border-color: rgba(255, 255, 255, 0.08);
     --border-highlight: rgba(129, 140, 248, 0.5);
@@ -41,9 +40,8 @@
   [data-theme="light"] {
     --bg-primary: #f0f4f9;
     --bg-secondary: #ffffff;
-    --bg-card: rgba(255, 255, 255, 0.7);
-    --bg-card-hover: rgba(255, 255, 255, 0.95);
-    --bg-chatbot: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-card-hover: rgba(255, 255, 255, 0.98);
     
     --border-color: rgba(0, 0, 0, 0.08);
     --border-highlight: rgba(79, 70, 229, 0.4);
@@ -61,7 +59,7 @@
     
     --gradient-hero: linear-gradient(135deg, #0f172a 0%, #334155 100%);
     --gradient-accent: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #d946ef 100%);
-    --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.6) 100%);
+    --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.8) 100%);
     --gradient-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
     
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
@@ -120,7 +118,7 @@
   }
   
   [data-theme="light"] .nav-header {
-    background: rgba(240, 244, 249, 0.75);
+    background: rgba(240, 244, 249, 0.85);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   }
   
@@ -1263,7 +1261,7 @@
     gap: 8px;
     flex-shrink: 0;
   }
-
+  
   @media (max-width: 480px) {
     .cv-modal-header {
       flex-direction: column;
@@ -1333,7 +1331,6 @@
     background: var(--bg-secondary);
   }
   
-  /* Admin PIN Access Panel & Form Elements */
   .cv-upload-panel,
   .admin-auth-panel,
   .cv-modal-content > div:not(.cv-iframe-container):not(.cv-preview-panel) {
@@ -1535,20 +1532,52 @@
     box-shadow: 0 12px 35px rgba(99, 102, 241, 0.55);
   }
   
-  .rag-chat-modal {
+ /* ==========================================================
+   Unified RAG Chat Modal Styling (Light Mode Warm Tint)
+   ========================================================== */
+
+   .rag-chat-modal {
     position: absolute;
-    bottom: 70px;
+    bottom: 65px;
     right: 0;
     width: 380px;
-    height: 520px;
-    background: var(--bg-chatbot);
+    max-width: calc(100vw - 48px);
+    height: 500px;
+    max-height: calc(100vh - 120px);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    z-index: 10000;
+  }
+  
+  /* Force light mode warm tint across the modal and all its container divs/sections */
+  [data-theme="light"] .rag-chat-modal,
+  [data-theme="light"] .rag-chat-modal div,
+  [data-theme="light"] .rag-chat-modal section,
+  [data-theme="light"] .rag-chat-modal header,
+  [data-theme="light"] .rag-chat-modal footer,
+  [data-theme="light"] .rag-chat-modal form {
+    background-color: rgba(252, 248, 246, 0.98) !important;
+  }
+  
+  /* Clear out hardcoded white card backgrounds specifically for top header wrappers */
+  [data-theme="light"] .rag-chat-modal > div > div:first-child,
+  [data-theme="light"] .rag-chat-modal .top-section,
+  [data-theme="light"] .rag-chat-modal [class*="header"] {
+    background-color: transparent !important;
+  }
+  
+  /* Chat message bubbles contrast */
+  [data-theme="light"] .rag-chat-modal .message-bubble,
+  [data-theme="light"] .rag-chat-modal .bot-message,
+  [data-theme="light"] .rag-chat-modal .chat-message {
+    background-color: rgba(245, 238, 235, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
   }
   
   .rag-chat-modal *::-webkit-scrollbar {
@@ -1556,6 +1585,7 @@
     height: 0px !important;
     display: none !important;
   }
+  
   .rag-chat-messages::-webkit-scrollbar {
     display: block !important;
     width: 5px !important;
@@ -1581,7 +1611,7 @@
   
   .rag-chat-header {
     padding: 16px 20px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
@@ -1610,6 +1640,7 @@
   .header-info h4 {
     font-size: 0.95rem;
     font-weight: 700;
+    color: var(--text-main);
   }
   
   .header-info p {
@@ -1663,6 +1694,7 @@
     gap: 6px;
     overflow-x: auto;
     border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
   }
   
   .rag-quick-prompts button {
@@ -1681,6 +1713,7 @@
     padding: 12px;
     border-top: 1px solid var(--border-color);
     gap: 8px;
+    background: var(--bg-secondary);
   }
   
   .rag-chat-input-form input {
@@ -1801,8 +1834,10 @@
     width: min(320px, 85vw);
     height: 100vh;
     height: 100dvh;
+    /* Harmonized with the modal background styling */
     background: var(--bg-secondary);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid var(--border-color);
     z-index: 1900;
     transform: translateX(100%);
@@ -1812,15 +1847,20 @@
     flex-direction: column;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 24px 20px env(safe-area-inset-bottom, 24px) 20px;
+    padding: 24px 20px 60px 20px;
     box-sizing: border-box;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+  }
+  
+  [data-theme="light"] .mobile-nav-drawer {
+    background: rgba(252, 248, 246, 0.98) !important; /* Forces the warm beige/reddish tone in light mode */
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
   }
   
   .mobile-nav-drawer.open {
     transform: translateX(0);
   }
-
+  
   .mobile-nav-drawer .nav-links-mobile,
   .mobile-nav-drawer .mobile-menu-content {
     display: flex;
@@ -1828,6 +1868,51 @@
     gap: 16px;
     margin-top: 20px;
     padding-bottom: 40px;
+    color: var(--text-main);
+  }
+  
+  /* ==========================================================================
+     VOICE & AI ANIMATION STYLES
+     ========================================================================== */
+  
+  @keyframes micPulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+    }
+    70% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+  }
+  
+  @keyframes aiWave {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    50% {
+      transform: scale(1.12);
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
+    }
+  }
+  
+  .mic-btn.listening {
+    background-color: #ef4444 !important;
+    color: white;
+    border-radius: 50%;
+    animation: micPulse 1.5s infinite ease-in-out;
+  }
+  
+  .bot-avatar.speaking {
+    animation: aiWave 1.2s infinite ease-in-out;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
   }
   
   /* ==========================================================================
@@ -1860,9 +1945,12 @@
       font-size: 2.5rem;
     }
   
-    .hero-grid {
+    .hero-grid,
+    .cred-grid,
+    .footer-inner,
+    .ai-grid {
       grid-template-columns: 1fr !important;
-      gap: 24px;
+      gap: 32px;
     }
   
     .hero-content {
@@ -1887,53 +1975,78 @@
     .admin-auth-panel {
       padding: 24px 16px;
     }
+  
+    .articles-grid-fixed,
+    .projects-grid {
+      grid-template-columns: 1fr !important;
+    }
   }
 
-  /* --- Voice Animation Styles --- */
+  /* ==========================================================
+   Refined Light Mode Drawer & Modal Styling Fixes
+   ========================================================== */
 
-@keyframes micPulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
-  }
-  70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-  }
+[data-theme="light"] .mobile-nav-drawer {
+  background: rgba(252, 248, 246, 0.98) !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-@keyframes aiWave {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(1.12);
-    opacity: 1;
-    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
-  }
+/* 1. Main Navigation Links & Titles */
+[data-theme="light"] .mobile-nav-drawer h2,
+[data-theme="light"] .mobile-nav-drawer .drawer-title,
+[data-theme="light"] .mobile-nav-drawer .nav-item,
+[data-theme="light"] .mobile-nav-drawer a:not(.btn) {
+  color: #2D3748 !important;
+  font-weight: 500;
 }
 
-.mic-btn.listening {
-  background-color: #ef4444 !important;
-  color: white;
+[data-theme="light"] .mobile-nav-drawer .nav-item:hover,
+[data-theme="light"] .mobile-nav-drawer a:not(.btn):hover {
+  color: #4F46E5 !important; /* Accent hover color */
+}
+
+/* 2. Footer Metadata & Subtext */
+[data-theme="light"] .mobile-nav-drawer span, 
+[data-theme="light"] .mobile-nav-drawer p,
+[data-theme="light"] .mobile-nav-drawer small {
+  color: #64748B !important;
+}
+
+/* 3. Specific fix for the Dark Mode Toggle Button inside the Light Drawer */
+[data-theme="light"] .mobile-nav-drawer button.dark-mode-btn,
+[data-theme="light"] .mobile-nav-drawer .theme-toggle {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ensure the icon/text inside that dark toggle stays crisp white */
+[data-theme="light"] .mobile-nav-drawer button.dark-mode-btn *,
+[data-theme="light"] .mobile-nav-drawer .theme-toggle * {
+  color: #F8FAFC !important;
+  fill: #F8FAFC !important;
+}
+
+/* 4. Close Icon ("X") Contrast */
+[data-theme="light"] .mobile-nav-drawer .close-btn,
+[data-theme="light"] .mobile-nav-drawer .close-btn svg {
+  color: #1E293B !important;
+  fill: #1E293B !important;
+}
+/* Fix close button visibility in the mobile drawer (Light Mode) */
+[data-theme="light"] .mobile-nav-drawer button.close-btn,
+[data-theme="light"] .mobile-nav-drawer .close-button,
+[data-theme="light"] .mobile-nav-drawer [aria-label*="Close" i] {
+  color: #1E293B !important;
+  background: rgba(0, 0, 0, 0.05) !important;
   border-radius: 50%;
-  animation: micPulse 1.5s infinite ease-in-out;
+  padding: 8px;
 }
 
-.bot-avatar.speaking {
-  animation: aiWave 1.2s infinite ease-in-out;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
-}
-
-@media (max-width: 768px) {
-  .articles-grid-fixed,
-  .projects-grid {
-    grid-template-columns: 1fr !important;
-  }
+[data-theme="light"] .mobile-nav-drawer button.close-btn svg,
+[data-theme="light"] .mobile-nav-drawer .close-button svg,
+[data-theme="light"] .mobile-nav-drawer [aria-label*="Close" i] svg {
+  stroke: #1E293B !important;
+  color: #1E293B !important;
+  fill: #1E293B !important;
 }
