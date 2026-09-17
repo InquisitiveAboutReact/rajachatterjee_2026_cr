@@ -1540,7 +1540,7 @@
     right: 0;
     width: 380px;
     height: 520px;
-    background: var(--bg-secondary);
+    background: #162c61;
     backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
@@ -1555,7 +1555,6 @@
     height: 0px !important;
     display: none !important;
   }
-  
   .rag-chat-messages::-webkit-scrollbar {
     display: block !important;
     width: 5px !important;
