@@ -2050,3 +2050,65 @@
   color: #1E293B !important;
   fill: #1E293B !important;
 }
+
+/* ==========================================================
+   Portfolio Traffic Dashboard Modal - Light Mode Warm Tint
+   ========================================================== */
+
+   [data-theme="light"] .analytics-modal,
+   [data-theme="light"] .traffic-dashboard-modal,
+   [data-theme="light"] .dashboard-modal-container {
+     background-color: rgba(252, 248, 246, 0.98) !important;
+     color: #1E293B !important;
+     backdrop-filter: blur(20px);
+     -webkit-backdrop-filter: blur(20px);
+     border: 1px solid rgba(0, 0, 0, 0.08);
+   }
+   
+   /* Force internal sections, cards, and text to adapt cleanly in light mode */
+   [data-theme="light"] .analytics-modal *,
+   [data-theme="light"] .traffic-dashboard-modal * {
+     color: inherit;
+   }
+   
+   /* Soften inner metric cards so they stand out nicely on the warm background */
+   [data-theme="light"] .analytics-modal .metric-card,
+   [data-theme="light"] .traffic-dashboard-modal .metric-card,
+   [data-theme="light"] .analytics-modal .dashboard-card {
+     background-color: rgba(255, 255, 255, 0.7) !important;
+     border: 1px solid rgba(0, 0, 0, 0.05) !important;
+     color: #1E293B !important;
+   }
+   
+   /* Ensure headings, descriptions, and numbers have sharp contrast */
+   [data-theme="light"] .analytics-modal h1,
+   [data-theme="light"] .analytics-modal h2,
+   [data-theme="light"] .analytics-modal h3,
+   [data-theme="light"] .traffic-dashboard-modal h1,
+   [data-theme="light"] .traffic-dashboard-modal h2,
+   [data-theme="light"] .traffic-dashboard-modal h3 {
+     color: #0F172A !important;
+   }
+   
+   [data-theme="light"] .analytics-modal p,
+   [data-theme="light"] .traffic-dashboard-modal p,
+   [data-theme="light"] .analytics-modal span {
+     color: #334155 !important;
+   }
+  
+   /* Force absolute brightness on the Analytics Modal label and subtext */
+div[class*="traffic"], 
+div[class*="analytics"],
+.traffic-analytics-container {
+  color: #f8fafc !important; /* Pure white for title */
+}
+
+/* Specifically target any paragraph, span, or small text inside the analytics block */
+div[class*="traffic"] p,
+div[class*="traffic"] span,
+div[class*="analytics"] p,
+div[class*="analytics"] span,
+.traffic-analytics-container p,
+.traffic-analytics-container span {
+  color: #cbd5e1 !important; /* Bright light-gray so it pops against the dark sidebar */
+}
