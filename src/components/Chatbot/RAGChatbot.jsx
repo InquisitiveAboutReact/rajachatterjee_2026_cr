@@ -39,17 +39,17 @@ const KNOWLEDGE_BASE = [
 ];
 
 function getDynamicGreeting() {
-  const hour = new Date().getHours(); // Fetches user's local device hour (0 - 23)[cite: 3]
+  const hour = new Date().getHours(); 
   let timeOfDay = "Good Evening";
   
   if (hour >= 4 && hour < 12) {
-    timeOfDay = "Good Morning"; // 04:00 AM - 11:59 AM
+    timeOfDay = "Good Morning"; 
   } else if (hour >= 12 && hour < 17) {
-    timeOfDay = "Good Afternoon"; // 12:00 PM - 04:59 PM
+    timeOfDay = "Good Afternoon"; 
   } else if (hour >= 17 && hour < 24) {
-    timeOfDay = "Good Evening"; // 05:00 PM - 11:59 PM
+    timeOfDay = "Good Evening"; 
   } else {
-    timeOfDay = "Good Morning"; // 00:00 AM - 03:59 AM (Late night / Early morning)
+    timeOfDay = "Good Morning"; 
   }
   
   return `Hello ${timeOfDay}, how can I help you today with Raja's information?`;
@@ -58,7 +58,6 @@ function getDynamicGreeting() {
 function retrieveRAGResponse(query) {
   const lower = query.toLowerCase().trim();
 
-  // Flexible greeting check to catch variations like "hii", "hey there", etc.
   const greetingTriggers = ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening"];
   const isGreeting = greetingTriggers.some(trigger => lower === trigger || lower.startsWith(trigger));
 
@@ -103,6 +102,11 @@ export default function RAGChatbot({ onQuery }) {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  
+  // Voice states
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -112,6 +116,62 @@ export default function RAGChatbot({ onQuery }) {
   useEffect(() => {
     if (isOpen) scrollToBottom();
   }, [messages, isOpen]);
+
+  // Handle Text-to-Speech (AI Speaking)
+  const speakText = (text) => {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel(); // Stop any ongoing speech
+
+    // Strip out HTML tags for clean speech playback
+    const plainText = text.replace(/<[^>]*>?/gm, '');
+    const utterance = new SpeechSynthesisUtterance(plainText);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const stopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  };
+
+  // Handle Speech-to-Text (Microphone listening)
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser. Please use Google Chrome or Edge.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    
+    recognition.onresult = (event) => {
+      const speechToText = event.results[0][0].transcript;
+      setInputValue(speechToText);
+      handleSend(speechToText); // Automatically submit on speech end
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => setIsListening(false);
+
+    recognition.start();
+  };
 
   const handleSend = (textToSend) => {
     const rawQuery = textToSend || inputValue;
@@ -134,6 +194,9 @@ export default function RAGChatbot({ onQuery }) {
       const assistantMsg = { id: Date.now() + 1, sender: 'assistant', text: responseText };
       setMessages(prev => [...prev, assistantMsg]);
       setIsTyping(false);
+
+      // Trigger text-to-speech automatically on response
+      speakText(responseText);
     }, 600);
   };
 
@@ -164,22 +227,34 @@ export default function RAGChatbot({ onQuery }) {
                 </span>
               </div>
             </div>
-            <button className="close-btn" onClick={() => setIsOpen(false)}>✕</button>
+            <button className="close-btn" onClick={() => { stopSpeaking(); setIsOpen(false); }}>✕</button>
           </div>
 
           <div className="rag-chat-messages">
-            {messages.map(msg => (
-              <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
-                {msg.sender === 'assistant' && <div className="bot-avatar">✦</div>}
-                <div className="chat-bubble">
-                  {msg.sender === 'assistant' && msg.text.includes('<a') ? (
-                    <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: msg.text }} />
-                  ) : (
-                    <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
-                  )}
-                </div>
-              </div>
-            ))}
+          {messages.map(msg => (
+  <div key={msg.id} className={`chat-bubble-row ${msg.sender}`}>
+    {msg.sender === 'assistant' && (
+      <div className={`bot-avatar ${isSpeaking ? 'speaking' : ''}`}>✦</div>
+    )}
+    <div className="chat-bubble">
+      {msg.sender === 'assistant' && msg.text.includes('<a') ? (
+        <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: msg.text }} />
+      ) : (
+        <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
+      )}
+      {msg.sender === 'assistant' && (
+        <button 
+          className="speak-audio-btn" 
+          onClick={() => speakText(msg.text)}
+          title="Read aloud"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', marginTop: '4px' }}
+        >
+          🔊
+        </button>
+      )}
+    </div>
+  </div>
+))}
             {isTyping && (
               <div className="chat-bubble-row assistant">
                 <div className="bot-avatar">✦</div>
@@ -201,10 +276,35 @@ export default function RAGChatbot({ onQuery }) {
           <form className="rag-chat-input-form" onSubmit={(e) => { e.preventDefault(); handleSend(); }}>
             <input
               type="text"
-              placeholder="Ask about Raja's experience, certifications, tech stack..."
+              placeholder={isListening ? "Listening to your voice..." : "Ask about Raja's experience, certifications..."}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
+
+            {/* Microphone Button for Voice Input */}
+            <button 
+              type="button" 
+              onClick={startListening} 
+              className={`mic-btn ${isListening ? 'listening' : ''}`}
+              title="Speak to Assistant"
+              style={{ background: isListening ? '#ef4444' : 'transparent', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '0 6px' }}
+            >
+              {isListening ? '🔴' : '🎤'}
+            </button>
+
+            {/* Stop Speech Button (appears when assistant is talking) */}
+            {isSpeaking && (
+              <button 
+                type="button" 
+                onClick={stopSpeaking} 
+                className="stop-speech-btn" 
+                title="Stop Audio"
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '14px', padding: '0 4px' }}
+              >
+                ⏹️
+              </button>
+            )}
+
             <button type="submit" disabled={!inputValue.trim()}>
               <span>➔</span>
             </button>
