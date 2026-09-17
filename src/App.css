@@ -1216,19 +1216,24 @@
     overflow: hidden;
   }
   
+  /* FIXED ISSUE 1: Header Responsive Alignment & Flex Wrapping */
   .cv-modal-header {
-    padding: 20px 28px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   
   .cv-header-title {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
   }
   
   .doc-icon {
@@ -1236,19 +1241,37 @@
   }
   
   .cv-header-title h3 {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 3.5vw, 1.2rem);
     font-weight: 700;
+    word-break: break-word;
+    margin: 0;
   }
   
   .cv-header-title p {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .cv-header-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    .cv-modal-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .cv-header-actions {
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
   }
   
   .cv-download-btn {
@@ -1771,6 +1794,7 @@
     visibility: visible;
   }
   
+  /* FIXED ISSUE 2: Mobile Navigation Drawer Scrolling & Padding */
   .mobile-nav-drawer {
     position: fixed;
     top: 0;
@@ -1784,13 +1808,27 @@
     z-index: 1900;
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 24px 20px env(safe-area-inset-bottom, 24px) 20px;
+    box-sizing: border-box;
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
   }
   
   .mobile-nav-drawer.open {
     transform: translateX(0);
+  }
+
+  .mobile-nav-drawer .nav-links-mobile,
+  .mobile-nav-drawer .mobile-menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+    padding-bottom: 40px;
   }
   
   /* ==========================================================================
@@ -1894,4 +1932,12 @@
   animation: aiWave 1.2s infinite ease-in-out;
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
+}
+
+/* Fix articles/projects grid collapsing on mobile */
+@media (max-width: 768px) {
+  .articles-grid-fixed,
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
