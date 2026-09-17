@@ -281,7 +281,10 @@ function App() {
             <button type="button" className="share-btn" onClick={handleShare} title="Share">↗ Share</button>
             <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button>
             <button type="button" className="cv-cta-btn" onClick={handleOpenCV}>📄 Download CV</button>
-            <button type="button" className="mobile-menu-btn" onClick={() => setIsMobileNavOpen(true)} aria-label="Open menu">
+            <button type="button" className="mobile-menu-btn" 
+            onClick={() =>{ 
+              console.log("Hamburger button clicked! Setting drawer open.");
+              setIsMobileNavOpen(true)}} aria-label="Open menu">
               <span /><span /><span />
             </button>
           </div>

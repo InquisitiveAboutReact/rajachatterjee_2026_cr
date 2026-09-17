@@ -1,5 +1,5 @@
-/* /* /* /* ==========================================================================
-   RAJA CHATTERJEE PORTFOLIO - HIGH-GLOSS & GLASSMORPHISM DESIGN SYSTEM
+/* ==========================================================================
+   RAJA CHATTERJEE PORTFOLIO - Updated App.css - 17-09-2026
    ========================================================================== */
 
    :root {
@@ -175,7 +175,7 @@
     color: var(--text-main);
     background: rgba(255, 255, 255, 0.05);
   }
-
+  
   .nav-links a.active {
     color: var(--text-main);
     position: relative;
@@ -239,7 +239,7 @@
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 28px rgba(168, 85, 247, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.6);
   }
-
+  
   .share-btn {
     background: var(--bg-card);
     backdrop-filter: blur(10px);
@@ -264,7 +264,6 @@
   
   .hero {
     padding: 20px 0 70px;
-    margin-top: 0px;
   }
   
   .eyebrow {
@@ -304,16 +303,9 @@
     gap: 48px;
     align-items: center;
   }
-
+  
   .hero-content {
     text-align: left;
-  }
-  
-  .intro-tag {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--accent-primary);
-    margin-bottom: 12px;
   }
   
   .hero h1 {
@@ -391,7 +383,6 @@
     transform: translateY(-2px);
   }
   
-  /* Portrait Card GLOSS & V2 */
   .portrait-card {
     position: relative;
     background: var(--bg-card);
@@ -402,7 +393,7 @@
     overflow: hidden;
     box-shadow: var(--shadow-card), var(--shadow-glow);
   }
-
+  
   .portrait-card-v2 {
     display: flex;
     flex-direction: column;
@@ -429,7 +420,7 @@
     object-fit: cover;
     display: block;
   }
-
+  
   .portrait-image-wrapper .status-dot-badge {
     position: absolute;
     bottom: 12px;
@@ -441,18 +432,17 @@
     z-index: 10;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
-
-  /* Status specific glowing badge colors */
+  
   .portrait-image-wrapper .status-dot-badge.available {
     background-color: #10b981;
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
   }
-
+  
   .portrait-image-wrapper .status-dot-badge.busy {
     background-color: #ef4444;
     box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
   }
-
+  
   .portrait-image-wrapper .status-dot-badge.away {
     background-color: #f59e0b;
     box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
@@ -476,7 +466,7 @@
     transform: scale(1.18);
     transform-origin: 45% 35%;
   }
-
+  
   @media (min-width: 1024px) {
     .portrait-card img {
       height: 440px;
@@ -499,8 +489,7 @@
     color: var(--accent-cyan);
     font-size: 0.85rem;
   }
-
-  /* Status Pill Interactive Button */
+  
   .status-pill-btn {
     display: inline-flex;
     align-items: center;
@@ -721,15 +710,14 @@
     color: var(--text-muted);
     font-size: 0.95rem;
   }
-
-  /* Articles Grid Fixed & Custom Card */
+  
   .articles-grid-fixed {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
     width: 100%;
   }
-
+  
   .article-card-custom:hover {
     border-color: #10b981 !important;
     box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
@@ -803,7 +791,7 @@
   
   .window-top span:nth-child(2) { background: #f59e0b; }
   .window-top span:nth-child(3) { background: #10b981; }
-
+  
   .window-top label {
     margin-left: auto;
     font-size: 0.75rem;
@@ -824,7 +812,7 @@
     display: block;
     margin-bottom: 6px;
   }
-
+  
   .prompt-box p,
   .response-box p {
     color: var(--text-muted);
@@ -1020,7 +1008,7 @@
     font-size: 0.9rem;
     font-weight: 500;
   }
-
+  
   .career-hierarchy-heading {
     font-size: 2.2rem;
     font-weight: 800;
@@ -1040,8 +1028,8 @@
     border-radius: 2px;
     margin-top: 8px;
   }
-
-  /* Career Timeline Light Mode Overrides */
+  
+  /* Light Theme Timeline Overrides */
   [data-theme="light"] .timeline-container,
   [data-theme="light"] .career-timeline {
     background: var(--bg-card);
@@ -1097,7 +1085,7 @@
     border: 3px solid #ffffff;
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
   }
-
+  
   [data-theme="light"] .career-timeline p,
   [data-theme="light"] .career-timeline span,
   [data-theme="light"] .career-timeline div,
@@ -1163,15 +1151,6 @@
     color: var(--text-main);
   }
   
-  .footer-bottom {
-    border-top: 1px solid var(--border-color);
-    padding-top: 24px;
-    display: flex;
-    justify-content: space-between;
-    color: var(--text-dim);
-    font-size: 0.85rem;
-  }
-
   .shell.footer-bottom {
     display: flex;
     flex-direction: column;
@@ -1206,7 +1185,7 @@
   }
   
   /* ==========================================================================
-     CV MODAL STYLES (GLOSSY DIALOG)
+     CV MODAL & ADMIN ACCESS PANEL STYLES
      ========================================================================== */
   
   .cv-modal-overlay {
@@ -1325,87 +1304,118 @@
   
   .cv-modal-content {
     flex: 1;
-    overflow: hidden;
-    min-height: 0;
-  }
-  
-  .cv-iframe-container {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .cv-preview-panel {
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .cv-pdf-viewer {
-    flex: 1;
-    height: 100%;
     overflow-y: auto;
-    overflow-x: hidden;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.2);
-    -webkit-overflow-scrolling: touch;
+    min-height: 0;
+    background: var(--bg-secondary);
   }
   
-  .cv-pdf-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  
-  .cv-pdf-page canvas {
-    display: block;
-    max-width: 100%;
-    height: auto !important;
-    border-radius: var(--radius-sm);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
-    background: #ffffff;
-  }
-  
-  .cv-pdf-page-label {
-    margin-top: 8px;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    font-weight: 600;
-  }
-  
-  .cv-pdf-loading,
-  .cv-pdf-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-height: 200px;
-    gap: 12px;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 24px;
-  }
-  
-  .cv-pdf-spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--border-color);
-    border-top-color: var(--accent-primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  .cv-upload-panel {
+  /* Admin PIN Access Panel & Form Elements */
+  .cv-upload-panel,
+  .admin-auth-panel,
+  .cv-modal-content > div:not(.cv-iframe-container):not(.cv-preview-panel) {
     padding: 40px;
     max-width: 640px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
+    color: var(--text-main) !important;
+    background: transparent !important;
+  }
+  
+  .cv-upload-panel h3,
+  .cv-upload-panel h4,
+  .admin-auth-panel h3,
+  .admin-auth-panel h4,
+  .cv-modal-content h2,
+  .cv-modal-content h3,
+  .cv-modal-content h4 {
+    color: var(--text-main) !important;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  
+  .cv-upload-panel p,
+  .admin-auth-panel p,
+  .cv-modal-content p {
+    color: var(--text-muted) !important;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  
+  .cv-upload-panel input,
+  .admin-auth-panel input,
+  .cv-modal-content input[type="password"],
+  .cv-modal-content input[type="text"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 14px 18px !important;
+    color: var(--text-main) !important;
+    font-size: 1rem !important;
+    width: 100% !important;
+    max-width: 360px !important;
+    outline: none !important;
+    display: block !important;
+    margin-bottom: 20px !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.25s ease !important;
+  }
+  
+  .cv-upload-panel input:focus,
+  .admin-auth-panel input:focus,
+  .cv-modal-content input:focus {
+    border-color: var(--border-highlight) !important;
+    box-shadow: 0 0 15px var(--accent-glow), inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  .cv-upload-panel .actions,
+  .admin-auth-panel .actions,
+  .cv-modal-content form div,
+  .cv-modal-content .admin-actions,
+  .cv-modal-content div {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .cv-upload-panel button,
+  .admin-auth-panel button,
+  .cv-modal-content button:not(.tab-btn):not(.cv-close-btn) {
+    background: var(--gradient-accent) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 12px 24px !important;
+    border-radius: 20px !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 0.95rem !important;
+    box-shadow: 0 4px 16px var(--accent-glow) !important;
+    transition: all 0.25s ease !important;
+  }
+  
+  .cv-upload-panel button:hover,
+  .admin-auth-panel button:hover,
+  .cv-modal-content button:not(.tab-btn):not(.cv-close-btn):hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5) !important;
+  }
+  
+  .cv-upload-panel button.cancel-btn,
+  .admin-auth-panel button[type="button"],
+  .cv-modal-content button:nth-child(2):not(.tab-btn) {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-muted) !important;
+    box-shadow: none !important;
+  }
+  
+  .cv-upload-panel button.cancel-btn:hover,
+  .admin-auth-panel button[type="button"]:hover,
+  .cv-modal-content button:nth-child(2):not(.tab-btn):hover {
+    color: var(--text-main) !important;
+    border-color: var(--border-highlight) !important;
+    background: var(--bg-card-hover) !important;
   }
   
   .upload-box {
@@ -1415,8 +1425,9 @@
     border-radius: var(--radius-lg);
     padding: 40px 24px;
     margin-bottom: 32px;
+    text-align: center;
   }
-
+  
   .upload-box.dragging {
     border-color: var(--accent-primary);
     background: rgba(99, 102, 241, 0.08);
@@ -1425,17 +1436,6 @@
   .upload-icon {
     font-size: 3rem;
     margin-bottom: 12px;
-  }
-  
-  .upload-box h4 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-  }
-  
-  .upload-box p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 24px;
   }
   
   .file-select-label,
@@ -1449,15 +1449,7 @@
     display: inline-block;
     border: none;
     font-size: 1rem;
-    min-height: 48px;
-    min-width: 200px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
     box-shadow: 0 4px 16px var(--accent-glow);
-  }
-
-  .file-select-btn:active {
-    transform: scale(0.98);
   }
   
   .cv-file-input-hidden {
@@ -1470,7 +1462,7 @@
     clip: rect(0, 0, 0, 0);
     border: 0;
   }
-
+  
   .current-file-badge {
     margin-top: 20px;
     font-size: 0.9rem;
@@ -1482,100 +1474,13 @@
     font-size: 0.85rem;
     color: var(--accent-emerald);
   }
-
+  
   .upload-status-msg.error {
     color: #ef4444;
   }
   
-  .repo-sync-guide {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    text-align: left;
-    font-size: 0.88rem;
-  }
-  
-  .repo-sync-guide h5 {
-    font-size: 0.95rem;
-    margin-bottom: 10px;
-    color: var(--accent-amber);
-  }
-  
-  .repo-sync-guide ol {
-    padding-left: 20px;
-    color: var(--text-muted);
-    line-height: 1.8;
-  }
-  
-  .reset-default-btn {
-    margin-top: 16px;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-size: 0.8rem;
-  }
-
-  .cv-open-tab-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .cv-mobile-preview {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
-    height: 100%;
-    gap: 16px;
-  }
-  
-  .cv-mobile-preview-icon {
-    font-size: 4rem;
-  }
-  
-  .cv-mobile-preview h4 {
-    font-size: 1.1rem;
-    word-break: break-word;
-  }
-  
-  .cv-mobile-preview p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    max-width: 320px;
-    line-height: 1.6;
-  }
-  
-  .cv-mobile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 280px;
-    margin-top: 8px;
-  }
-  
-  .cv-mobile-actions .btn-primary,
-  .cv-mobile-actions .btn-secondary {
-    width: 100%;
-    justify-content: center;
-    min-height: 48px;
-  }
-  
   /* ==========================================================================
-     RAG CHATBOT WIDGET STYLES & COMPLETE SCROLLBAR RESET
+     RAG CHATBOT WIDGET STYLES & SCROLLBAR SETTINGS
      ========================================================================== */
   
   .rag-chatbot-wrapper {
@@ -1606,14 +1511,6 @@
     box-shadow: 0 12px 35px rgba(99, 102, 241, 0.55);
   }
   
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    background: #10b981;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #10b981;
-  }
-  
   .rag-chat-modal {
     position: absolute;
     bottom: 70px;
@@ -1629,8 +1526,7 @@
     flex-direction: column;
     overflow: hidden;
   }
-
-  /* Universal WebKit Scrollbar Reset inside Chat Modal */
+  
   .rag-chat-modal *::-webkit-scrollbar {
     width: 5px !important;
     height: 0px !important;
@@ -1651,15 +1547,7 @@
     border-radius: 4px !important;
   }
   
-  .rag-quick-prompts,
-  .rag-chat-modal div {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-  
   .rag-chat-messages {
-    scrollbar-width: thin !important;
-    scrollbar-color: #334155 #0b0f19 !important;
     flex: 1;
     padding: 16px;
     overflow-y: auto;
@@ -1724,18 +1612,6 @@
     justify-content: flex-end;
   }
   
-  .bot-avatar {
-    width: 24px;
-    height: 24px;
-    background: var(--accent-primary);
-    border-radius: 50%;
-    font-size: 0.7rem;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
   .chat-bubble {
     max-width: 80%;
     padding: 10px 14px;
@@ -1758,24 +1634,6 @@
     box-shadow: 0 4px 12px var(--accent-glow);
   }
   
-  .chat-bubble.typing span {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--text-muted);
-    border-radius: 50%;
-    margin: 0 2px;
-    animation: bounce 1.2s infinite ease-in-out;
-  }
-  
-  .chat-bubble.typing span:nth-child(2) { animation-delay: 0.2s; }
-  .chat-bubble.typing span:nth-child(3) { animation-delay: 0.4s; }
-  
-  @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-6px); }
-  }
-  
   .rag-quick-prompts {
     padding: 8px 12px;
     display: flex;
@@ -1793,11 +1651,6 @@
     border-radius: 12px;
     white-space: nowrap;
     cursor: pointer;
-  }
-  
-  .rag-quick-prompts button:hover {
-    color: var(--text-main);
-    border-color: var(--border-highlight);
   }
   
   .rag-chat-input-form {
@@ -1876,11 +1729,6 @@
     transform: translateY(0);
   }
   
-  .scroll-to-top:hover {
-    border-color: var(--border-highlight);
-    background: var(--bg-card-hover);
-  }
-  
   /* ==========================================================================
      MOBILE NAVIGATION DRAWER
      ========================================================================== */
@@ -1945,104 +1793,6 @@
     transform: translateX(0);
   }
   
-  .mobile-nav-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border-color);
-  }
-  
-  .mobile-nav-brand {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: 0.05em;
-  }
-  
-  .mobile-nav-brand span {
-    color: var(--accent-primary);
-  }
-  
-  .mobile-nav-close {
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1.3rem;
-    cursor: pointer;
-  }
-
-  .mobile-nav-scrollable-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  }
-  
-  .mobile-nav-links {
-    list-style: none;
-    padding: 16px 0;
-  }
-  
-  .mobile-nav-links li a {
-    display: block;
-    padding: 16px 24px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    border-left: 3px solid transparent;
-    transition: all 0.2s ease;
-    min-height: 44px;
-  }
-  
-  .mobile-nav-links li a:hover,
-  .mobile-nav-links li a:active {
-    color: var(--text-main);
-    background: var(--bg-card);
-    border-left-color: var(--accent-primary);
-  }
-  
-  .mobile-nav-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 20px 24px;
-    margin-top: auto;
-    border-top: 1px solid var(--border-color);
-  }
-  
-  .mobile-action-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-  }
-  
-  /* ==========================================================================
-     UTILITIES & ANIMATIONS
-     ========================================================================== */
-  
-  .reveal-section {
-    animation: fadeInUp 0.6s ease both;
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
   /* ==========================================================================
      RESPONSIVE BREAKPOINTS & MOBILE FIXES
      ========================================================================== */
@@ -2054,83 +1804,9 @@
     .cv-cta-btn {
       display: none !important;
     }
-
+  
     .mobile-menu-btn {
       display: flex !important;
-    }
-
-    .footer-cta-grid, 
-    footer .grid {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 24px;
-    }
-
-    .rag-chat-trigger {
-      transform: scale(0.95);
-      bottom: 16px;
-      right: 16px;
-    }
-
-    .shell.footer-bottom {
-      padding-bottom: 120px !important;
-    }
-  }
-
-  @media (max-width: 992px) {
-    .nav-links,
-    .share-btn,
-    .theme-toggle-btn,
-    .cv-cta-btn {
-      display: none !important;
-    }
-
-    .mobile-menu-btn {
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-      align-items: center !important;
-      gap: 4px !important;
-      width: 38px !important;
-      height: 38px !important;
-      background: transparent !important;
-      border: none !important;
-      cursor: pointer !important;
-    }
-  }
-
-  @media (max-width: 900px) {
-    .hero-grid {
-      display: flex !important;
-      flex-direction: column-reverse !important;
-      gap: 25px !important;
-      text-align: center;
-    }
-
-    .hero-content {
-      text-align: center !important;
-    }
-  
-    .hero-actions {
-      justify-content: center !important;
-    }
-
-    .portrait-card-v2 {
-      width: 100% !important;
-      max-width: 300px !important;
-      margin: 0 auto !important;
-    }
-  
-    .hero .hero-grid + div,
-    .hero [style*="gridTemplateColumns"] {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 15px !important;
-      text-align: center !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-      margin-top: 25px !important;
-      padding-top: 20px !important;
     }
   }
   
@@ -2143,129 +1819,20 @@
       height: 64px;
     }
   
-    .hero {
-      padding: 48px 0 40px;
-    }
-  
-    .hero-grid,
-    .ai-grid,
-    .cred-grid,
-    .footer-inner {
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-  
-    .portrait-card {
-      order: -1;
-      max-width: 280px;
-      margin: 0 auto;
-    }
-  
-    .portrait-card img {
-      height: 280px;
-    }
-  
     .hero h1 {
-      font-size: 2.4rem;
+      font-size: 2.5rem;
     }
   
-    .intro-tag {
-      font-size: 1rem;
+    .hero-grid {
+      grid-template-columns: 1fr !important;
+      gap: 24px;
     }
   
-    .hero-description {
-      font-size: 1rem;
-    }
-  
-    .hero-actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  
-    .hero-actions .btn-primary,
-    .hero-actions .btn-secondary {
+    .hero-content {
+      text-align: left;
       width: 100%;
-      justify-content: center;
-      min-height: 48px;
     }
   
-    .work-heading h2,
-    .ai-section h2,
-    .cred-grid h2,
-    .footer-inner h2 {
-      font-size: 2rem;
-    }
-  
-    .projects-grid,
-    .articles-grid-fixed {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-  
-    .project-card {
-      padding: 24px;
-    }
-  
-    .project-visual {
-      height: 120px;
-      font-size: 1.1rem;
-    }
-  
-    .ai-section {
-      padding: 60px 0;
-      margin: 60px 0;
-    }
-  
-    .cert-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .legacy-certs {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 20px;
-    }
-  
-    .legacy-list {
-      flex-direction: column;
-      gap: 8px;
-    }
-  
-    .cred-grid {
-      padding: 28px 24px;
-      margin: 40px 0 60px;
-    }
-  
-    .numbers-col {
-      justify-content: flex-start;
-      gap: 32px;
-    }
-  
-    .number-item strong {
-      font-size: 2.8rem;
-    }
-  
-    .footer-inner h2 {
-      font-size: 2.4rem;
-    }
-  
-    .email-link {
-      font-size: 1.4rem;
-    }
-  
-    .footer-bottom {
-      flex-direction: column;
-      gap: 8px;
-      text-align: center;
-      padding-bottom: 100px;
-    }
-  
-    .ticker-bar {
-      margin: 40px 0;
-    }
-  
-    /* CV Modal — full screen on mobile */
     .cv-modal-overlay {
       padding: 0;
       align-items: stretch;
@@ -2279,139 +1846,8 @@
       border: none;
     }
   
-    .cv-modal-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 16px 20px;
-      padding-top: calc(16px + env(safe-area-inset-top));
-      position: relative;
-      padding-right: 56px;
-    }
-  
-    .cv-header-title h3 {
-      font-size: 1rem;
-    }
-  
-    .cv-header-title p {
-      font-size: 0.8rem;
-    }
-  
-    .cv-header-actions {
-      width: 100%;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-  
-    .cv-download-btn,
-    .cv-open-tab-btn {
-      flex: 1;
-      justify-content: center;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-    }
-  
-    .cv-close-btn {
-      position: absolute;
-      top: calc(12px + env(safe-area-inset-top));
-      right: 16px;
-    }
-  
-    .tab-btn {
-      font-size: 0.8rem;
-      padding: 12px 8px;
-    }
-  
-    .cv-upload-panel {
+    .cv-upload-panel,
+    .admin-auth-panel {
       padding: 24px 16px;
-      overflow-y: auto;
-    }
-  
-    .upload-box {
-      padding: 32px 16px;
-    }
-  
-    /* Chatbot mobile layout */
-    .rag-chatbot-wrapper {
-      bottom: calc(16px + env(safe-area-inset-bottom));
-      right: 16px;
-    }
-  
-    .rag-chat-trigger {
-      padding: 12px 16px;
-      font-size: 0.85rem;
-    }
-  
-    .rag-chat-modal {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: min(520px, 75dvh);
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-  
-    .scroll-to-top {
-      bottom: calc(80px + env(safe-area-inset-bottom));
-      right: 16px;
     }
   }
-  
-  @media (max-width: 480px) {
-    .hero h1 {
-      font-size: 2rem;
-    }
-  
-    .eyebrow {
-      font-size: 0.78rem;
-      padding: 6px 12px;
-    }
-  
-    .brand {
-      font-size: 1.1rem;
-    }
-  
-    .tab-btn span {
-      display: none;
-    }
-  }
-
-  @media (max-height: 650px) {
-    .shell.footer-bottom {
-      padding-bottom: 90px !important;
-    }
-    .rag-chat-trigger {
-      bottom: 12px;
-      right: 12px;
-    }
-  }
-  
-  /* Reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    .ticker-track {
-      animation: none;
-    }
-  
-    .reveal-section {
-      animation: none;
-    }
-  
-    html {
-      scroll-behavior: auto;
-    }
-  }   
-
-  /* Add only these rules to the very bottom of your original App.css */
-.articles-grid-fixed {
-  display: grid;
-  grid-template-columns: 1fr;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.article-card-custom {
-  background: linear-gradient(145deg, var(--card-bg), rgba(16, 185, 129, 0.03));
-}
