@@ -353,7 +353,7 @@ const KNOWLEDGE_BASE = [
   },
   {
     topic: "companies",
-    keywords: ["companies", "company", "employer", "employers", "worked", "organization", "organizations", "where", "firms", "previous", "raja's", "rajesh"],
+    keywords: ["companies", "company", "employer", "employers", "worked", "organization", "organizations", "where", "firms", "previous", "raja's"],
     content: "Raja's previous companies before he joined TCS, were Cognizant, IBM, Intelligroup, Sanguine IT Solutions and Hinnovation Research Center"
   },
   {
@@ -378,8 +378,8 @@ const KNOWLEDGE_BASE = [
   },
   {
     topic: "contact",
-    keywords: ["contact", "email", "linkedin", "hire", "collaborate", "reach", "github", "connect"],
-    content: "To contact Raja, please click on the below Linkedin & Github Link :-\n1. Linkedin = <a href=\"https://www.linkedin.com/in/rajachatterjee84/\" target=\"_blank\">LinkedIn</a>\n2. Github = <a href=\"https://github.com/InquisitiveAboutReact\" target=\"_blank\">Github</a>",
+    keywords: ["contact", "email", "linkedin", "hire", "collaborate", "reach", "github", "connect", "whatsapp"],
+    content: "You can contact Raja by any of the below :-\n1. <a href=\"https://www.linkedin.com/in/rajachatterjee84/\" target=\"_blank\" style=\"color: #60a5fa; text-decoration: underline;\">Linkedin</a>\n2. WhatsApp (Through Portal when he's available)\n3. Via Mail (Through Portal when his status is busy or away)\n4. <a href=\"https://github.com/InquisitiveAboutReact\" target=\"_blank\" style=\"color: #60a5fa; text-decoration: underline;\">Github</a>"
   },
   {
     topic: "cv",
@@ -415,6 +415,11 @@ function retrieveRAGResponse(query) {
     return getDynamicGreeting();
   }
 
+  if (lower.includes('contact') || lower.includes('reach') || lower.includes('hire') || lower.includes('connect')) {
+    const contactEntry = KNOWLEDGE_BASE.find(e => e.topic === 'contact');
+    if (contactEntry) return contactEntry.content;
+  }
+
   if (
     lower.includes('company') || 
     lower.includes('companies') || 
@@ -445,11 +450,6 @@ function retrieveRAGResponse(query) {
     return bestMatch.content;
   }
 
-  if (lower.includes('contact')) {
-    const contactEntry = KNOWLEDGE_BASE.find(e => e.topic === 'contact');
-    if (contactEntry) return contactEntry.content;
-  }
-
   return "I don't have sufficient knowledge for this question, I am still under training";
 }
 
@@ -467,7 +467,7 @@ export default function RAGChatbot({ onQuery }) {
   
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [voiceNotice, setVoiceNotice] = useState(''); // State for the inline banner message
+  const [voiceNotice, setVoiceNotice] = useState('');
 
   const messagesEndRef = useRef(null);
 
@@ -506,15 +506,11 @@ export default function RAGChatbot({ onQuery }) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (!SpeechRecognition) {
-      // Show an inline banner instead of alert()
       setVoiceNotice("Voice input requires Chrome/Edge. Please type your message or use quick prompts below.");
-      
-      // Automatically clear notice after 5 seconds
       setTimeout(() => setVoiceNotice(''), 5000);
       return;
     }
 
-    // Clear any previous notices if supported
     setVoiceNotice('');
 
     const recognition = new SpeechRecognition();
@@ -560,7 +556,7 @@ export default function RAGChatbot({ onQuery }) {
     const userMsg = { id: Date.now(), sender: 'user', text: cleanQuery };
     setMessages(prev => [...prev, userMsg]);
     setInputValue('');
-    setVoiceNotice(''); // Clear notice when sending
+    setVoiceNotice('');
 
     if (typeof onQuery === 'function') {
       onQuery();
@@ -651,7 +647,6 @@ export default function RAGChatbot({ onQuery }) {
             <button onClick={() => handleSend("How can I contact Raja?")}>Contact Info</button>
           </div>
 
-          {/* Inline Notice Banner */}
           {voiceNotice && (
             <div className="voice-notice-banner" style={{
               background: 'rgba(239, 68, 68, 0.15)',
