@@ -1532,11 +1532,11 @@
     box-shadow: 0 12px 35px rgba(99, 102, 241, 0.55);
   }
   
- /* ==========================================================
-   Unified RAG Chat Modal Styling (Light Mode Warm Tint)
-   ========================================================== */
-
-   .rag-chat-modal {
+  /* ==========================================================
+     Unified RAG Chat Modal Styling (Light Mode Warm Tint)
+     ========================================================== */
+  
+  .rag-chat-modal {
     position: absolute;
     bottom: 65px;
     right: 0;
@@ -1555,7 +1555,7 @@
     z-index: 10000;
   }
   
-  /* Force light mode warm tint across the modal and all its container divs/sections */
+  /* Light mode warm tint backgrounds for modal containers */
   [data-theme="light"] .rag-chat-modal,
   [data-theme="light"] .rag-chat-modal div,
   [data-theme="light"] .rag-chat-modal section,
@@ -1565,19 +1565,10 @@
     background-color: rgba(252, 248, 246, 0.98) !important;
   }
   
-  /* Clear out hardcoded white card backgrounds specifically for top header wrappers */
   [data-theme="light"] .rag-chat-modal > div > div:first-child,
   [data-theme="light"] .rag-chat-modal .top-section,
   [data-theme="light"] .rag-chat-modal [class*="header"] {
     background-color: transparent !important;
-  }
-  
-  /* Chat message bubbles contrast */
-  [data-theme="light"] .rag-chat-modal .message-bubble,
-  [data-theme="light"] .rag-chat-modal .bot-message,
-  [data-theme="light"] .rag-chat-modal .chat-message {
-    background-color: rgba(245, 238, 235, 0.9) !important;
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
   }
   
   .rag-chat-modal *::-webkit-scrollbar {
@@ -1834,7 +1825,6 @@
     width: min(320px, 85vw);
     height: 100vh;
     height: 100dvh;
-    /* Harmonized with the modal background styling */
     background: var(--bg-secondary);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -1853,7 +1843,7 @@
   }
   
   [data-theme="light"] .mobile-nav-drawer {
-    background: rgba(252, 248, 246, 0.98) !important; /* Forces the warm beige/reddish tone in light mode */
+    background: rgba(252, 248, 246, 0.98) !important;
     border-left: 1px solid rgba(0, 0, 0, 0.08);
   }
   
@@ -1981,134 +1971,53 @@
       grid-template-columns: 1fr !important;
     }
   }
-
-  /* ==========================================================
-   Refined Light Mode Drawer & Modal Styling Fixes
-   ========================================================== */
-
-[data-theme="light"] .mobile-nav-drawer {
-  background: rgba(252, 248, 246, 0.98) !important;
-  border-left: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-/* 1. Main Navigation Links & Titles */
-[data-theme="light"] .mobile-nav-drawer h2,
-[data-theme="light"] .mobile-nav-drawer .drawer-title,
-[data-theme="light"] .mobile-nav-drawer .nav-item,
-[data-theme="light"] .mobile-nav-drawer a:not(.btn) {
-  color: #2D3748 !important;
-  font-weight: 500;
-}
-
-[data-theme="light"] .mobile-nav-drawer .nav-item:hover,
-[data-theme="light"] .mobile-nav-drawer a:not(.btn):hover {
-  color: #4F46E5 !important; /* Accent hover color */
-}
-
-/* 2. Footer Metadata & Subtext */
-[data-theme="light"] .mobile-nav-drawer span, 
-[data-theme="light"] .mobile-nav-drawer p,
-[data-theme="light"] .mobile-nav-drawer small {
-  color: #64748B !important;
-}
-
-/* 3. Specific fix for the Dark Mode Toggle Button inside the Light Drawer */
-[data-theme="light"] .mobile-nav-drawer button.dark-mode-btn,
-[data-theme="light"] .mobile-nav-drawer .theme-toggle {
-  background: #1E293B !important;
-  color: #F8FAFC !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Ensure the icon/text inside that dark toggle stays crisp white */
-[data-theme="light"] .mobile-nav-drawer button.dark-mode-btn *,
-[data-theme="light"] .mobile-nav-drawer .theme-toggle * {
-  color: #F8FAFC !important;
-  fill: #F8FAFC !important;
-}
-
-/* 4. Close Icon ("X") Contrast */
-[data-theme="light"] .mobile-nav-drawer .close-btn,
-[data-theme="light"] .mobile-nav-drawer .close-btn svg {
-  color: #1E293B !important;
-  fill: #1E293B !important;
-}
-/* Fix close button visibility in the mobile drawer (Light Mode) */
-[data-theme="light"] .mobile-nav-drawer button.close-btn,
-[data-theme="light"] .mobile-nav-drawer .close-button,
-[data-theme="light"] .mobile-nav-drawer [aria-label*="Close" i] {
-  color: #1E293B !important;
-  background: rgba(0, 0, 0, 0.05) !important;
-  border-radius: 50%;
-  padding: 8px;
-}
-
-[data-theme="light"] .mobile-nav-drawer button.close-btn svg,
-[data-theme="light"] .mobile-nav-drawer .close-button svg,
-[data-theme="light"] .mobile-nav-drawer [aria-label*="Close" i] svg {
-  stroke: #1E293B !important;
-  color: #1E293B !important;
-  fill: #1E293B !important;
-}
-
-/* ==========================================================
-   Portfolio Traffic Dashboard Modal - Light Mode Warm Tint
-   ========================================================== */
-
-   [data-theme="light"] .analytics-modal,
-   [data-theme="light"] .traffic-dashboard-modal,
-   [data-theme="light"] .dashboard-modal-container {
-     background-color: rgba(252, 248, 246, 0.98) !important;
-     color: #1E293B !important;
-     backdrop-filter: blur(20px);
-     -webkit-backdrop-filter: blur(20px);
-     border: 1px solid rgba(0, 0, 0, 0.08);
-   }
-   
-   /* Force internal sections, cards, and text to adapt cleanly in light mode */
-   [data-theme="light"] .analytics-modal *,
-   [data-theme="light"] .traffic-dashboard-modal * {
-     color: inherit;
-   }
-   
-   /* Soften inner metric cards so they stand out nicely on the warm background */
-   [data-theme="light"] .analytics-modal .metric-card,
-   [data-theme="light"] .traffic-dashboard-modal .metric-card,
-   [data-theme="light"] .analytics-modal .dashboard-card {
-     background-color: rgba(255, 255, 255, 0.7) !important;
-     border: 1px solid rgba(0, 0, 0, 0.05) !important;
-     color: #1E293B !important;
-   }
-   
-   /* Ensure headings, descriptions, and numbers have sharp contrast */
-   [data-theme="light"] .analytics-modal h1,
-   [data-theme="light"] .analytics-modal h2,
-   [data-theme="light"] .analytics-modal h3,
-   [data-theme="light"] .traffic-dashboard-modal h1,
-   [data-theme="light"] .traffic-dashboard-modal h2,
-   [data-theme="light"] .traffic-dashboard-modal h3 {
-     color: #0F172A !important;
-   }
-   
-   [data-theme="light"] .analytics-modal p,
-   [data-theme="light"] .traffic-dashboard-modal p,
-   [data-theme="light"] .analytics-modal span {
-     color: #334155 !important;
-   }
   
-   /* Force absolute brightness on the Analytics Modal label and subtext */
-div[class*="traffic"], 
-div[class*="analytics"],
-.traffic-analytics-container {
-  color: #f8fafc !important; /* Pure white for title */
-}
-
-/* Specifically target any paragraph, span, or small text inside the analytics block */
-div[class*="traffic"] p,
-div[class*="traffic"] span,
-div[class*="analytics"] p,
-div[class*="analytics"] span,
-.traffic-analytics-container p,
-.traffic-analytics-container span {
-  color: #cbd5e1 !important; /* Bright light-gray so it pops against the dark sidebar */
+  /* ==========================================================
+     LIGHT MODE CONTRAST & CHAT FIXES
+     ========================================================= */
+  
+  [data-theme="light"] .mobile-nav-drawer h2,
+  [data-theme="light"] .mobile-nav-drawer .drawer-title,
+  [data-theme="light"] .mobile-nav-drawer .nav-item,
+  [data-theme="light"] .mobile-nav-drawer a:not(.btn) {
+    color: #2D3748 !important;
+    font-weight: 500;
+  }
+  
+  [data-theme="light"] .mobile-nav-drawer span, 
+  [data-theme="light"] .mobile-nav-drawer p,
+  [data-theme="light"] .mobile-nav-drawer small {
+    color: #64748B !important;
+  }
+  
+  [data-theme="light"] .mobile-nav-drawer button.close-btn {
+    color: #1E293B !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-radius: 50%;
+    padding: 8px;
+  }
+  
+  /* Dynamically style chat message text depending on theme */
+  [data-theme="light"] .chat-bubble,
+  [data-theme="light"] .chat-message,
+  [data-theme="light"] [class*="chatbot"] p,
+  [data-theme="light"] [class*="chatbot"] span {
+    color: #1e293b !important;
+  }
+  
+  [data-theme="dark"] .chat-bubble,
+  [data-theme="dark"] .chat-message,
+  [data-theme="dark"] [class*="chatbot"] p {
+    color: #f8fafc !important;
+  }
+  /* Force mobile visibility for chatbot audio and voice controls */
+.rag-chat-modal .audio-btn,
+.rag-chat-modal .voice-btn,
+.rag-chat-modal .mic-btn,
+.rag-chat-modal button[title*="audio"],
+.rag-chat-modal button[title*="voice"],
+.rag-chat-modal button[aria-label*="audio"] {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
