@@ -176,23 +176,77 @@ export default function CVModal({ isOpen, onClose }) {
   return (
     <div className="cv-modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="CV Viewer">
       <div className="cv-modal-container" onClick={(e) => e.stopPropagation()}>
-        <div className="cv-modal-header">
-          <div className="cv-header-title">
-            <span className="doc-icon" aria-hidden="true">📄</span>
-            <div>
-              <h3>Raja Chatterjee — Curriculum Vitae</h3>
-              <p>Technical Delivery Leader & Digital Builder (18+ Years Experience)</p>
+        
+        {/* Top bar containing title and close button cleanly side-by-side in flex layout */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          gap: '16px',
+          padding: '20px 20px 12px 20px',
+          borderBottom: '1px solid #334155'
+        }}>
+          <div className="cv-header-title" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flex: 1, minWidth: 0 }}>
+            <span className="doc-icon" aria-hidden="true" style={{ fontSize: '24px', flexShrink: 0 }}>📄</span>
+            <div style={{ minWidth: 0 }}>
+              <h3 style={{ margin: 0, fontSize: '18px', color: '#ffffff', fontWeight: '600', wordBreak: 'break-word' }}>
+                Raja Chatterjee — Curriculum Vitae
+              </h3>
+              <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#94a3b8', wordBreak: 'break-word' }}>
+                Technical Delivery Leader & Digital Builder (18+ Years Experience)
+              </p>
             </div>
           </div>
 
-          <div className="cv-header-actions">
+          <button 
+            type="button" 
+            onClick={onClose} 
+            aria-label="Close"
+            style={{
+              background: '#334155',
+              border: '1px solid #475569',
+              color: '#ffffff',
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '16px',
+              cursor: 'pointer',
+              flexShrink: 0,
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Action buttons row */}
+        <div className="cv-modal-header" style={{ padding: '12px 20px', borderBottom: '1px solid #334155' }}>
+          <div className="cv-header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             <button type="button" className="cv-download-btn" onClick={handleDownload}>
               <span aria-hidden="true">↓</span> Download PDF
             </button>
-            <button type="button" className="cv-open-tab-btn" onClick={handleOpenInNewTab}>
-              Open in New Tab
+            <button 
+              type="button" 
+              className="cv-open-tab-btn" 
+              onClick={handleOpenInNewTab}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                backgroundColor: '#334155',
+                color: '#ffffff',
+                fontWeight: '600',
+                fontSize: '14px',
+                borderRadius: '8px',
+                border: '1px solid #475569',
+                cursor: 'pointer',
+              }}
+            >
+              <span>Open in New Tab ↗</span>
             </button>
-            <button type="button" className="cv-close-btn" onClick={onClose} aria-label="Close">✕</button>
           </div>
         </div>
 
