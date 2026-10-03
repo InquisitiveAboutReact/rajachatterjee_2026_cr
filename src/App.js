@@ -1,3 +1,5 @@
+
+import './suppressResizeObserver';
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import profileImage from './images/raja-profile-2026.jpg';
@@ -5,6 +7,7 @@ import oracleHrBadge from './images/oracle-hr-2025.jpg';
 import oracleAiBadge from './images/oracle-ai-2026.jpg';
 import oraclePayrollBadge from './images/oracle-payroll-2026.jpg';
 import claudeCCAFBadge from './images/CCAF-O.jpg';
+import n8nWorkflowImage from './images/n8n.png';
 import CVModal from './components/CVManager/CVModal';
 import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
@@ -12,11 +15,28 @@ import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
-import SkillMatcherWidget from './SkillMatcherWidget'; // Assuming your matcher component is imported or defined
-//import profileData from './data/profileData';
+import SkillMatcherWidget from './SkillMatcherWidget'; 
 import { RAJA_PROFILE } from './data/profileData';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
+
+// Robust global interceptor to stop ResizeObserver development overlay errors
+if (typeof window !== 'undefined') {
+  const originalError = console.error;
+  console.error = (...args) => {
+    if (typeof args[0] === 'string' && args[0].includes('ResizeObserver loop completed with undelivered notifications')) {
+      return;
+    }
+    originalError(...args);
+  };
+
+  window.addEventListener('error', (e) => {
+    if (e.message && e.message.includes('ResizeObserver loop completed with undelivered notifications')) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
+  }, true);
+}
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -80,6 +100,7 @@ function App() {
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [selectedN8nImage, setSelectedN8nImage] = useState(null);
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [userMessage, setUserMessage] = useState('');
@@ -282,9 +303,7 @@ function App() {
             <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button>
             <button type="button" className="cv-cta-btn" onClick={handleOpenCV}>📄 Download CV</button>
             <button type="button" className="mobile-menu-btn" 
-            onClick={() =>{ 
-              console.log("Hamburger button clicked! Setting drawer open.");
-              setIsMobileNavOpen(true)}} aria-label="Open menu">
+              onClick={() => setIsMobileNavOpen(true)} aria-label="Open menu">
               <span /><span /><span />
             </button>
           </div>
@@ -449,26 +468,54 @@ function App() {
           <p>From technical strategy to dependable delivery, I turn moving parts into progress.</p>
         </div>
 
-        <div className="projects-grid">
-          <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-NextJS-Heroku" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>
-            <div className="project-type">01 / Engineering</div>
-            <div className="project-visual">&lt;/&gt; SSR Next.js</div>
+        <div className="projects-section">
+          {/* Full-width Top Card with click-to-zoom trigger for n8n modal */}
+          <div 
+            className="project-card full-width-card" 
+            onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="project-type">01 / COMPARISON</div>
+            <div className="project-visual workflow-visual-container">
+              <img 
+                src={n8nWorkflowImage} 
+                alt="JEV Emulator vs Ollama and Wiki API Architecture" 
+                className="workflow-img-contain"
+              />
+            </div>
             <div className="project-footer">
-              <h3>Server-Side Rendering</h3>
+              <h3>JEV Emulator vs Ollama+Wiki API (Click to expand)</h3>
               <Arrow />
             </div>
-            <p>Faster, resilient web experiences with Next.js, Express &amp; React.</p>
-          </a>
+            <p>Comparative structural analysis of emulation layers versus local LLM and retrieval-augmented pipeline patterns.</p>
+          </div>
 
-          <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-CSR-Express-Webpack-React" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>
-            <div className="project-type">02 / Architecture</div>
-            <div className="project-visual">[ Client ➔ Server ➔ Build ]</div>
-            <div className="project-footer">
-              <h3>React, CSR &amp; SSR</h3>
-              <Arrow />
-            </div>
-            <p>A flexible rendering setup built from first principles with Webpack.</p>
-          </a>
+          {/* Two Column Grid for 02 and 03 */}
+          <div className="projects-grid-row">
+            <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
+              <div className="project-type">02 / ENGINEERING</div>
+              <div className="project-visual">
+                <code>&lt;/&gt; SSR Next.js</code>
+              </div>
+              <div className="project-footer">
+                <h3>Server-Side Rendering</h3>
+                <Arrow />
+              </div>
+              <p>Faster, resilient web experiences with Next.js, Express & React.</p>
+            </a>
+
+            <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
+              <div className="project-type">03 / ARCHITECTURE</div>
+              <div className="project-visual">
+                <span>[ Client &rarr; Server &rarr; Build ]</span>
+              </div>
+              <div className="project-footer">
+                <h3>React, CSR & SSR</h3>
+                <Arrow />
+              </div>
+              <p>A flexible rendering setup built from first principles with Webpack.</p>
+            </a>
+          </div>
         </div>
 
         <section className="articles-section" style={{ marginTop: '40px' }}>
@@ -487,8 +534,8 @@ function App() {
         </section>
       </section>
 
-    {/* Recruiter Job Description Matcher Section */}
-    <section className="shell reveal-section" id="matcher" style={{ margin: '60px auto' }}>
+      {/* Recruiter Job Description Matcher Section */}
+      <section className="shell reveal-section" id="matcher" style={{ margin: '60px auto' }}>
         <div className="section-kicker">
           <span>01.5</span> <h2>Recruiter Portal</h2>
         </div>
@@ -615,8 +662,30 @@ function App() {
         </div>
       </footer>
 
+      {/* Modals & Overlays */}
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
+
+      {/* n8n Image Zoom Modal Lightbox Overlay */}
+      {selectedN8nImage && (
+        <div className="n8n-lightbox-overlay" onClick={() => setSelectedN8nImage(null)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div className="n8n-lightbox-content" onClick={(e) => e.stopPropagation()} style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh', background: '#0f172a', padding: '20px', borderRadius: '12px', border: '1px solid #334155' }}>
+            <button 
+              className="n8n-lightbox-close" 
+              onClick={() => setSelectedN8nImage(null)}
+              style={{ position: 'absolute', top: '10px', right: '15px', background: 'transparent', border: 'none', color: '#fff', fontSize: '28px', cursor: 'pointer' }}
+            >
+              &times;
+            </button>
+            <img 
+              src={selectedN8nImage} 
+              alt="Expanded n8n Workflow Architecture" 
+              style={{ width: '100%', height: 'auto', maxHeight: '80vh', objectFit: 'contain', borderRadius: '8px', display: 'block' }}
+            />
+          </div>
+        </div>
+      )}
+
       <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
       <Analytics /> 
