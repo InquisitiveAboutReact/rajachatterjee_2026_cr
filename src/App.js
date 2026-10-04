@@ -732,6 +732,7 @@ function App() {
                 className="modal-video-player" 
                 controls 
                 autoPlay 
+                //src={`${window.location.origin}/videos/updated-n8n-jev.mp4`}
                 src = {videoFile}
                 //src='/videos/Updated N8N+JEV.mp4'
                // src={`${process.env.PUBLIC_URL}/videos/updated-n8n-jev.mp4`}
