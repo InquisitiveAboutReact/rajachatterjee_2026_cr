@@ -475,7 +475,7 @@ function App() {
             onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
             style={{ cursor: 'pointer' }}
           >
-            <div className="project-type">01 / New Ideas , AI & Automation Mind</div>
+            <div className="project-type">01 / New Ideas , AI & Automation Mind !!</div>
             <div className="project-visual workflow-visual-container">
               <img 
                 src={n8nWorkflowImage} 
