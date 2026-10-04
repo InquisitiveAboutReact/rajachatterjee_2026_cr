@@ -1,8 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.ec4c8144.css",
-    "main.js": "./static/js/main.2e076fa7.js",
-    "static/media/Updated N8N+JEV.mp4": "./static/media/Updated N8N+JEV.6f4b90c34b1fd2b05b99.mp4",
+    "main.js": "./static/js/main.55daed5e.js",
     "static/media/n8n.png": "./static/media/n8n.7076830f16a3a64cd9b0.png",
     "static/media/raja-profile-2026.jpg": "./static/media/raja-profile-2026.e6aa1bcb81d70aaa8a54.jpg",
     "static/media/oracle-hr-2025.jpg": "./static/media/oracle-hr-2025.b03bf336d66612a67993.jpg",
@@ -11,10 +10,10 @@
     "static/media/CCAF-O.jpg": "./static/media/CCAF-O.e2637790553bb99d71c4.jpg",
     "index.html": "./index.html",
     "main.ec4c8144.css.map": "./static/css/main.ec4c8144.css.map",
-    "main.2e076fa7.js.map": "./static/js/main.2e076fa7.js.map"
+    "main.55daed5e.js.map": "./static/js/main.55daed5e.js.map"
   },
   "entrypoints": [
     "static/css/main.ec4c8144.css",
-    "static/js/main.2e076fa7.js"
+    "static/js/main.55daed5e.js"
   ]
 }
