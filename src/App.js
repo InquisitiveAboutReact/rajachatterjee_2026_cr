@@ -475,7 +475,9 @@ function App() {
             <div className="project-type">01 / New Ideas , AI & Automation Mind !!</div>
             
             {/* Clickable Image Container with Zoom Trigger */}
+            <h4>JEV Emulator vs Ollama+Wiki API (Click to expand the image)</h4>
             <div 
+           
               className="project-visual workflow-visual-container" 
               onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
               style={{ cursor: 'pointer' }}
@@ -500,7 +502,7 @@ function App() {
               </video>
             </div>
             <div className="project-footer">
-              <h3>JEV Emulator vs Ollama+Wiki API (Click to expand)</h3>
+              <h3>Click to Play the Video</h3>
               <Arrow />
             </div>
             <p>Comparative structural analysis of emulation layers versus local LLM and retrieval-augmented pipeline patterns.</p>
