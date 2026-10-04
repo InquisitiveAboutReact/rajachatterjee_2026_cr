@@ -732,7 +732,7 @@ function App() {
                 className="modal-video-player" 
                 controls 
                 autoPlay 
-                src='/video/Updated N8N+JEV.mp4'
+                src='/videos/Updated N8N+JEV.mp4'
               >
                 Your browser does not support the video tag.
               </video>
