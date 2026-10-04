@@ -28,3 +28,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Ignore local deployment scripts
+deploy-*.sh
+
+# Ignore video files in the src/images directory
+src/images/*.mp4
