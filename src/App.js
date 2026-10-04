@@ -19,6 +19,7 @@ import SkillMatcherWidget from './SkillMatcherWidget';
 import { RAJA_PROFILE } from './data/profileData';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
+import n8nVideo from './images/n8n_jev_prod.mp4';
 
 // Robust global interceptor to stop ResizeObserver development overlay errors
 if (typeof window !== 'undefined') {
@@ -468,20 +469,35 @@ function App() {
           <p>From technical strategy to dependable delivery, I turn moving parts into progress.</p>
         </div>
 
-        <div className="projects-section">
-          {/* Full-width Top Card with click-to-zoom trigger for n8n modal */}
-          <div 
-            className="project-card full-width-card" 
-            onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
-            style={{ cursor: 'pointer' }}
-          >
+     <div className="projects-section">
+          {/* Full-width Top Card */}
+          <div className="project-card full-width-card">
             <div className="project-type">01 / New Ideas , AI & Automation Mind !!</div>
-            <div className="project-visual workflow-visual-container">
+            
+            {/* Clickable Image Container with Zoom Trigger */}
+            <div 
+              className="project-visual workflow-visual-container" 
+              onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
+              style={{ cursor: 'pointer' }}
+            >
               <img 
                 src={n8nWorkflowImage} 
                 alt="JEV Emulator vs Ollama and Wiki API Architecture" 
                 className="workflow-img-contain"
               />
+            </div>
+
+            {/* Video Player Container */}
+            <div className="video-container" style={{ width: '100%', maxWidth: '900px', margin: '20px auto', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+              <video 
+                controls 
+                width="100%" 
+                preload="metadata"
+                style={{ display: 'block', width: '100%', height: 'auto', background: '#000' }}
+              >
+                <source src={n8nVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
             <div className="project-footer">
               <h3>JEV Emulator vs Ollama+Wiki API (Click to expand)</h3>
