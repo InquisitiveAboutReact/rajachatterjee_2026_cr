@@ -7,7 +7,7 @@ import oracleAiBadge from './images/oracle-ai-2026.jpg';
 import oraclePayrollBadge from './images/oracle-payroll-2026.jpg';
 import claudeCCAFBadge from './images/CCAF-O.jpg';
 import n8nWorkflowImage from './images/n8n.png';
-//import videoFile from './images/Updated N8N+JEV.mp4';
+import videoFile from './images/updated-n8n-jev.mp4';
 import CVModal from './components/CVManager/CVModal';
 import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
@@ -732,8 +732,9 @@ function App() {
                 className="modal-video-player" 
                 controls 
                 autoPlay 
+                src = {videoFile}
                 //src='/videos/Updated N8N+JEV.mp4'
-                src={`${process.env.PUBLIC_URL}/videos/updated-n8n-jev.mp4`}
+               // src={`${process.env.PUBLIC_URL}/videos/updated-n8n-jev.mp4`}
               >
                 Your browser does not support the video tag.
               </video>
