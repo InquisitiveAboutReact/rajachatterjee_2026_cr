@@ -1,3 +1,4 @@
+
 import './suppressResizeObserver';
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
@@ -7,7 +8,6 @@ import oracleAiBadge from './images/oracle-ai-2026.jpg';
 import oraclePayrollBadge from './images/oracle-payroll-2026.jpg';
 import claudeCCAFBadge from './images/CCAF-O.jpg';
 import n8nWorkflowImage from './images/n8n.png';
-import videoFile from './images/updated-n8n-jev.mp4';
 import CVModal from './components/CVManager/CVModal';
 import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
@@ -19,6 +19,7 @@ import SkillMatcherWidget from './SkillMatcherWidget';
 import { RAJA_PROFILE } from './data/profileData';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
+import n8nVideo from './images/n8n_jev_prod.mp4';
 
 // Robust global interceptor to stop ResizeObserver development overlay errors
 if (typeof window !== 'undefined') {
@@ -101,7 +102,6 @@ function App() {
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [selectedN8nImage, setSelectedN8nImage] = useState(null);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false); // State for video modal
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [userMessage, setUserMessage] = useState('');
@@ -469,39 +469,43 @@ function App() {
           <p>From technical strategy to dependable delivery, I turn moving parts into progress.</p>
         </div>
 
-        <div className="projects-section">
-          {/* Full-width Top Card with click-to-zoom trigger for n8n modal & Play Video Link */}
-          <div 
-            className="project-card full-width-card" 
-          >
+     <div className="projects-section">
+          {/* Full-width Top Card */}
+          <div className="project-card full-width-card">
+            <div className="project-type">01 / New Ideas , AI & Automation Mind !!</div>
+            
+            {/* Clickable Image Container with Zoom Trigger */}
+            <h4>JEV Emulator vs Ollama+Wiki API (Click to expand the image)</h4>
             <div 
+           
+              className="project-visual workflow-visual-container" 
               onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
               style={{ cursor: 'pointer' }}
             >
-              <div className="project-type">01 / New Ideas , AI & Automation Mind</div>
-              <div className="project-visual workflow-visual-container">
-                <img 
-                  src={n8nWorkflowImage} 
-                  alt="JEV Emulator vs Ollama and Wiki API Architecture" 
-                  className="workflow-img-contain"
-                />
-              </div>
-              <div className="project-footer">
-                <h3>JEV Emulator vs Ollama+Wiki API (Click to expand)</h3>
-                <Arrow />
-              </div>
+              <img 
+                src={n8nWorkflowImage} 
+                alt="JEV Emulator vs Ollama and Wiki API Architecture" 
+                className="workflow-img-contain"
+              />
             </div>
-            
+
+            {/* Video Player Container */}
+            <div className="video-container" style={{ width: '100%', maxWidth: '900px', margin: '20px auto', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+              <video 
+                controls 
+                width="100%" 
+                preload="metadata"
+                style={{ display: 'block', width: '100%', height: 'auto', background: '#000' }}
+              >
+                <source src={n8nVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div className="project-footer">
+              <h3>Click to Play the Video</h3>
+              <Arrow />
+            </div>
             <p>Comparative structural analysis of emulation layers versus local LLM and retrieval-augmented pipeline patterns.</p>
-            
-            {/* Play the video link added here */}
-            <button 
-              type="button" 
-              className="video-link-trigger" 
-              onClick={() => setIsVideoModalOpen(true)}
-            >
-              ▶ Play the video
-            </button>
           </div>
 
           {/* Two Column Grid for 02 and 03 */}
@@ -599,156 +603,111 @@ function App() {
               <label>RAJA / AI DELIVERY COPILOT</label>
             </div>
             <div className="prompt-box">
-              <b>Prompt</b>
-              <p>Evaluate delivery strategy for multi-cloud migration under strict regulatory constraints.</p>
+              <b>Ask the delivery copilot</b>
+              <p>&ldquo;How does Raja lead enterprise AI and cloud architecture programs?&rdquo;</p>
             </div>
             <div className="response-box">
-              <div className="spark-icon">✨</div>
+              <div className="spark-icon" aria-hidden="true">✦</div>
               <div>
-                <b>Copilot Assessment</b>
-                <p>Prioritize phased decoupling of core data stores. Establish zero-trust network boundaries before transitioning transactional middleware.</p>
+                <b>Grounded execution, zero noise.</b>
+                <p>Combines 18+ years of cloud delivery leadership with modular UI pipelines.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="shell reveal-section" id="certifications" style={{ marginBottom: '80px' }}>
-        <div className="section-kicker"><span>03</span> Professional verification</div>
+      <section className="shell certifications reveal-section" id="certifications">
+        <div className="section-kicker"><span>03</span> Verified learning</div>
         <div className="work-heading">
-          <h2>Credentials &amp; Certifications</h2>
-          <p>Validated expertise across modern cloud architecture, enterprise AI, and HCM platforms.</p>
+          <h2>Credentials that<br /><em>keep evolving.</em></h2>
+          <p>Recent Oracle certifications complementing enterprise delivery foundations.</p>
         </div>
 
         <div className="cert-grid">
-          {certifications.map((cert, index) => (
-            <div key={index} className="cert-card">
-              <div className="cert-image">
-                <img src={cert.image} alt={cert.title} />
-              </div>
+          {certifications.map((cert) => (
+            <article className="cert-card" key={cert.title}>
+              <div className="cert-image"><img src={cert.image} alt={cert.title} loading="lazy" /></div>
               <span className="cert-year">{cert.year}</span>
               <h3>{cert.title}</h3>
               <p>{cert.detail}</p>
-            </div>
+            </article>
           ))}
-        </div>
-
-        <div className="legacy-certs">
-          <span>Legacy Milestone Credentials</span>
-          <div className="legacy-list">
-            <div><b>ITIL v3 Foundation</b> <em>(2012)</em></div>
-            <div><b>Oracle Certified Associate</b> <em>(2015)</em></div>
-            <div><b>Scrum Master (CSM)</b> <em>(2018)</em></div>
-          </div>
         </div>
       </section>
 
-      <section className="shell reveal-section" id="experience">
+      <section className="shell experience reveal-section" id="experience">
+        <div className="section-kicker"><span>04</span> The detail</div>
         <div className="cred-grid">
           <div>
-            <div className="section-kicker"><span>04</span> Background</div>
-            <h2>18+ years of delivery leadership &amp; engineering depth.</h2>
+            <h2>Experience that<br />travels well.</h2>
+            <p className="experience-copy">18+ years across technical delivery, program management, and full-stack development.</p>
             <div className="tags-cloud">
-              <span className="tag-pill">Enterprise Delivery</span>
-              <span className="tag-pill">Cloud Architecture</span>
-              <span className="tag-pill">AI Workflows</span>
-              <span className="tag-pill">Stakeholder Management</span>
+              <span className="tag-pill">Salesforce</span>
+              <span className="tag-pill">React / Node</span>
+              <span className="tag-pill">Cloud &amp; CI/CD</span>
+              <span className="tag-pill">Agile delivery</span>
             </div>
           </div>
           <div className="numbers-col">
-            <div className="number-item">
-              <strong>18+</strong>
-              <small>Years experience</small>
-            </div>
-            <div className="number-item">
-              <strong>50+</strong>
-              <small>Enterprise programs</small>
+            <div className="number-item"><strong>18+</strong><small>years in technology</small></div>
+            <div className="number-item"><strong>360°</strong><small>delivery ownership</small></div>
+          </div>
+        </div>
+        <div style={{ marginTop: '30px' }}><Timeline /></div>
+      </section>
+
+      <footer id="contact" className="reveal-section">
+        <div className="shell footer-inner">
+          <div>
+            <div className="section-kicker"><span>05</span> Start a conversation</div>
+            <h2>Have an idea<br />worth <em>moving?</em></h2>
+          </div>
+          <div>
+            <p className="footer-tagline">Let&apos;s make the complicated parts feel simple.</p>
+            <a href="mailto:i.gooner168@gmail.com" className="email-link">Say hello <Arrow /></a>
+            <div className="socials-row">
+              <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_linkedin')}>LinkedIn</a>
+              <a href="https://github.com/InquisitiveAboutReact" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>GitHub</a>
             </div>
           </div>
         </div>
-
-        <h3 className="career-hierarchy-heading">Career Progression</h3>
-        <Timeline />
-      </section>
-
-      <section className="shell reveal-section" id="contact" style={{ margin: '80px auto' }}>
-        <footer>
-          <div className="footer-inner">
-            <div>
-              <div className="section-kicker"><span>05</span> Get in touch</div>
-              <h2>Let&apos;s build something<br /><em>exceptional together.</em></h2>
-              <a className="email-link" href="mailto:i.gooner168@gmail.com">i.gooner168@gmail.com</a>
-              <div className="socials-row">
-                <a href="https://www.linkedin.com/in/rajachatterjee84/" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_linkedin')}>LinkedIn</a>
-                <a href="https://github.com/I-gooner168" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>GitHub</a>
-                <a href="https://medium.com/@i.gooner168" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_medium')}>Medium</a>
-              </div>
-            </div>
-            <div>
-              <p style={{ color: 'var(--text-muted)', lineHeight: '1.7', fontSize: '1.05rem' }}>
-                Whether you&apos;re looking to lead a complex cloud transformation, optimize engineering throughput, or explore AI-assisted workflows, my inbox is open.
-              </p>
-            </div>
+        <div className="shell footer-bottom">
+          <div className="footer-meta">
+            <span>© 2026 Raja Chatterjee, all rights reserved.</span>
+            <span className="footer-date">Last Updated: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
           </div>
-        </footer>
-      </section>
-
-      <div className="shell footer-bottom">
-        <div className="footer-meta">
-          <span className="footer-tagline">Designed with intent &amp; precision</span>
-          <span className="footer-date">© {new Date().getFullYear()} Raja Chatterjee. All rights reserved.</span>
         </div>
-      </div>
+      </footer>
 
-      {/* CV Modal */}
-      {isCVModalOpen && <CVModal onClose={() => setIsCVModalOpen(false)} />}
+      {/* Modals & Overlays */}
+      <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
+      <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
 
-      {/* Analytics Modal */}
-      {isAnalyticsOpen && <AnalyticsModal onClose={() => setIsAnalyticsOpen(false)} />}
-
-      {/* Zoom Image Modal for n8n workflow */}
+      {/* n8n Image Zoom Modal Lightbox Overlay */}
       {selectedN8nImage && (
-        <div className="modal-overlay" onClick={() => setSelectedN8nImage(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={() => setSelectedN8nImage(null)}>✕</button>
-            <h3 style={{ marginBottom: '16px', fontSize: '1.3rem' }}>JEV Emulator vs Ollama + Wiki API Architecture</h3>
-            <div style={{ width: '100%', maxHeight: '75vh', overflow: 'hidden', display: 'flex', justifyContent: 'center', background: '#000', borderRadius: '12px', padding: '10px' }}>
-              <img src={selectedN8nImage} alt="Expanded n8n Workflow" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
-            </div>
+        <div className="n8n-lightbox-overlay" onClick={() => setSelectedN8nImage(null)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div className="n8n-lightbox-content" onClick={(e) => e.stopPropagation()} style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh', background: '#0f172a', padding: '20px', borderRadius: '12px', border: '1px solid #334155' }}>
+            <button 
+              className="n8n-lightbox-close" 
+              onClick={() => setSelectedN8nImage(null)}
+              style={{ position: 'absolute', top: '10px', right: '15px', background: 'transparent', border: 'none', color: '#fff', fontSize: '28px', cursor: 'pointer' }}
+            >
+              &times;
+            </button>
+            <img 
+              src={selectedN8nImage} 
+              alt="Expanded n8n Workflow Architecture" 
+              style={{ width: '100%', height: 'auto', maxHeight: '80vh', objectFit: 'contain', borderRadius: '8px', display: 'block' }}
+            />
           </div>
         </div>
       )}
 
-      {/* Video Modal for Updated N8N+JEV.mp4 */}
-      {isVideoModalOpen && (
-        <div className="video-modal-overlay" onClick={() => setIsVideoModalOpen(false)}>
-          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="video-modal-header">
-              <h3>Updated N8N + JEV Walkthrough</h3>
-              <button className="modal-close-btn" onClick={() => setIsVideoModalOpen(false)}>✕</button>
-            </div>
-            <div className="video-wrapper">
-              <video 
-                className="modal-video-player" 
-                controls 
-                autoPlay 
-                //src={`${window.location.origin}/videos/updated-n8n-jev.mp4`}
-                src = {videoFile}
-                //src='/videos/Updated N8N+JEV.mp4'
-               // src={`${process.env.PUBLIC_URL}/videos/updated-n8n-jev.mp4`}
-              >
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <ScrollToTop />
-      <RAGChatbot />
-
+      <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
-      <Analytics />
+      <Analytics /> 
+      <ScrollToTop />
     </main>
   );
 }
