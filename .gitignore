@@ -33,3 +33,6 @@ deploy-*.sh
 
 # Ignore video files in the src/images directory
 src/images/*.mp4
+
+# Ignore local video files in public
+public/videos/*.mp4
