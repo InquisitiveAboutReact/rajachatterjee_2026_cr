@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@upstash/redis": "^1.38.3",
+    "@upstash/vector": "^1.2.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "ajv": "^8.11.0",
@@ -68,7 +69,8 @@
   "devDependencies": {
     "ajv8": "npm:ajv@8.11.0",
     "concurrently": "^8.2.0",
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "ml-pca": "^4.1.1"
   },
   "repository": {
     "type": "git",

@@ -449,12 +449,48 @@ function App() {
           <p>From technical strategy to dependable delivery, I turn moving parts into progress.</p>
         </div>
 
+<<<<<<< Updated upstream
         <div className="projects-grid">
           <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-NextJS-Heroku" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_github')}>
             <div className="project-type">01 / Engineering</div>
             <div className="project-visual">&lt;/&gt; SSR Next.js</div>
             <div className="project-footer">
               <h3>Server-Side Rendering</h3>
+=======
+     <div className="projects-section">
+          {/* Full-width Top Card */}
+          <div className="project-card full-width-card">
+            <div className="project-type">01 / New Ideas , AI & Automation Mind !!</div>
+            <h3>Click to expand the image</h3>
+            
+            {/* Clickable Image Container with Zoom Trigger */}
+            <div 
+              className="project-visual workflow-visual-container" 
+              onClick={() => setSelectedN8nImage(n8nWorkflowImage)}
+              style={{ cursor: 'pointer' }}
+            >
+              <img 
+                src={n8nWorkflowImage} 
+                alt="JEV Emulator vs Ollama and Wiki API Architecture" 
+                className="workflow-img-contain"
+              />
+            </div>
+
+            {/* Video Player Container */}
+            <div className="video-container" style={{ width: '100%', maxWidth: '900px', margin: '20px auto', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+              <video 
+                controls 
+                width="100%" 
+                preload="metadata"
+                style={{ display: 'block', width: '100%', height: 'auto', background: '#000' }}
+              >
+                <source src={n8nVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div className="project-footer">
+              <h3>Click to play the video</h3>
+>>>>>>> Stashed changes
               <Arrow />
             </div>
             <p>Faster, resilient web experiences with Next.js, Express &amp; React.</p>
