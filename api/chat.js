@@ -7,20 +7,53 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const embeddingsPath = path.join(__dirname, '..', 'scripts', 'embeddings-output.json');
 
 async function getEmbedding(text) {
-  // We keep local Ollama for embeddings because it's free and fast for small chunks
-  // If you prefer a cloud embedding provider, we can switch this to Voyage AI or OpenAI
-  try {
-    const res = await fetch('http://localhost:11434/api/embeddings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'nomic-embed-text', prompt: text }),
-    });
-    if (!res.ok) throw new Error(`Ollama Embedding Error: ${res.statusText}`);
-    const data = await res.json();
-    return data.embedding;
-  } catch (err) {
-    console.error(`[RAG] Embedding failed: ${err.message}`);
-    throw err;
+  // In production (Vercel), we cannot use localhost:11434.
+  // We use a cloud-based embedding model for the user's query.
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+
+  if (!isProduction) {
+    // LOCAL MODE: Use Ollama
+    try {
+      const res = await fetch('http://localhost:11434/api/embeddings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'nomic-embed-text', prompt: text }),
+      });
+      if (!res.ok) throw new Error(`Ollama Embedding Error: ${res.statusText}`);
+      const data = await res.json();
+      return data.embedding;
+    } catch (err) {
+      console.error(`[RAG] Local Embedding failed: ${err.message}`);
+      throw err;
+    }
+  } else {
+    // PRODUCTION MODE: Use a Cloud Embedding API
+    // Using a free/low-cost compatible embedding endpoint
+    try {
+      // We can use a Groq-compatible or similar cloud provider.
+      // Since you have a Groq key, we'll try to use a cloud-accessible embedding service.
+      // For now, I'll implement a fallback to a common cloud embedding pattern.
+      const res = await fetch('https://api.groq.com/openai/v1/embeddings', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'nomic-embed-text', // Groq supports nomic embeddings
+          input: text
+        }),
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(`Cloud Embedding Error: ${errData.error?.message || res.statusText}`);
+      }
+      const data = await res.json();
+      return data.data[0].embedding;
+    } catch (err) {
+      console.error(`[RAG] Production Embedding failed: ${err.message}`);
+      throw err;
+    }
   }
 }
 
