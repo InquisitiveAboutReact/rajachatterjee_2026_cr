@@ -1,5 +1,6 @@
 {
   "name": "myprofile-pro",
+  "type": "module",
   "homepage": ".",
   "version": "0.1.0",
   "private": true,
