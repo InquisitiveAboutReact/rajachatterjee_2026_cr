@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "./static/css/main.a5b78928.css",
-    "main.js": "./static/js/main.3d21f69c.js",
-    "static/media/updated-n8n-jev.mp4": "./static/media/updated-n8n-jev.6f4b90c34b1fd2b05b99.mp4",
+    "main.css": "./static/css/main.7d454d54.css",
+    "main.js": "./static/js/main.c65656f0.js",
+    "static/media/n8n_jev_prod.mp4": "./static/media/n8n_jev_prod.6f4b90c34b1fd2b05b99.mp4",
     "static/media/n8n.png": "./static/media/n8n.7076830f16a3a64cd9b0.png",
     "static/media/raja-profile-2026.jpg": "./static/media/raja-profile-2026.e6aa1bcb81d70aaa8a54.jpg",
     "static/media/oracle-hr-2025.jpg": "./static/media/oracle-hr-2025.b03bf336d66612a67993.jpg",
@@ -10,11 +10,11 @@
     "static/media/oracle-payroll-2026.jpg": "./static/media/oracle-payroll-2026.a69c54749d640a4ed40c.jpg",
     "static/media/CCAF-O.jpg": "./static/media/CCAF-O.e2637790553bb99d71c4.jpg",
     "index.html": "./index.html",
-    "main.a5b78928.css.map": "./static/css/main.a5b78928.css.map",
-    "main.3d21f69c.js.map": "./static/js/main.3d21f69c.js.map"
+    "main.7d454d54.css.map": "./static/css/main.7d454d54.css.map",
+    "main.c65656f0.js.map": "./static/js/main.c65656f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.a5b78928.css",
-    "static/js/main.3d21f69c.js"
+    "static/css/main.7d454d54.css",
+    "static/js/main.c65656f0.js"
   ]
 }
