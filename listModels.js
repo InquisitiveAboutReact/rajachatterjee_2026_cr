@@ -1,0 +1,42 @@
+import fs from 'fs';
+import path from 'path';
+
+async function listModels() {
+  try {
+    const envPath = path.join(process.cwd(), '.env.local');
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    const env = {};
+    envContent.split('\n').forEach(line => {
+      const [key, value] = line.split('=');
+      if (key && value) env[key.trim()] = value.trim().replace(/['"]/g, '');
+    });
+
+    const apiKey = env.GROQ_API_KEY;
+    if (!apiKey) {
+      console.error('❌ Error: GROQ_API_KEY not found in .env.local');
+      return;
+    }
+
+    console.log('🔍 Checking available Groq models...');
+    const res = await fetch('https://api.groq.com/openai/v1/models', {
+      headers: { 'Authorization': `Bearer ${apiKey}` },
+    });
+
+    if (!res.ok) {
+      throw new Error(`API Error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    console.log('\n✅ YOUR AVAILABLE MODELS:');
+    console.log('--------------------------------------------------');
+    data.data.forEach(model => {
+      console.log(model.id);
+    });
+    console.log('--------------------------------------------------');
+
+  } catch (err) {
+    console.error('❌ Critical Error:', err.message);
+  }
+}
+
+listModels();
