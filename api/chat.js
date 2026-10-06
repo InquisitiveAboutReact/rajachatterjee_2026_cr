@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const embeddingsPath = path.join(__dirname, '..', 'scripts', 'embeddings-output.json');
 
+// Production-ready RAG pipeline - Fixed Cloud Embeddings (v2)
 async function getEmbedding(text) {
   // In production (Vercel), we cannot use localhost:11434.
   // We use a cloud-based embedding model for the user's query.
