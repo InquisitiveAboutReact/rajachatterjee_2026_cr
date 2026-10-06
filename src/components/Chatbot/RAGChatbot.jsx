@@ -909,7 +909,7 @@ export default function RAGChatbot({ onQuery }) {
                 <span className="training-warning">
                   Under Training & Can make mistakes
                   <p className="maintenance-alert">
-                    Current under maintenance as Vector Database refresh is in progress. You might not get some responses correcrtly.</p>
+                    Currently under maintenance as Vector Database refresh is in progress. You might not get some responses correcrtly.</p>
                 </span>
               </div>
             </div>
