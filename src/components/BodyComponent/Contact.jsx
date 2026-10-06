@@ -46,7 +46,7 @@ function Contact() {
   );
 }
 
-export default Contact;
+export default Contact
 
 import React from 'react';
 import { useStyles } from './BodyStyle';

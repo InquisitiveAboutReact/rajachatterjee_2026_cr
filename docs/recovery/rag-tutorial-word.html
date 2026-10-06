@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 28px; }
+        h2 { color: #34495e; margin-top: 30px; font-size: 22px; border-left: 5px solid #3498db; padding-left: 15px; }
+        h3 { color: #2980b9; font-size: 18px; margin-top: 20px; }
+        code { background-color: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        .highlight { background-color: #eef; padding: 15px; border-radius: 8px; border: 1px solid #dde; margin: 20px 0; }
+        ul { margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
+        .footer { font-style: italic; color: #7f8c8d; text-align: center; margin-top: 50px; }
+    </style>
+    <title>RAG Tutorial - Word Ready</title>
+</head>
+<body>
+    <h1>🎓 The "Zero-to-Hero" Guide: Building a Grounded RAG Pipeline for Your Portfolio</h1>
+    <p>This guide walks through the implementation of a Retrieval-Augmented Generation (RAG) system used to power a professional portfolio chatbot. Instead of relying on a general LLM that might hallucinate, we use a "grounded" approach where the AI only answers based on verified profile data.</p>
+
+    <h2>🏗️ The Architecture</h2>
+    <p>The pipeline follows a four-stage process:<br>
+    <code>Knowledge Base</code> &rarr; <code>Embedding Engine</code> &rarr; <code>Vector Database</code> &rarr; <code>LLM Generator</code></p>
+
+    <h3>1. The Knowledge Base (Data Layer)</h3>
+    <p>We don't provide the LLM with one giant biography. Instead, we use <strong>Chunking</strong>.</p>
+    <ul>
+        <li><strong>What it is:</strong> Breaking a profile into small, self-contained "chunks" (e.g., one project per chunk).</li>
+        <li><strong>Why it matters:</strong> It prevents the LLM from getting confused and allows the search engine to find the <em>exact</em> sentence needed.</li>
+        <li><strong>Implementation:</strong> Files in <code>src/data/knowledge/*.js</code> export arrays of objects containing <code>id</code>, <code>category</code>, and <code>text</code>.</li>
+    </ul>
+
+    <h3>2. The Embedding Engine (The Translator)</h3>
+    <p>Computers cannot "read" text; they read numbers (vectors).</p>
+    <ul>
+        <li><strong>The Process:</strong> We use an embedding model (like <code>nomic-embed-text</code> via Ollama) to turn a sentence into a list of 768 numbers.</li>
+        <li><strong>The Logic:</strong> Sentences with similar meanings end up with similar numbers.</li>
+        <li><strong>Script:</strong> <code>scripts/generateEmbeddings.mjs</code> iterates through all chunks and generates these vectors.</li>
+    </ul>
+
+    <h3>3. The Vector Database (The Memory)</h3>
+    <p>We use <strong>Upstash Vector</strong>, a serverless database designed for high-speed similarity search.</p>
+    <ul>
+        <li><strong>Storage:</strong> We store the vector and the original text as metadata.</li>
+        <li><strong>Querying:</strong> When a user asks a question, we embed the question and ask Upstash: <em>"Give me the top 3 vectors most similar to this question."</em></li>
+    </ul>
+
+    <h3>4. The LLM Generator (The Voice)</h3>
+    <p>Finally, we use a model like <strong>Llama 3.2</strong> or <strong>Groq</strong> to synthesize the answer.</p>
+    <ul>
+        <li><strong>The Prompt:</strong> We send a system prompt: <em>"You are Raja's assistant. Use ONLY the following context to answer. If it's not there, say you don't know."</em></li>
+        <li><strong>The Result:</strong> A response that is factually accurate and grounded in the data.</li>
+    </ul>
+
+    <h2>🛠️ Local Setup Guide</h2>
+    <p>To run this pipeline locally:</p>
+    <ol>
+        <li><strong>Install Ollama:</strong> Run <code>ollama pull llama3.2</code> and <code>ollama pull nomic-embed-text</code>.</li>
+        <li><strong>Upstash Setup:</strong> Create a free index at Upstash and add the <code>URL</code> and <code>TOKEN</code> to your <code>.env.local</code>.</li>
+        <li><strong>Ingest Data:</strong> Run <code>node --env-file=.env.local scripts/generateEmbeddings.mjs</code>.</li>
+        <li><strong>Launch:</strong> Run <code>vercel dev</code> and start chatting!</li>
+    </ol>
+
+    <hr>
+    <p class="footer">This architecture transforms a simple chatbot into a professional AI agent, demonstrating a deep understanding of modern LLM orchestration.</p>
+</body>
+</html>

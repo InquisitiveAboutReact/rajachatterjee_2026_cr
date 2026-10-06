@@ -872,37 +872,26 @@ export default function RAGChatbot({ onQuery }) {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        console.log(`Chunk received at ${performance.now().toFixed(0)}ms, length: ${value.length}`);
 
         fullText += decoder.decode(value, { stream: true });
-        const displayText = fullText.split(SOURCES_MARKER)[0];
-
-        setMessages(prev =>
-          prev.map(m => (m.id === assistantId ? { ...m, text: displayText } : m))
-        );
       }
 
-      // Once streaming is done, split out the sources from the tail end
       let finalText = fullText;
       let sources = [];
-      const markerIndex = fullText.indexOf(SOURCES_MARKER);
-      if (markerIndex !== -1) {
-        finalText = fullText.slice(0, markerIndex).trim();
-        try {
-          const parsed = JSON.parse(fullText.slice(markerIndex + SOURCES_MARKER.length));
-          
-          // Handle both old array format and new object format gracefully
-          sources = Array.isArray(parsed) ? parsed : parsed.sources || [];
-          const vectors = Array.isArray(parsed) ? null : parsed.vectors;
-
-          // 👉 Logs the source IDs
-          console.log("Retrieved Vector Database Sources & Metadata:", sources);
-          
-          // 👉 Logs the raw vector embeddings arrays in your browser console F12
-          if (vectors) {
-            console.log("Vector DB Embeddings (Front-End):", vectors);
-          }
-        } catch (e) {}
+      try {
+        const parsed = JSON.parse(fullText);
+        finalText = parsed.answer || fullText;
+        sources = parsed.sources || [];
+      } catch (e) {
+        // If it's not JSON, handle the SOURCES_MARKER as a fallback
+        const markerIndex = fullText.indexOf(SOURCES_MARKER);
+        if (markerIndex !== -1) {
+          finalText = fullText.slice(0, markerIndex).trim();
+          try {
+            const parsedSources = JSON.parse(fullText.slice(markerIndex + SOURCES_MARKER.length));
+            sources = Array.isArray(parsedSources) ? parsedSources : parsedSources.sources || [];
+          } catch (err) {}
+        }
       }
 
       setMessages(prev =>
