@@ -848,51 +848,22 @@ export default function RAGChatbot({ onQuery }) {
     setIsTyping(true);
 
     const assistantId = Date.now() + 1;
-    // Insert an empty placeholder bubble we'll fill in as text streams in
     setMessages(prev => [...prev, { id: assistantId, sender: 'assistant', text: '', sources: [] }]);
 
-    const SOURCES_MARKER = '@@SOURCES@@';
-
     try {
+      // We send the raw question. The server will try its best to embed it.
+      // But we've updated the server to be more resilient.
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: cleanQuery }),
       });
-      // 👉 Log the response stream or parsed sources in the browser console
-      console.log("Query sent to backend:", cleanQuery);
 
-      if (!res.ok || !res.body) throw new Error('Chat API request failed');
+      if (!res.ok) throw new Error('Chat API request failed');
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText = '';
-      setIsTyping(false); // swap the "..." dots for the streaming text itself
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        fullText += decoder.decode(value, { stream: true });
-      }
-
-      let finalText = fullText;
-      let sources = [];
-      try {
-        const parsed = JSON.parse(fullText);
-        finalText = parsed.answer || fullText;
-        sources = parsed.sources || [];
-      } catch (e) {
-        // If it's not JSON, handle the SOURCES_MARKER as a fallback
-        const markerIndex = fullText.indexOf(SOURCES_MARKER);
-        if (markerIndex !== -1) {
-          finalText = fullText.slice(0, markerIndex).trim();
-          try {
-            const parsedSources = JSON.parse(fullText.slice(markerIndex + SOURCES_MARKER.length));
-            sources = Array.isArray(parsedSources) ? parsedSources : parsedSources.sources || [];
-          } catch (err) {}
-        }
-      }
+      const data = await res.json();
+      const finalText = data.answer;
+      const sources = data.sources || [];
 
       setMessages(prev =>
         prev.map(m => (m.id === assistantId ? { ...m, text: finalText, sources } : m))
