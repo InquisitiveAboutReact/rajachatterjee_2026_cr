@@ -1,32 +1,22 @@
 export const SKILLS = [
   {
-    id: "skill-delivery-leadership",
-    category: "skill",
-    text: "Technical Delivery Management: 18+ years of experience leading global teams through ambitious technology programs and enterprise-scale delivery."
+    id: 'skill-delivery-leadership',
+    category: 'Leadership',
+    text: "Raja is a Technical Delivery Leader with 18+ years of experience. He specializes in Program Management, Technical Project Leadership, and Managing Global Distributed Teams. He is an expert in Agile and Scaled Agile (SAFe) methodologies, focusing on delivery risk summarization and team velocity."
   },
   {
-    id: "skill-oracle-hcm",
-    category: "skill",
-    text: "Oracle HCM Cloud Fusion: Expert in Human Capital Management, including core HR, Absence Management, and Global Payroll engines."
+    id: 'skill-tech-stack',
+    category: 'Technical Skills',
+    text: "Raja's technical expertise includes Full-Stack Cloud Development, UI Architecture, and Enterprise Integration. He is proficient in React, Node.js, and Express. He has a strong background in building high-throughput systems, specifically in the Payments and Retail domains."
   },
   {
-    id: "skill-ui-arch",
-    category: "skill",
-    text: "UI Architecture & Performance: Specialist in modern web technologies, React, Micro-Frontend strategies, and frontend performance optimization."
+    id: 'skill-cloud-ai',
+    category: 'Cloud & AI',
+    text: "Raja is a certified expert in Cloud and AI. He holds certifications as an Oracle Cloud Infrastructure (OCI) Enterprise AI Professional and an Azure Architect. He specializes in RAG (Retrieval-Augmented Generation), Model Context Protocol (MCP), and AI-enabled delivery workflows."
   },
   {
-    id: "skill-cloud-native",
-    category: "skill",
-    text: "Enterprise Cloud Delivery: Proficiency in Cloud Architecture, CI/CD pipelines, and delivering scalable solutions on Vercel and Azure."
-  },
-  {
-    id: "skill-ai-builder",
-    category: "skill",
-    text: "AI Digital Builder: Implementing AI-enabled workflows, RAG (Retrieval-Augmented Generation) pipelines, and LLM integrations for business productivity."
-  },
-  {
-    id: "skill-enterprise-tools",
-    category: "skill",
-    text: "Enterprise Tooling: Deep experience with SAP Concur, Guidewire, and Oracle Fusion integration patterns."
+    id: 'skill-delivery-tools',
+    category: 'Tools & Process',
+    text: "Raja focuses on operational excellence using CI/CD pipelines, Webpack optimization, and AI-driven delivery copilots to reduce technical debt and accelerate time-to-market for enterprise platforms."
   }
 ];
