@@ -8,12 +8,9 @@ const embeddingsPath = path.join(__dirname, '..', 'scripts', 'embeddings-output.
 
 // Production-ready RAG pipeline - Fixed Cloud Embeddings (v2)
 async function getEmbedding(text) {
-  // In production (Vercel), we cannot use localhost:11434.
-  // We use a cloud-based embedding model for the user's query.
   const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
 
   if (!isProduction) {
-    // LOCAL MODE: Use Ollama
     try {
       const res = await fetch('http://localhost:11434/api/embeddings', {
         method: 'POST',
@@ -28,29 +25,26 @@ async function getEmbedding(text) {
       throw err;
     }
   } else {
-    // PRODUCTION MODE: Use a Cloud Embedding API
-    // Using a free/low-cost compatible embedding endpoint
     try {
-      // We can use a Groq-compatible or similar cloud provider.
-      // Since you have a Groq key, we'll try to use a cloud-accessible embedding service.
-      // For now, I'll implement a fallback to a common cloud embedding pattern.
-      const res = await fetch('https://api.groq.com/openai/v1/embeddings', {
+      // Using Hugging Face's free Inference API for production embeddings
+      // This model is a direct replacement for nomic-embed-text
+      const res = await fetch('https://api-inference.huggingface.co/pipeline/feature-extraction/nomic-ai/nomic-embed-text-v1.5', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'nomic-embed-text', // Groq supports nomic embeddings
-          input: text
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inputs: text }),
       });
+
       if (!res.ok) {
         const errData = await res.json();
-        throw new Error(`Cloud Embedding Error: ${errData.error?.message || res.statusText}`);
+        throw new Error(`Cloud Embedding Error: ${errData.error || res.statusText}`);
       }
       const data = await res.json();
-      return data.data[0].embedding;
+
+      // HF returns the array of numbers directly
+      if (Array.isArray(data)) return data;
+      if (data.data && Array.isArray(data.data[0])) return data.data[0];
+
+      throw new Error('Unexpected embedding response format from HF');
     } catch (err) {
       console.error(`[RAG] Production Embedding failed: ${err.message}`);
       throw err;
