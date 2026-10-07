@@ -42,6 +42,7 @@ if (typeof window !== 'undefined') {
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
+
 const VERCEL_DOMAIN = 'https://rajachatterjee-2026-cr.vercel.app';
 const VERCEL_API_URL = window.location.hostname === 'localhost' || window.location.hostname.includes('github.io')
   ? `${VERCEL_DOMAIN}/api/status`
@@ -288,7 +289,7 @@ function App() {
   return (
     <main className="app-root">
       <ScrollProgress />
-
+      
       <header className="nav-header">
         <div className="shell nav-inner">
           <a className="brand" href="#top">RAJA<span>·</span>CHATTERJEE</a>
@@ -701,11 +702,29 @@ function App() {
           </div>
         </div>
         <div className="shell footer-bottom">
+        <div className="security-badge" style={{ 
+          display: 'inline-flex', 
+          alignItems: 'center', 
+          gap: '8px', 
+          padding: '6px 12px', 
+          background: 'rgba(16, 185, 129, 0.1)', // Very faint green
+          border: '1px solid rgba(16, 185, 129, 0.3)', 
+          borderRadius: '20px', 
+          fontSize: '0.8rem', 
+          color: '#10b981' // Green text/icon
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Secured & CSP Protected</span>
+        </div>
           <div className="footer-meta">
             <span>© 2026 Raja Chatterjee, all rights reserved.</span>
             <span className="footer-date">Last Updated: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
           </div>
+          
         </div>
+    
       </footer>
 
       {/* Modals & Overlays */}
@@ -731,7 +750,7 @@ function App() {
           </div>
         </div>
       )}
-
+      
       <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
       <Analytics /> 
