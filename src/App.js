@@ -8,6 +8,7 @@ import oracleAiBadge from './images/oracle-ai-2026.jpg';
 import oraclePayrollBadge from './images/oracle-payroll-2026.jpg';
 import claudeCCAFBadge from './images/CCAF-O.jpg';
 import n8nWorkflowImage from './images/n8n.png';
+import vercelGitCicdImage from './images/Vercel-Git-cicd.png';
 import CVModal from './components/CVManager/CVModal';
 import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
@@ -508,10 +509,52 @@ function App() {
             <p>Comparative structural analysis of emulation layers versus local LLM and retrieval-augmented pipeline patterns.</p>
           </div>
 
+        <section className="articles-section" style={{ marginTop: '40px' }}>
+          <h2 style={{ textAlign: 'center', margin: '0 0 18px', color: '#b99110', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '1.1rem' }}>Technical Articles Section</h2>
+          <div className="articles-grid-fixed">
+            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>02 / ARTICLE • DEVOPS</div>
+              <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
+                <img
+                  src={vercelGitCicdImage}
+                  alt="Vercel Git CI/CD architecture diagram for deployment troubleshooting article"
+                  loading="lazy"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block', background: '#0b1220' }}
+                />
+              </div>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+                <h3>Resolving Vercel Branch Conflicts</h3>
+                <Arrow />
+              </div>
+              <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
+            </a>
+            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/i-benchmarked-a-direct-llm-call-against-an-ai-agent-in-n8n-inspired-by-typesafe-ais-jev-a00281fa762e" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>03 / ARTICLE • AI & Automation</div>
+              <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
+                <img
+                  src={n8nWorkflowImage}
+                  alt="n8n workflow architecture diagram for the article on JEV, Ollama, and AI agents"
+                  loading="lazy"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </div>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+                <h3>TypeSafe AI's Jev (Emulator) + n8n + Ollama Integration</h3>
+                <Arrow />
+              </div>
+              <p>I Benchmarked a Direct LLM Call Against an AI Agent in n8n, Inspired by TypeSafe AI’s Jev</p>
+            </a>
+          </div>
+        </section>
+
+        <div style={{ textAlign: 'center', margin: '0 0 18px', color: '#b99110', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '1.1rem' }}>
+          A couple of projects on Server Side Rendering
+        </div>
+
           {/* Two Column Grid for 02 and 03 */}
           <div className="projects-grid-row">
             <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
-              <div className="project-type">02 / ENGINEERING</div>
+              <div className="project-type">04 / ENGINEERING</div>
               <div className="project-visual">
                 <code>&lt;/&gt; SSR Next.js</code>
               </div>
@@ -523,7 +566,7 @@ function App() {
             </a>
 
             <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
-              <div className="project-type">03 / ARCHITECTURE</div>
+              <div className="project-type">05 / ARCHITECTURE</div>
               <div className="project-visual">
                 <span>[ Client &rarr; Server &rarr; Build ]</span>
               </div>
@@ -535,21 +578,6 @@ function App() {
             </a>
           </div>
         </div>
-
-        <section className="articles-section" style={{ marginTop: '40px' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#b99110', fontWeight: 600, fontSize: '1.5rem' }}>Technical Articles Section</h2>
-          <div className="articles-grid-fixed">
-            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
-              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>03 / ARTICLE • DEVOPS</div>
-              <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>[ Vercel ➔ Git ➔ Deploy ]</div>
-              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-                <h3>Resolving Vercel Branch Conflicts</h3>
-                <Arrow />
-              </div>
-              <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
-            </a>
-          </div>
-        </section>
       </section>
 
       {/* Recruiter Job Description Matcher Section */}
