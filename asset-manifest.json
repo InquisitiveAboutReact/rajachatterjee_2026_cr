@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.7dfd5003.css",
-    "main.js": "./static/js/main.63c774c5.js",
+    "main.js": "./static/js/main.2b7c42eb.js",
     "static/media/n8n_jev_prod.mp4": "./static/media/n8n_jev_prod.6f4b90c34b1fd2b05b99.mp4",
     "static/media/Vercel-Git-cicd.png": "./static/media/Vercel-Git-cicd.5425b0d9f41a35575536.png",
     "static/media/n8n.png": "./static/media/n8n.7076830f16a3a64cd9b0.png",
@@ -12,10 +12,10 @@
     "static/media/CCAF-O.jpg": "./static/media/CCAF-O.e2637790553bb99d71c4.jpg",
     "index.html": "./index.html",
     "main.7dfd5003.css.map": "./static/css/main.7dfd5003.css.map",
-    "main.63c774c5.js.map": "./static/js/main.63c774c5.js.map"
+    "main.2b7c42eb.js.map": "./static/js/main.2b7c42eb.js.map"
   },
   "entrypoints": [
     "static/css/main.7dfd5003.css",
-    "static/js/main.63c774c5.js"
+    "static/js/main.2b7c42eb.js"
   ]
 }
