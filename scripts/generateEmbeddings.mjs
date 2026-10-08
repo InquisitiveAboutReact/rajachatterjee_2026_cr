@@ -7,6 +7,7 @@ import { SKILLS } from '../src/data/knowledge/skills.js';
 import { CONTACT } from '../src/data/knowledge/contact.js';
 import { PROJECTS } from '../src/data/knowledge/projects.js';
 import { EXPERIENCE } from '../src/data/knowledge/experience.js';
+import { COMPANIES } from '../src/data/knowledge/companies.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -41,7 +42,7 @@ async function getEmbedding(text) {
 }
 
 async function main() {
-  const ALL_CHUNKS = [...CERTIFICATIONS, ...SKILLS, ...CONTACT, ...PROJECTS, ...EXPERIENCE];
+  const ALL_CHUNKS = [...CERTIFICATIONS, ...SKILLS, ...CONTACT, ...PROJECTS, ...EXPERIENCE, ...COMPANIES];
   const results = [];
 
   console.log(`🚀 Starting embedding process for ${ALL_CHUNKS.length} chunks...`);
