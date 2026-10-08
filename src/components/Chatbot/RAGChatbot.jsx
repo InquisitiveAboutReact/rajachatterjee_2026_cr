@@ -904,12 +904,13 @@ export default function RAGChatbot({ onQuery }) {
               <div>
                 <h4>Raja's AI Chatbot</h4>
                 <p className="status-subtext">
-                  <span className="live-dot"></span> Grounded Profile RAG Engine
+                  <span className="live-dot"></span> 
                 </p>
                 <span className="training-warning">
-                  Under Training & Can make mistakes
+                AI Assistant Active (Beta)
                   <p className="maintenance-alert">
-                    Currently under maintenance as Vector Database refresh is in progress. You might not get some responses correcrtly.</p>
+                  Note: Knowledge base indexing is currently updating. Responses may occasionally vary.
+                  You can toggle audio off if you prefer the agent not to read responses aloud during updates.</p>
                 </span>
               </div>
             </div>
