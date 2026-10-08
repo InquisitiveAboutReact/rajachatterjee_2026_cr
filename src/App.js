@@ -514,7 +514,7 @@ function App() {
           <h2 style={{ textAlign: 'center', margin: '0 0 18px', color: '#b99110', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '1.1rem' }}>Technical Articles Section</h2>
           <div className="articles-grid-fixed">
             <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/technical-deep-dive-resolving-branch-conflicts-ci-build-failures-in-vercel-for-multi-branch-13a20ab27fe8?sharedUserId=i.gooner168" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
-              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>02 / ARTICLE • DEVOPS</div>
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}> ARTICLE • DEVOPS</div>
               <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
                 <img
                   src={vercelGitCicdImage}
@@ -530,7 +530,7 @@ function App() {
               <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
             </a>
             <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/i-benchmarked-a-direct-llm-call-against-an-ai-agent-in-n8n-inspired-by-typesafe-ais-jev-a00281fa762e" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
-              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}>03 / ARTICLE • AI & Automation</div>
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}> ARTICLE • AI & Automation</div>
               <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
                 <img
                   src={n8nWorkflowImage}
@@ -555,7 +555,7 @@ function App() {
           {/* Two Column Grid for 02 and 03 */}
           <div className="projects-grid-row">
             <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
-              <div className="project-type">04 / ENGINEERING</div>
+              <div className="project-type">02 / ENGINEERING</div>
               <div className="project-visual">
                 <code>&lt;/&gt; SSR Next.js</code>
               </div>
@@ -567,7 +567,7 @@ function App() {
             </a>
 
             <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
-              <div className="project-type">05 / ARCHITECTURE</div>
+              <div className="project-type">03 / ARCHITECTURE</div>
               <div className="project-visual">
                 <span>[ Client &rarr; Server &rarr; Build ]</span>
               </div>
@@ -584,7 +584,7 @@ function App() {
       {/* Recruiter Job Description Matcher Section */}
       <section className="shell reveal-section" id="matcher" style={{ margin: '60px auto' }}>
         <div className="section-kicker">
-          <span>01.5</span> <h2>Recruiter Portal</h2>
+          <span>04</span> <h2>Recruiter Portal</h2>
         </div>
         <div className="work-heading">
           <h2>
@@ -615,7 +615,7 @@ function App() {
       <section className="ai-section reveal-section" id="about">
         <div className="shell ai-grid">
           <div>
-            <div className="section-kicker"><span>02</span> Intelligence, applied</div>
+            <div className="section-kicker"><span>05</span> Intelligence, applied</div>
             <h2>Human judgement,<br /><em>AI momentum.</em></h2>
             <p className="ai-copy">
               I&apos;m exploring thoughtful ways to make delivery teams sharper: clearer signals, less manual overhead, and more time for human decisions.
@@ -629,7 +629,7 @@ function App() {
           <div className="ai-window">
             <div className="window-top">
               <span /><span /><span />
-              <label>RAJA / AI DELIVERY COPILOT</label>
+              <label>RAJA / Enterprise AI builder</label>
             </div>
             <div className="prompt-box">
               <b>Ask the delivery copilot</b>
@@ -647,7 +647,7 @@ function App() {
       </section>
 
       <section className="shell certifications reveal-section" id="certifications">
-        <div className="section-kicker"><span>03</span> Verified learning</div>
+        <div className="section-kicker"><span>06</span> Verified learning</div>
         <div className="work-heading">
           <h2>Credentials that<br /><em>keep evolving.</em></h2>
           <p>Recent Oracle certifications complementing enterprise delivery foundations.</p>
@@ -666,16 +666,17 @@ function App() {
       </section>
 
       <section className="shell experience reveal-section" id="experience">
-        <div className="section-kicker"><span>04</span> The detail</div>
+        <div className="section-kicker"><span></span> The detail</div>
         <div className="cred-grid">
           <div>
             <h2>Experience that<br />travels well.</h2>
             <p className="experience-copy">18+ years across technical delivery, program management, and full-stack development.</p>
             <div className="tags-cloud">
-              <span className="tag-pill">Salesforce</span>
-              <span className="tag-pill">React / Node</span>
-              <span className="tag-pill">Cloud &amp; CI/CD</span>
-              <span className="tag-pill">Agile delivery</span>
+              <span className="tag-pill">Enterprise AI Architect </span>
+              <span className="tag-pill">UI Full Stack</span>
+              <span className="tag-pill">Container Services, Oracle Cloud Fusion HCM</span>
+              <span className="tag-pill">Products [SAP Concur, Guidewire]</span>
+              <span className="tag-pill">ITIL, Managed Services, Agile delivery</span>
             </div>
           </div>
           <div className="numbers-col">
@@ -689,7 +690,7 @@ function App() {
       <footer id="contact" className="reveal-section">
         <div className="shell footer-inner">
           <div>
-            <div className="section-kicker"><span>05</span> Start a conversation</div>
+            <div className="section-kicker"><span></span> Start a conversation</div>
             <h2>Have an idea<br />worth <em>moving?</em></h2>
           </div>
           <div>
