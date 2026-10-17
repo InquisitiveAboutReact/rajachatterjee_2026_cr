@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!--Link PWA Manifest -->
+<!-- <link rel="manifest" href="/manifest.json" /> -->
+
+<!-- iOS / Safari App Support -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Portfolio" />
+<link rel="apple-touch-icon" href="/logo102.png" />
+<!-- iOS Default Splash Background Style -->
+<style>
+  html, body {
+    background-color: #090d16 !important;
+    margin: 0;
+    padding: 0;
+  }
+</style>
     <meta charset="utf-8" />
     <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> -->
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon.png" />
@@ -15,12 +31,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/cover.jpg" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> 
     <title>Raja Chatterjee | Portfolio Pro</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to view Raja Chatterjee's portfolio.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div style="background: #0b1220; height: 100vh; display: flex; align-items: center; justify-content: center; color: #10b981; font-family: sans-serif;">
+        Loading Portfolio...
+      </div>
+    </div>
   </body>
 </html>
 

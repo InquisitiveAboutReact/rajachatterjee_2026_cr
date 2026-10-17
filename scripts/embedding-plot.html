@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Embedding Space — Your Knowledge Chunks</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    body { background:#0d1220; color:#f5f5f7; font-family: sans-serif; padding: 2rem; }
+    #chart-container { max-width: 800px; margin: auto; }
+  </style>
+</head>
+<body>
+  <h2>Your Knowledge Chunks in Embedding Space</h2>
+  <p style="color:#9aa0b4">Each point is one chunk from your RAG knowledge base, compressed from 768 dimensions to 2 via PCA. Closer points are more semantically similar.</p>
+  <div id="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
+  <script>
+    const datasets = [{"label":"certification","data":[{"x":7.837614200586168,"y":-6.6983262165307345,"id":"cert-oracle-hcm"},{"x":8.23841267675151,"y":-3.019826260742938,"id":"cert-oracle-ai"},{"x":7.163954600254369,"y":-7.159942626880612,"id":"cert-oracle-payroll"},{"x":4.168535305627367,"y":0.18879155884510027,"id":"cert-claude"},{"x":7.000339962954214,"y":1.7671689396927441,"id":"cert-azure"},{"x":3.4743097188109067,"y":-0.5050468612474693,"id":"cert-itil"}],"backgroundColor":"#f5a623","pointRadius":7},{"label":"Leadership","data":[{"x":-4.9142621739955015,"y":-0.6994561890838692,"id":"skill-delivery-leadership"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"Technical Skills","data":[{"x":-4.831525357674485,"y":1.1901080821282655,"id":"skill-tech-stack"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"Cloud & AI","data":[{"x":-0.9777473762993497,"y":-1.4145227520067918,"id":"skill-cloud-ai"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"Tools & Process","data":[{"x":-2.8874973112226923,"y":2.8180537043341256,"id":"skill-delivery-tools"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"contact","data":[{"x":-3.2819354873119035,"y":2.3082801337076813,"id":"contact-info"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"project","data":[{"x":3.2169148823764493,"y":8.491920125620602,"id":"proj-ssr-nextjs"},{"x":3.011312079427282,"y":9.20649259614779,"id":"proj-hybrid-arch"},{"x":4.143972645588777,"y":2.5811002302055455,"id":"proj-ai-copilot"},{"x":5.494967294744373,"y":7.245275981397722,"id":"proj-n8n-emulator"}],"backgroundColor":"#4fd1c5","pointRadius":7},{"label":"experience","data":[{"x":-5.98834644325904,"y":-2.237774503142357,"id":"exp-overall"},{"x":6.774363643301435,"y":-6.758812382533876,"id":"exp-oracle-fusion"},{"x":1.7778640921786237,"y":-1.028193666902013,"id":"exp-delivery-mgmt"},{"x":4.342604022496956,"y":1.7513123958678147,"id":"exp-fullstack-cloud"}],"backgroundColor":"#e0457b","pointRadius":7},{"label":"Current Role","data":[{"x":-6.819442402653567,"y":-0.32449410122470485,"id":"comp-tcs-current"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"Work History","data":[{"x":-6.4840605304692565,"y":-1.2792918218622829,"id":"comp-tcs-payments"},{"x":-6.498764574114181,"y":-1.1592660965037171,"id":"comp-tcs-retail"},{"x":-4.822602633968705,"y":-0.5045393301649653,"id":"comp-cognizant"},{"x":-7.20383613217653,"y":-2.7140834801608062,"id":"comp-ibm"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"Early Career","data":[{"x":-4.709837848895016,"y":0.06649543640423196,"id":"comp-early-career"}],"backgroundColor":"#f5f5f7","pointRadius":7},{"label":"Overall Journey","data":[{"x":-7.225306853058217,"y":-2.1114228953644623,"id":"comp-summary"}],"backgroundColor":"#f5f5f7","pointRadius":7}];
+    new Chart(document.getElementById('chart'), {
+      type: 'scatter',
+      data: { datasets },
+      options: {
+        plugins: {
+          legend: { labels: { color: '#f5f5f7' } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ctx.raw.id
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { color: '#9aa0b4' }, grid: { color: '#2a2f45' } },
+          y: { ticks: { color: '#9aa0b4' }, grid: { color: '#2a2f45' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

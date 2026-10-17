@@ -28,5 +28,10 @@ export const CERTIFICATIONS = [
     id: "cert-itil",
     category: "certification",
     text: "ITIL Foundation Service Management (2015) — expertise in IT service delivery and operational excellence."
+  },
+  {
+    id: "cert-summary",
+    category: "certification",
+    text: "Raja Chatterjee holds multiple professional certifications: Oracle Global Human Resources Cloud 2025 Certified Implementation Professional, Oracle Payroll Cloud 2026 Certified Implementation Professional, Oracle Cloud Infrastructure (OCI) Certified Enterprise AI Professional, Claude Certified Associate - Foundations, Microsoft AZ-300 Azure Architect Technologies, and ITIL Foundation Service Management."
   }
 ];

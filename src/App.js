@@ -23,22 +23,22 @@ import { Analytics } from "@vercel/analytics/react";
 import n8nVideo from './images/n8n_jev_prod.mp4';
 
 // Robust global interceptor to stop ResizeObserver development overlay errors
-if (typeof window !== 'undefined') {
-  const originalError = console.error;
-  console.error = (...args) => {
-    if (typeof args[0] === 'string' && args[0].includes('ResizeObserver loop completed with undelivered notifications')) {
-      return;
-    }
-    originalError(...args);
-  };
+// if (typeof window !== 'undefined') {
+//   const originalError = console.error;
+//   console.error = (...args) => {
+//     if (typeof args[0] === 'string' && args[0].includes('ResizeObserver loop completed with undelivered notifications')) {
+//       return;
+//     }
+//     originalError(...args);
+//   };
 
-  window.addEventListener('error', (e) => {
-    if (e.message && e.message.includes('ResizeObserver loop completed with undelivered notifications')) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-    }
-  }, true);
-}
+//   window.addEventListener('error', (e) => {
+//     if (e.message && e.message.includes('ResizeObserver loop completed with undelivered notifications')) {
+//       e.stopImmediatePropagation();
+//       e.preventDefault();
+//     }
+//   }, true);
+// }
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -265,6 +265,15 @@ function App() {
     }
   }, []);
 
+  // Adding PWA 
+  useEffect(() => {
+    if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  }, []);
+
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
   const handleShare = async () => {
@@ -312,7 +321,7 @@ function App() {
           </div>
         </div>
       </header>
-
+          
       <MobileNav 
         isOpen={isMobileNavOpen} 
         onClose={() => setIsMobileNavOpen(false)} 
@@ -554,7 +563,8 @@ function App() {
 
           {/* Two Column Grid for 02 and 03 */}
           <div className="projects-grid-row">
-            <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
+            <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-NextJS-Heroku" target="_blank"
+            rel="noopener noreferrer">
               <div className="project-type">02 / ENGINEERING</div>
               <div className="project-visual">
                 <code>&lt;/&gt; SSR Next.js</code>
@@ -566,7 +576,8 @@ function App() {
               <p>Faster, resilient web experiences with Next.js, Express & React.</p>
             </a>
 
-            <a className="project-card" href="#work" onClick={(e) => e.preventDefault()}>
+            <a className="project-card" href="https://github.com/InquisitiveAboutReact/SSR-CSR-Express-Webpack-React" target="_blank"
+            rel="noopener noreferrer">
               <div className="project-type">03 / ARCHITECTURE</div>
               <div className="project-visual">
                 <span>[ Client &rarr; Server &rarr; Build ]</span>
