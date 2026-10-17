@@ -917,8 +917,7 @@ export default function RAGChatbot({ onQuery }) {
                 <span className="training-warning">
                 AI Assistant Active (Beta)
                   <p className="maintenance-alert">
-                  Note: Knowledge base indexing is currently updating. Responses may occasionally vary.
-                  You can toggle audio off if you prefer the agent not to read responses aloud during updates.</p>
+                  Note: This AI can only answer related to Raja's portfolio. Out of context questions might not get responded as per expectations.</p>
                 </span>
               </div>
             </div>
