@@ -49,6 +49,14 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
+  // NEVER CACHE PDF FILES OR RANGE REQUESTS
+  if (url.pathname.endsWith('.pdf') || event.request.headers.has('range')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   // BYPASS PDF FILES: Let browser handle Range (206) requests natively
   if (url.pathname.endsWith('.pdf') || event.request.headers.has('range')) {
     return; // Fallback directly to network without SW interception

@@ -47,14 +47,25 @@ export default function CVModal({ isOpen, onClose }) {
     }
   }, []);
 
+  //18th Oct 2026 - To stop Safari from throwing WebKitBlobResource error 1 when clicking "Open in New Tab" or viewing base64 uploads, convert base64 data into a clean Data URL or Object URL without early revocation.
+
   const getViewableUrl = useCallback(() => {
+    // If user uploaded a custom CV in admin, return base64 directly
     if (cvUrl.startsWith('data:')) {
-      revokeBlobUrl();
-      blobUrlRef.current = dataUrlToBlobUrl(cvUrl);
-      return blobUrlRef.current;
+      return cvUrl;
     }
-    return cvUrl;
-  }, [cvUrl, revokeBlobUrl]);
+    // Append cache-buster query parameter to bypass SW PDF caching on mobile
+    return `${cvUrl}?v=${Date.now()}`;
+  }, [cvUrl]);
+
+  // const getViewableUrl = useCallback(() => {
+  //   if (cvUrl.startsWith('data:')) {
+  //     revokeBlobUrl();
+  //     blobUrlRef.current = dataUrlToBlobUrl(cvUrl);
+  //     return blobUrlRef.current;
+  //   }
+  //   return cvUrl;
+  // }, [cvUrl, revokeBlobUrl]);
 
   useEffect(() => {
     const savedCV = localStorage.getItem('custom_raja_cv_base64');
@@ -136,9 +147,19 @@ export default function CVModal({ isOpen, onClose }) {
     triggerDownload(getViewableUrl(), filename);
   };
 
+  // 18-Oct-2026
   const handleOpenInNewTab = () => {
-    window.open(getViewableUrl(), '_blank', 'noopener,noreferrer');
+    const url = getViewableUrl();
+    if (url.startsWith('data:')) {
+      const blobUrl = dataUrlToBlobUrl(url);
+      window.open(blobUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
+  // const handleOpenInNewTab = () => {
+  //   window.open(getViewableUrl(), '_blank', 'noopener,noreferrer');
+  // };
 
   const handleResetToDefault = () => {
     localStorage.removeItem('custom_raja_cv_base64');
