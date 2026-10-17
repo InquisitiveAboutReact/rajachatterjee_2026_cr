@@ -189,7 +189,7 @@ export default function CVModal({ isOpen, onClose }) {
             <button type="button" className="cv-download-btn" onClick={handleDownload}>
               <span aria-hidden="true">↓</span> Download PDF
             </button>
-            <button type="button" className="cv-open-tab-btn" onClick={handleOpenInNewTab}>
+            <button type="button" className="cv-download-btn" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-highlight)', color: 'var(--text-main)' }} onClick={handleOpenInNewTab}>
               Open in New Tab
             </button>
             <button type="button" className="cv-close-btn" onClick={onClose} aria-label="Close">✕</button>
@@ -244,12 +244,30 @@ export default function CVModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {!showPinModal && activeTab === 'preview' && (
-            <div className="cv-preview-panel">
-              <CVPdfViewer url={cvUrl} key={cvUrl} />
+{!showPinModal && activeTab === 'preview' && (
+            <div className="cv-preview-panel" style={{ width: '100%', height: '100%', minHeight: '65vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', position: 'relative' }}>
+                <iframe
+                  src={`${getViewableUrl()}#toolbar=0&navpanes=0`}
+                  title="Raja Chatterjee CV Preview"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 'none', minHeight: '500px', background: '#ffffff', display: 'block' }}
+                />
+              </div>
+              <div style={{ padding: '10px 16px', textAlign: 'center', background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'center', gap: '16px', alignItems: 'center', flexShrink: 0 }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Having trouble viewing inline?</span>
+                <button 
+                  type="button" 
+                  onClick={handleOpenInNewTab}
+                  className="cv-download-btn"
+                  style={{ padding: '6px 14px', fontSize: '0.85rem', borderRadius: '16px' }}
+                >
+                  Open Full PDF View ↗
+                </button>
+              </div>
             </div>
           )}
-
           {!showPinModal && activeTab === 'upload' && pinVerified && (
             <div className="cv-upload-panel">
               <div
