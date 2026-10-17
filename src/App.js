@@ -99,7 +99,10 @@ const trackAnalyticsEvent = async (metricName, value = null) => {
 };
 
 function App() {
-  const [theme, setTheme] = useState('dark');
+  //const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('portfolio_theme') || 'dark';
+  });
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -230,11 +233,17 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('portfolio_theme', theme);
   }, [theme]);
-
+  
   useEffect(() => {
-    const savedTheme = localStorage.getItem('portfolio_theme');
-    if (savedTheme) setTheme(savedTheme);
+    const savedTheme = localStorage.getItem('portfolio_theme') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
+
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem('portfolio_theme');
+  //   if (savedTheme) setTheme(savedTheme);
+  // }, []);
 
   useEffect(() => {
     const sectionIds = NAV_SECTIONS.map((s) => s.id);
@@ -390,7 +399,7 @@ function App() {
             </div>            
             
             {isAdmin && (
-              <div style={{ background: '#1e293b', padding: '10px', borderRadius: '10px', border: '1px solid #475569', width: '100%' }}>
+              <div style={{ background: 'var(--bg-card)', padding: '10px', borderRadius: '10px', border: '1px solid #475569', width: '100%' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
                   <span className="status-dot" style={{ backgroundColor: currentStatus.color }} />
                   <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#cbd5e1' }}>Admin Override</span>
@@ -404,12 +413,12 @@ function App() {
             )}
 
             {currentStatus.status === 'available' ? (
-              <div style={{ background: '#0b141a', border: '1px solid #222d34', borderRadius: '10px', padding: '12px', width: '100%', color: '#e9edef', boxShadow: '0 4px 16px rgba(0,0,0,0.3)', textAlign: 'left' }}>
+              <div style={{ background: 'var(--bg-card)', border: '1px solid #222d34', borderRadius: '10px', padding: '12px', width: '100%', color: '#e9edef', boxShadow: '0 4px 16px rgba(0,0,0,0.3)', textAlign: 'left' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', borderBottom: '1px solid #222d34', paddingBottom: '6px', marginBottom: '8px' }}>
                   <span style={{ width: '7px', height: '7px', backgroundColor: '#00a884', borderRadius: '50%', display: 'inline-block' }} />
                   <span style={{ fontSize: '11px', fontWeight: 'bold' }}>Chat with Raja • Online</span>
                 </div>
-                <div style={{ background: '#202c33', padding: '6px 10px', borderRadius: '6px', fontSize: '11px', marginBottom: '6px' }}>
+                <div style={{ background: 'var(--bg-secondary)', padding: '6px 10px', borderRadius: '6px', fontSize: '11px', marginBottom: '6px' }}>
                   👋 Hi! Drop a note below:
                 </div>
                 <form onSubmit={handleWhatsAppSubmit}>
@@ -605,16 +614,16 @@ function App() {
           <p>Paste a target job description below to verify dynamic skill alignment against my enterprise profile.</p>
         </div>
         <div 
-          style={{ 
-            background: '#1e293b', 
-            padding: '32px', 
-            borderRadius: '16px', 
-            border: '1px solid #334155',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px'
-          }}
+         style={{ 
+          background: 'var(--bg-card)', 
+          padding: '32px', 
+          borderRadius: '16px', 
+          border: '1px solid var(--border-color)',
+          boxShadow: 'var(--shadow-card)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px'
+        }}
         >
           <SkillMatcherWidget 
             profileData={RAJA_PROFILE} 
@@ -746,7 +755,7 @@ function App() {
       {/* n8n Image Zoom Modal Lightbox Overlay */}
       {selectedN8nImage && (
         <div className="n8n-lightbox-overlay" onClick={() => setSelectedN8nImage(null)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div className="n8n-lightbox-content" onClick={(e) => e.stopPropagation()} style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh', background: '#0f172a', padding: '20px', borderRadius: '12px', border: '1px solid #334155' }}>
+          <div className="n8n-lightbox-content" onClick={(e) => e.stopPropagation()} style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh', background: 'var(--bg-secondary)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
             <button 
               className="n8n-lightbox-close" 
               onClick={() => setSelectedN8nImage(null)}

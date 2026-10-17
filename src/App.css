@@ -109,7 +109,7 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(6, 9, 17, 0.65);
+    background: var(--bg-primary);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid var(--border-color);
@@ -2273,3 +2273,56 @@
   from { opacity: 0; transform: scale(0.95) translateY(10px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* ==========================================================================
+   APP CONTAINER THEME SYNC FIX 
+   ========================================================================== */
+
+   [data-theme="light"] .app-root,
+   [data-theme="light"] main,
+   [data-theme="light"] .hero,
+   [data-theme="light"] .shell {
+     background-color: var(--bg-primary) !important;
+     color: var(--text-main) !important;
+   }
+   
+   /* Fix Hero section title text visibility in light mode */
+   [data-theme="light"] .hero h1 {
+     color: #0f172a !important;
+   }
+   
+   /* Fix Hero description subtext visibility in light mode */
+   [data-theme="light"] .hero-description,
+   [data-theme="light"] .intro-tag {
+     color: #475569 !important;
+   }
+
+   /* ==========================================================================
+   WIDESCREEN & NEST HUB MAX CONTAINER FIX 
+   ========================================================================== */
+
+html, body, #root, .app-root {
+  margin: 0;
+  padding: 0;
+  width: 100% !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  background-color: var(--bg-primary) !important;
+}
+
+[data-theme="light"] html,
+[data-theme="light"] body,
+[data-theme="light"] #root,
+[data-theme="light"] .app-root,
+[data-theme="light"] main {
+  background-color: #f0f4f9 !important;
+}
+
+[data-theme="dark"] html,
+[data-theme="dark"] body,
+[data-theme="dark"] #root,
+[data-theme="dark"] .app-root,
+[data-theme="dark"] main {
+  background-color: #060911 !important;
+}
+   

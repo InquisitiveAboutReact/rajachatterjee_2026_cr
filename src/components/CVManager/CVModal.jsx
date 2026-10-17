@@ -176,77 +176,23 @@ export default function CVModal({ isOpen, onClose }) {
   return (
     <div className="cv-modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="CV Viewer">
       <div className="cv-modal-container" onClick={(e) => e.stopPropagation()}>
-        
-        {/* Top bar containing title and close button cleanly side-by-side in flex layout */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: '16px',
-          padding: '20px 20px 12px 20px',
-          borderBottom: '1px solid #334155'
-        }}>
-          <div className="cv-header-title" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flex: 1, minWidth: 0 }}>
-            <span className="doc-icon" aria-hidden="true" style={{ fontSize: '24px', flexShrink: 0 }}>📄</span>
-            <div style={{ minWidth: 0 }}>
-              <h3 style={{ margin: 0, fontSize: '18px', color: '#ffffff', fontWeight: '600', wordBreak: 'break-word' }}>
-                Raja Chatterjee — Curriculum Vitae
-              </h3>
-              <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#94a3b8', wordBreak: 'break-word' }}>
-                Technical Delivery Leader & Digital Builder (18+ Years Experience)
-              </p>
+        <div className="cv-modal-header">
+          <div className="cv-header-title">
+            <span className="doc-icon" aria-hidden="true">📄</span>
+            <div>
+              <h3>Raja Chatterjee — Curriculum Vitae</h3>
+              <p>Technical Delivery Leader & Digital Builder (18+ Years Experience)</p>
             </div>
           </div>
 
-          <button 
-            type="button" 
-            onClick={onClose} 
-            aria-label="Close"
-            style={{
-              background: '#334155',
-              border: '1px solid #475569',
-              color: '#ffffff',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '16px',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Action buttons row */}
-        <div className="cv-modal-header" style={{ padding: '12px 20px', borderBottom: '1px solid #334155' }}>
-          <div className="cv-header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="cv-header-actions">
             <button type="button" className="cv-download-btn" onClick={handleDownload}>
               <span aria-hidden="true">↓</span> Download PDF
             </button>
-            <button 
-              type="button" 
-              className="cv-open-tab-btn" 
-              onClick={handleOpenInNewTab}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 16px',
-                backgroundColor: '#334155',
-                color: '#ffffff',
-                fontWeight: '600',
-                fontSize: '14px',
-                borderRadius: '8px',
-                border: '1px solid #475569',
-                cursor: 'pointer',
-              }}
-            >
-              <span>Open in New Tab ↗</span>
+            <button type="button" className="cv-download-btn" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-highlight)', color: 'var(--text-main)' }} onClick={handleOpenInNewTab}>
+              Open in New Tab
             </button>
+            <button type="button" className="cv-close-btn" onClick={onClose} aria-label="Close">✕</button>
           </div>
         </div>
 
@@ -298,9 +244,28 @@ export default function CVModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {!showPinModal && activeTab === 'preview' && (
-            <div className="cv-preview-panel">
-              <CVPdfViewer url={cvUrl} key={cvUrl} />
+{!showPinModal && activeTab === 'preview' && (
+            <div className="cv-preview-panel" style={{ width: '100%', height: '100%', minHeight: '65vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', position: 'relative' }}>
+                <iframe
+                  src={`${getViewableUrl()}#toolbar=0&navpanes=0`}
+                  title="Raja Chatterjee CV Preview"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 'none', minHeight: '500px', background: '#ffffff', display: 'block' }}
+                />
+              </div>
+              <div style={{ padding: '10px 16px', textAlign: 'center', background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'center', gap: '16px', alignItems: 'center', flexShrink: 0 }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Having trouble viewing inline?</span>
+                <button 
+                  type="button" 
+                  onClick={handleOpenInNewTab}
+                  className="cv-download-btn"
+                  style={{ padding: '6px 14px', fontSize: '0.85rem', borderRadius: '16px' }}
+                >
+                  Open Full PDF View ↗
+                </button>
+              </div>
             </div>
           )}
 
