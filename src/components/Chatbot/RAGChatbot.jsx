@@ -739,6 +739,7 @@ export default function RAGChatbot({ onQuery }) {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceNotice, setVoiceNotice] = useState('');
+  const [loadingMessage, setLoadingMessage] = useState('Thinking...');
 
   const messagesEndRef = useRef(null);
 
@@ -847,7 +848,13 @@ export default function RAGChatbot({ onQuery }) {
     }
 
     setIsTyping(true);
-
+    setLoadingMessage('Thinking...');
+    const loadingPhrases = ['Thinking...', 'Checking the knowledge base...', 'Almost there...'];
+    let phraseIndex = 0;
+    const loadingInterval = setInterval(() => {
+      phraseIndex = (phraseIndex + 1) % loadingPhrases.length;
+      setLoadingMessage(loadingPhrases[phraseIndex]);
+    }, 3000);
     const assistantId = Date.now() + 1;
     setMessages(prev => [...prev, { id: assistantId, sender: 'assistant', text: '', sources: [] }]);
 
@@ -880,6 +887,7 @@ export default function RAGChatbot({ onQuery }) {
         )
       );
     } finally {
+      clearInterval(loadingInterval);
       setIsTyping(false);
     }
   };
@@ -951,6 +959,7 @@ export default function RAGChatbot({ onQuery }) {
               <div className="chat-bubble-row assistant">
                 <div className="bot-avatar">✦</div>
                 <div className="chat-bubble typing">
+                <p style={{ fontSize: '12px', color: '#8a94ad', marginBottom: '4px' }}>{loadingMessage}</p>
                   <span></span><span></span><span></span>
                 </div>
               </div>

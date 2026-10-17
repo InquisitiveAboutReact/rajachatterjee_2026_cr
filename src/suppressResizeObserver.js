@@ -20,6 +20,13 @@ if (typeof window !== 'undefined') {
         }
       };
     }
+
+    window.addEventListener('error', (e) => {
+      if (e.message === 'Script error.' || e.message?.includes('ResizeObserver')) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }, true);
   
     // 2. Suppress console error logs
     const resizeObserverLoopErrRe = /ResizeObserver loop completed with undelivered notifications/;
