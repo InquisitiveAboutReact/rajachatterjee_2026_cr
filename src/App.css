@@ -2325,4 +2325,87 @@ html, body, #root, .app-root {
 [data-theme="dark"] main {
   background-color: #060911 !important;
 }
-   
+
+/* Pinned CV Modal Close Button for Mobile and Desktop Viewports */
+.cv-pinned-close-btn {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid var(--border-color, #334155) !important;
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+@media (max-width: 600px) {
+  .cv-modal-header {
+    padding-right: 56px !important;
+  }
+  
+  .cv-header-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .cv-download-btn {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* Ensure CV Modal Header buttons stack nicely on mobile devices */
+@media (max-width: 600px) {
+  .cv-modal-header {
+    padding: 14px 16px !important;
+    padding-right: 56px !important; /* Make room for pinned close button */
+  }
+
+  .cv-header-title h3 {
+    font-size: 0.95rem !important;
+  }
+
+  .cv-header-title p {
+    font-size: 0.75rem !important;
+  }
+
+  .cv-header-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+
+  .cv-download-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    font-size: 0.85rem !important;
+    padding: 8px 12px !important;
+  }
+}
+
+/* Fix mobile navigation drawer cutoff and safe area inset */
+@media (max-width: 600px) {
+  .mobile-nav-drawer,
+  .nav-menu-container {
+    padding-bottom: calc(30px + env(safe-area-inset-bottom)) !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  .cv-header-actions {
+    margin-bottom: 8px !important;
+  }
+}
