@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-const ADMIN_PIN = '7890';
+const ADMIN_PIN = process.env.CV_ADMIN_PIN || '7890';
 const DEFAULT_CV_PATH = process.env.PUBLIC_URL + '/Raja_Chatterjee_CV.pdf';
 const DEFAULT_CV_NAME = 'Raja_Chatterjee_CV.pdf';
 
