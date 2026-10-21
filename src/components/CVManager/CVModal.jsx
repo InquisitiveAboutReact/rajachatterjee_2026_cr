@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useToast } from '../ToastNotifications/ToastContext';
 
 const ADMIN_PIN = process.env.CV_ADMIN_PIN || '7890';
 const DEFAULT_CV_PATH = process.env.PUBLIC_URL + '/Raja_Chatterjee_CV.pdf';
@@ -122,9 +123,13 @@ export default function CVModal({ isOpen, onClose }) {
     fileInputRef.current?.click();
   };
 
+  const showToast = useToast();
+  
   const handleDownload = () => {
     const filename = uploadedFileName || DEFAULT_CV_NAME;
     triggerDownload(getViewableUrl(), filename);
+    showToast('CV downloaded successfully!', 'success');
+    
   };
 
   // TRUE NATIVE OPEN IN NEW TAB FOR MOBILE AND DESKTOP

@@ -93,10 +93,11 @@ export default function MobileNav({
   onClose, 
   onOpenCV, 
   onOpenAnalytics, 
+  onOpenFeedback,
   theme, 
   onToggleTheme 
 }) {
-  // Prevent background scrolling when mobile menu is open
+  // Prevent background scrolling when mobile menu is open  
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -205,6 +206,30 @@ export default function MobileNav({
               >
              <span style={{ color: '#fac2b4' }}>📊 Analytics Modal</span>   
               </button>
+
+              {/* Feedback Command Palette Button (Option 2) */}
+              <button 
+                type="button" 
+                onClick={() => { onClose(); onOpenFeedback(); }}
+                className="nav-sub-item"
+                style={{ 
+                  background: 'transparent', 
+                  border: 'none', 
+                  textAlign: 'left', 
+                  padding: 0, 
+                  paddingLeft: '14px',
+                  fontSize: '14px', 
+                  fontWeight: '500', 
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  marginTop: '4px'
+                }}
+              >
+                <span style={{ color: '#c084fc' }}>💬 Log Issue / Feedback</span>   
+              </button>
+              
             </div>
           </nav>
         </div>

@@ -1,0 +1,40 @@
+.toast-notification {
+    position: fixed;
+    top: 32px;                  /* Positioned near the top */
+    left: 50%;                  /* Centered horizontally */
+    transform: translateX(-50%); /* Perfect center alignment */
+    background: rgba(15, 23, 42, 0.95); /* Sleek dark backdrop */
+    color: #f8fafc;
+    border: 1.5px solid #10b981;  /* High-contrast vibrant green border */
+    padding: 16px 28px;         /* Generous padding */
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1rem;            /* Clear, readable font size */
+    font-weight: 500;
+    backdrop-filter: blur(10px);/* Modern translucent glass effect */
+    z-index: 99999;             /* Sits above modals, chatbots, and browser chrome */
+    animation: slideInCenter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .toast-icon {
+    font-size: 1.3rem;
+  }
+  
+  .toast-message {
+    letter-spacing: 0.01em;
+  }
+  
+  @keyframes slideInCenter {
+    from {
+      transform: translate(-50%, -30px);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
