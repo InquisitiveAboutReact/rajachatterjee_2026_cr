@@ -872,9 +872,10 @@ export default function RAGChatbot({ onQuery }) {
       const data = await res.json();
       const finalText = data.answer;
       const sources = data.sources || [];
+      const action = data.action || null;  // Adding CV to Chat
 
       setMessages(prev =>
-        prev.map(m => (m.id === assistantId ? { ...m, text: finalText, sources } : m))
+        prev.map(m => (m.id === assistantId ? { ...m, text: finalText, sources , action} : m))
       );
       speakText(finalText);
     } catch (err) {
@@ -936,6 +937,76 @@ export default function RAGChatbot({ onQuery }) {
                   ) : (
                     <p style={{ whiteSpace: 'pre-line' }}>{msg.text}</p>
                   )}
+                 
+ {/* 💡  CV Download Button UI */}
+ {/* 💡 Renders button when action === 'download_cv' */}
+ 
+{/* 💡 Dual CV Action Buttons */}
+{msg.action === 'download_cv' && (
+  <div style={{ marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+    {/* Option 1: Open / Preview in New Tab */}
+    <button
+      onClick={() => {
+        const activeCvUrl = localStorage.getItem('user_uploaded_cv_url') || '/Raja_Chatterjee_CV.pdf';
+        window.open(activeCvUrl, '_blank', 'noopener,noreferrer');
+      }}
+      style={{
+        backgroundColor: '#3b82f6',
+        color: '#ffffff',
+        border: 'none',
+        padding: '6px 12px',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '0.8rem',
+        fontWeight: '600',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '4px',
+        boxShadow: '0 2px 8px rgba(59, 130, 246, 0.3)'
+      }}
+    >
+      👁️ Open in New Tab
+    </button>
+
+    {/* Option 2: Direct Download */}
+    <button
+      onClick={() => {
+        // 1. Check if the main CV Modal download button exists on the page
+        const modalDownloadBtn = document.querySelector('.cv-modal-download-btn') || 
+                                 document.querySelector('[data-cv-download]');
+
+        if (modalDownloadBtn) {
+          modalDownloadBtn.click();
+        } else {
+          // 2. Direct download fallback using the exact public file name
+          const link = document.createElement('a');
+          link.href = `${process.env.PUBLIC_URL || ''}/Raja_Chatterjee_CV.pdf`;
+          link.target = '_blank';
+          link.download = 'Raja_Chatterjee_CV.pdf';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }}
+      style={{
+        backgroundColor: '#10b981',
+        color: '#ffffff',
+        border: 'none',
+        padding: '6px 12px',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '0.8rem',
+        fontWeight: '600',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '4px',
+        boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
+      }}
+    >
+      📥 Download PDF
+    </button>
+  </div>
+)}
                   {msg.sender === 'assistant' && msg.sources && msg.sources.length > 0 && (
                     <p style={{ fontSize: '11px', color: '#8a94ad', marginTop: '4px' }}>
                       Sources: {msg.sources.join(', ')}
@@ -967,6 +1038,7 @@ export default function RAGChatbot({ onQuery }) {
           </div>
 
           <div className="rag-quick-prompts">
+          <button onClick={() => handleSend("Show me your CV / Resume")}>Get CV 📄</button>
             <button onClick={() => handleSend("What companies did Raja work for?")}>Companies</button>
             <button onClick={() => handleSend("What certifications does he hold?")}>Certifications</button>
             <button onClick={() => handleSend("Show selected projects")}>Projects</button>

@@ -468,8 +468,22 @@ export default async function handler(req, res) {
   if (!question || typeof question !== 'string') return res.status(400).json({ error: 'Missing question' });
 
   try {
-    const matches = await getRetrievalSet(question);
 
+    // 1.  // Adding code for download CV option from Chatbot. Instant check for CV Intent FIRST (Fast-path)
+    const lowerQ = question.toLowerCase();
+    const isCvIntent = lowerQ.includes('cv') || 
+                       lowerQ.includes('resume') || 
+                       lowerQ.includes('download profile') || 
+                       lowerQ.includes('curriculum vitae');
+
+    if (isCvIntent) {
+      return res.status(200).json({
+        answer: "Here is Raja's professional CV! You can download it directly using the button below:",
+        sources: ['contact-cv'],
+        action: 'download_cv'
+      });
+    }
+    const matches = await getRetrievalSet(question);
     if (matches.length === 0) {
       return res.status(200).json({
         answer: "I don't have specific information about that. Please contact Raja directly for more details!",
