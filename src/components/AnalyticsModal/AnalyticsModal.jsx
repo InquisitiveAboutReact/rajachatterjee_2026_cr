@@ -977,6 +977,7 @@ export default function AnalyticsModal({ isOpen, onClose }) {
     return () => {
       document.body.style.overflow = '';
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   // Fetch live analytics whenever the Modal opens OR when startDate/endDate changes
@@ -1018,6 +1019,7 @@ export default function AnalyticsModal({ isOpen, onClose }) {
     }
 
     fetchFilteredAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, startDate, endDate]);
 
   const handlePickerClick = (e) => {

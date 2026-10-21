@@ -21,7 +21,9 @@ import { RAJA_PROFILE } from './data/profileData';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import n8nVideo from './images/n8n_jev_prod.mp4';
-
+import FeedbackCommandPalette from './components/FeedbackCommandPalette';
+import FeedbackReactionWidget from './components/FeedbackReactionWidget';
+import { ToastProvider } from './components/ToastNotifications/ToastContext';
 // Robust global interceptor to stop ResizeObserver development overlay errors
 // if (typeof window !== 'undefined') {
 //   const originalError = console.error;
@@ -110,6 +112,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [userMessage, setUserMessage] = useState('');
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   const hasTrackedProjects = useRef(false);
   const hasTrackedTimeline = useRef(false);
@@ -305,8 +308,19 @@ function App() {
   };
 
   return (
+    <ToastProvider>
     <main className="app-root">
+      
       <ScrollProgress />
+      <div className="app-container">
+      {/* Your existing components (Navbar, Sections, Footer, etc.) */}
+      
+      {/* Place the component here near the bottom */}
+      <FeedbackCommandPalette 
+        isOpen={isFeedbackOpen} 
+        onClose={() => setIsFeedbackOpen(false)} 
+      />
+    </div>
       
       <header className="nav-header">
         <div className="shell nav-inner">
@@ -319,6 +333,7 @@ function App() {
             ))}
           </nav>
           <div className="nav-controls">
+          <button type="button" className="share-btn" onClick={() => setIsFeedbackOpen(true)} title="Log Feedback">💬 Feedback</button>
             <button type="button" className="share-btn" onClick={() => setIsAnalyticsOpen(true)} title="Analytics">📊 Analytics</button>
             <button type="button" className="share-btn" onClick={handleShare} title="Share">↗ Share</button>
             <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button>
@@ -339,6 +354,10 @@ function App() {
           setIsMobileNavOpen(false);
           setIsAnalyticsOpen(true);
         }} 
+        onOpenFeedback={() => {
+          setIsMobileNavOpen(false);
+          setIsFeedbackOpen(true);
+        }}
         theme={theme} 
         onToggleTheme={toggleTheme} 
       />
@@ -707,6 +726,11 @@ function App() {
         <div style={{ marginTop: '30px' }}><Timeline /></div>
       </section>
 
+      {/* Embedded Option 3: Quick Reaction Widget */}
+      <section className="shell" style={{ margin: '40px auto' }}>
+        <FeedbackReactionWidget />
+      </section>
+
       <footer id="contact" className="reveal-section">
         <div className="shell footer-inner">
           <div>
@@ -751,6 +775,7 @@ function App() {
       {/* Modals & Overlays */}
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
+      <FeedbackCommandPalette isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
 
       {/* n8n Image Zoom Modal Lightbox Overlay */}
       {selectedN8nImage && (
@@ -777,6 +802,7 @@ function App() {
       <Analytics /> 
       <ScrollToTop />
     </main>
+    </ToastProvider>
   );
 }
 
