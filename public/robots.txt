@@ -1,3 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap URL (Replace with your actual domain once live)
+Sitemap: https://rajachatterjee-2026-cr.vercel.app/sitemap.xml
