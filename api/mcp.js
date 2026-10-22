@@ -22,131 +22,106 @@ const PORTFOLIO_DATA = {
   };
   
   export default async function handler(req, res) {
-    // 1. Mandatory CORS Headers
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version, authorization");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-protocol-version, authorization");
   
     if (req.method === "OPTIONS") {
-      return res.status(200).end();
+      return res.status(204).end();
     }
   
-    // 2. Handle POST Requests (JSON-RPC 2.0 Direct Response)
-    if (req.method === "POST") {
-      res.setHeader("Content-Type", "application/json; charset=utf-8");
+    // Streamable HTTP (stateless): no GET/SSE handshake needed for a simple tool server.
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Method Not Allowed. This server only accepts POST." });
+    }
   
-      let body = req.body;
-      if (typeof body === "string") {
-        try {
-          body = JSON.parse(body);
-        } catch (e) {
-          return res.status(400).json({
-            jsonrpc: "2.0",
-            id: null,
-            error: { code: -32700, message: "Parse error" },
-          });
-        }
-      }
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
   
-      const { id = 1, method, params } = body || {};
-  
-      // Standard MCP Protocol Methods
-      if (method === "initialize") {
-        return res.status(200).json({
-          jsonrpc: "2.0",
-          id,
-          result: {
-            protocolVersion: "2024-11-05",
-            capabilities: { tools: {} },
-            serverInfo: { name: "raja-chatterjee-portfolio-mcp", version: "1.0.0" },
-          },
+    let body = req.body;
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        return res.status(400).json({
+          jsonrpc: "2.0", id: null,
+          error: { code: -32700, message: "Parse error" },
         });
       }
+    }
   
-      if (method === "notifications/initialized") {
-        return res.status(200).json({ jsonrpc: "2.0", result: {} });
-      }
+    const { id, method, params } = body || {};
   
-      if (method === "tools/list") {
-        return res.status(200).json({
-          jsonrpc: "2.0",
-          id,
-          result: {
-            tools: [
-              {
-                name: "get_candidate_profile",
-                description: "Returns executive summary of Raja Chatterjee",
-                inputSchema: { type: "object", properties: {} },
-              },
-              {
-                name: "get_certifications",
-                description: "Retrieves list of verified technical & AI certifications",
-                inputSchema: { type: "object", properties: {} },
-              },
-              {
-                name: "query_skills_and_projects",
-                description: "Searches candidate skills and architectural focus areas",
-                inputSchema: {
-                  type: "object",
-                  properties: {
-                    keyword: { type: "string", description: "Skill or domain keyword" },
-                  },
-                  required: ["keyword"],
-                },
-              },
-            ],
-          },
-        });
-      }
+    // JSON-RPC notifications (no "id") get NO response body at all — returning
+    // one is itself a spec violation that can confuse strict clients.
+    if (method === "notifications/initialized") {
+      return res.status(202).end();
+    }
   
-      if (method === "tools/call") {
-        const toolName = params?.name;
-        const args = params?.arguments || {};
-        let content = [];
-  
-        if (toolName === "get_candidate_profile") {
-          content = [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.profile, null, 2) }];
-        } else if (toolName === "get_certifications") {
-          content = [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.certifications, null, 2) }];
-        } else if (toolName === "query_skills_and_projects") {
-          const keyword = (args?.keyword || "").toLowerCase();
-          const matchedSkills = PORTFOLIO_DATA.skills.filter((s) => s.toLowerCase().includes(keyword));
-          content = [
-            {
-              type: "text",
-              text: JSON.stringify({ query: args?.keyword, matchedSkills }, null, 2),
-            },
-          ];
-        } else {
-          return res.status(200).json({
-            jsonrpc: "2.0",
-            id,
-            error: { code: -32601, message: `Tool not found: ${toolName}` },
-          });
-        }
-  
-        return res.status(200).json({
-          jsonrpc: "2.0",
-          id,
-          result: { content },
-        });
-      }
-  
+    if (method === "initialize") {
       return res.status(200).json({
-        jsonrpc: "2.0",
-        id,
-        error: { code: -32601, message: `Method not found: ${method}` },
+        jsonrpc: "2.0", id,
+        result: {
+          protocolVersion: "2025-06-18",
+          capabilities: { tools: {} },
+          serverInfo: { name: "raja-chatterjee-portfolio-mcp", version: "1.0.0" },
+        },
       });
     }
   
-    // 3. Handle GET Requests (Lightweight SSE Handshake)
-    if (req.method === "GET") {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache, no-transform");
-      res.setHeader("Connection", "keep-alive");
-      res.write(`event: endpoint\ndata: /api/mcp\n\n`);
-      return res.end();
+    if (method === "tools/list") {
+      return res.status(200).json({
+        jsonrpc: "2.0", id,
+        result: {
+          tools: [
+            {
+              name: "get_candidate_profile",
+              description: "Returns executive summary of Raja Chatterjee",
+              inputSchema: { type: "object", properties: {} },
+            },
+            {
+              name: "get_certifications",
+              description: "Retrieves list of verified technical & AI certifications",
+              inputSchema: { type: "object", properties: {} },
+            },
+            {
+              name: "query_skills_and_projects",
+              description: "Searches candidate skills and architectural focus areas",
+              inputSchema: {
+                type: "object",
+                properties: { keyword: { type: "string", description: "Skill or domain keyword" } },
+                required: ["keyword"],
+              },
+            },
+          ],
+        },
+      });
     }
   
-    return res.status(405).json({ error: "Method Not Allowed" });
+    if (method === "tools/call") {
+      const toolName = params?.name;
+      const args = params?.arguments || {};
+      let content = [];
+  
+      if (toolName === "get_candidate_profile") {
+        content = [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.profile, null, 2) }];
+      } else if (toolName === "get_certifications") {
+        content = [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.certifications, null, 2) }];
+      } else if (toolName === "query_skills_and_projects") {
+        const keyword = (args?.keyword || "").toLowerCase();
+        const matchedSkills = PORTFOLIO_DATA.skills.filter((s) => s.toLowerCase().includes(keyword));
+        content = [{ type: "text", text: JSON.stringify({ query: args?.keyword, matchedSkills }, null, 2) }];
+      } else {
+        return res.status(200).json({
+          jsonrpc: "2.0", id,
+          error: { code: -32601, message: `Tool not found: ${toolName}` },
+        });
+      }
+  
+      return res.status(200).json({ jsonrpc: "2.0", id, result: { content } });
+    }
+  
+    return res.status(200).json({
+      jsonrpc: "2.0", id,
+      error: { code: -32601, message: `Method not found: ${method}` },
+    });
   }
