@@ -1,149 +1,151 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
-
-// Initialize Server
-const server = new Server(
-  {
-    name: "raja-chatterjee-portfolio-mcp",
-    version: "1.0.0",
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
-
-// Portfolio Data
+// Candidate Data
 const PORTFOLIO_DATA = {
-  profile: {
-    name: "Raja Chatterjee",
-    title: "IT Technical Delivery Manager & AI Engineer",
-    experience: "18+ years in enterprise delivery, OCI, fast formulas, and AI/RAG engineering",
-    location: "India",
-  },
-  certifications: [
-    "Oracle Cloud Infrastructure Enterprise AI Professional",
-    "Oracle Payroll Cloud Certified Implementation Professional",
-    "Claude Certified Associate - Foundations",
-    "Microsoft Certified: Azure Solutions Architect",
-  ],
-  skills: [
-    "Technical Delivery Management",
-    "Enterprise Software Implementation",
-    "Oracle Cloud Infrastructure (OCI)",
-    "AI & RAG Engineering",
-    "React & Node.js",
-    "Docker & n8n Automation",
-  ],
-};
-
-// Register Tool Definitions
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: [
-    {
-      name: "get_candidate_profile",
-      description: "Returns an executive summary of Raja Chatterjee's background and core roles.",
-      inputSchema: { type: "object", properties: {} },
+    profile: {
+      name: "Raja Chatterjee",
+      title: "IT Technical Delivery Manager & AI Engineer",
+      experience: "18+ years in enterprise delivery, OCI, fast formulas, and AI/RAG engineering",
+      location: "India",
     },
-    {
-      name: "get_certifications",
-      description: "Retrieves verified technical and AI certifications.",
-      inputSchema: { type: "object", properties: {} },
-    },
-    {
-      name: "query_skills_and_projects",
-      description: "Searches candidate skills and architectural focus areas by keyword.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          keyword: { type: "string", description: "Skill or domain to search for" },
-        },
-        required: ["keyword"],
-      },
-    },
-  ],
-}));
-
-// Register Tool Execution Handler
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
-
-  switch (name) {
-    case "get_candidate_profile":
-      return { content: [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.profile, null, 2) }] };
-
-    case "get_certifications":
-      return { content: [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.certifications, null, 2) }] };
-
-    case "query_skills_and_projects": {
-      const keyword = (args?.keyword || "").toLowerCase();
-      const matchedSkills = PORTFOLIO_DATA.skills.filter((skill) =>
-        skill.toLowerCase().includes(keyword)
-      );
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
-              {
-                query: args?.keyword,
-                matchedSkills: matchedSkills.length > 0 ? matchedSkills : ["No exact match found, but experience covers general IT delivery & AI."],
-              },
-              null,
-              2
-            ),
-          },
-        ],
-      };
+    certifications: [
+      "Oracle Cloud Infrastructure Enterprise AI Professional",
+      "Oracle Payroll Cloud Certified Implementation Professional",
+      "Claude Certified Associate - Foundations",
+      "Microsoft Certified: Azure Solutions Architect",
+    ],
+    skills: [
+      "Technical Delivery Management",
+      "Enterprise Software Implementation",
+      "Oracle Cloud Infrastructure (OCI)",
+      "AI & RAG Engineering",
+      "React & Node.js",
+      "Docker & n8n Automation",
+    ],
+  };
+  
+  export default async function handler(req, res) {
+    // Set CORS and JSON Headers
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version");
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+  
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
     }
-
-    default:
-      throw new Error(`Tool not found: ${name}`);
-  }
-});
-
-// Single active transport session for single-turn serverless invocations
-let serverTransport = null;
-
-export default async function handler(req, res) {
-  // 1. Mandatory CORS Headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version");
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  try {
-    // 2. Handle GET (SSE stream establishment)
+  
+    // Handle GET (Protocol Handshake / Capabilities discovery)
     if (req.method === "GET") {
-      serverTransport = new SSEServerTransport("/api/mcp", res);
-      await server.connect(serverTransport);
-      return;
+      const handshakeData = JSON.stringify({
+        name: "raja-chatterjee-portfolio-mcp",
+        version: "1.0.0",
+        protocolVersion: "2024-11-05",
+        capabilities: { tools: {} },
+      });
+      return res.status(200).send(handshakeData);
     }
-
-    // 3. Handle POST (JSON-RPC messages from external clients)
+  
+    // Handle POST (JSON-RPC Tool Requests)
     if (req.method === "POST") {
-      if (!serverTransport) {
-        serverTransport = new SSEServerTransport("/api/mcp", res);
-        await server.connect(serverTransport);
+      const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
+      const { id, method, params } = body;
+  
+      try {
+        if (method === "initialize") {
+          return res.status(200).send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              id,
+              result: {
+                protocolVersion: "2024-11-05",
+                capabilities: { tools: {} },
+                serverInfo: { name: "raja-chatterjee-portfolio-mcp", version: "1.0.0" },
+              },
+            })
+          );
+        }
+  
+        if (method === "tools/list") {
+          return res.status(200).send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              id,
+              result: {
+                tools: [
+                  {
+                    name: "get_candidate_profile",
+                    description: "Returns executive summary of Raja Chatterjee",
+                    inputSchema: { type: "object", properties: {} },
+                  },
+                  {
+                    name: "get_certifications",
+                    description: "Retrieves list of verified technical & AI certifications",
+                    inputSchema: { type: "object", properties: {} },
+                  },
+                  {
+                    name: "query_skills_and_projects",
+                    description: "Searches candidate skills and architectural focus areas",
+                    inputSchema: {
+                      type: "object",
+                      properties: {
+                        keyword: { type: "string", description: "Skill or domain keyword" },
+                      },
+                      required: ["keyword"],
+                    },
+                  },
+                ],
+              },
+            })
+          );
+        }
+  
+        if (method === "tools/call") {
+          const toolName = params?.name;
+          const args = params?.arguments || {};
+          let content = [];
+  
+          if (toolName === "get_candidate_profile") {
+            content = [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.profile, null, 2) }];
+          } else if (toolName === "get_certifications") {
+            content = [{ type: "text", text: JSON.stringify(PORTFOLIO_DATA.certifications, null, 2) }];
+          } else if (toolName === "query_skills_and_projects") {
+            const keyword = (args?.keyword || "").toLowerCase();
+            const matchedSkills = PORTFOLIO_DATA.skills.filter((s) => s.toLowerCase().includes(keyword));
+            content = [
+              {
+                type: "text",
+                text: JSON.stringify({ query: args?.keyword, matchedSkills }, null, 2),
+              },
+            ];
+          } else {
+            throw new Error(`Tool not found: ${toolName}`);
+          }
+  
+          return res.status(200).send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              id,
+              result: { content },
+            })
+          );
+        }
+  
+        return res.status(200).send(
+          JSON.stringify({
+            jsonrpc: "2.0",
+            id,
+            error: { code: -32601, message: `Method not found: ${method}` },
+          })
+        );
+      } catch (err) {
+        return res.status(200).send(
+          JSON.stringify({
+            jsonrpc: "2.0",
+            id: id || null,
+            error: { code: -32000, message: err.message },
+          })
+        );
       }
-      await serverTransport.handlePostMessage(req, res, req.body);
-      return;
     }
-
-    res.status(405).json({ error: "Method Not Allowed" });
-  } catch (error) {
-    console.error("Vercel MCP Error:", error);
-    if (!res.headersSent) {
-      res.status(500).json({ error: error.message || "Internal Server Error" });
-    }
+  
+    return res.status(405).send(JSON.stringify({ error: "Method Not Allowed" }));
   }
-}
