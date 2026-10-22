@@ -1,3 +1,4 @@
+// Candidate Data
 const PORTFOLIO_DATA = {
     profile: {
       name: "Raja Chatterjee",
@@ -25,26 +26,32 @@ const PORTFOLIO_DATA = {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version, authorization");
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
   
     if (req.method === "OPTIONS") {
       return res.status(200).end();
     }
   
-    // Handle GET (Handshake)
+    // Handle GET (SSE Handshake transport stream)
     if (req.method === "GET") {
-      return res.status(200).send(
-        JSON.stringify({
-          name: "raja-chatterjee-portfolio-mcp",
-          version: "1.0.0",
-          protocolVersion: "2024-11-05",
-          capabilities: { tools: {} },
-        })
-      );
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+  
+      const endpointEvent = JSON.stringify({
+        name: "raja-chatterjee-portfolio-mcp",
+        version: "1.0.0",
+        protocolVersion: "2024-11-05",
+        capabilities: { tools: {} },
+      });
+  
+      res.write(`event: endpoint\ndata: /api/mcp\n\n`);
+      res.write(`data: ${endpointEvent}\n\n`);
+      return res.end();
     }
   
     // Handle POST (JSON-RPC 2.0 Requests)
     if (req.method === "POST") {
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
       const { id, method, params } = body;
   
@@ -63,7 +70,6 @@ const PORTFOLIO_DATA = {
           );
         }
   
-        // Acknowledge client notification
         if (method === "notifications/initialized") {
           return res.status(200).send(JSON.stringify({ jsonrpc: "2.0", result: {} }));
         }
@@ -136,7 +142,7 @@ const PORTFOLIO_DATA = {
         return res.status(200).send(
           JSON.stringify({
             jsonrpc: "2.0",
-            id: id || null,
+            id,
             error: { code: -32601, message: `Method not found: ${method}` },
           })
         );
