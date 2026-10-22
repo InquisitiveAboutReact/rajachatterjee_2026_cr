@@ -1,4 +1,3 @@
-// Candidate Data
 const PORTFOLIO_DATA = {
     profile: {
       name: "Raja Chatterjee",
@@ -37,11 +36,14 @@ const PORTFOLIO_DATA = {
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
   
+      // Wrap initialization metadata in a valid JSON-RPC structure expected by the inspector
       const endpointEvent = JSON.stringify({
-        name: "raja-chatterjee-portfolio-mcp",
-        version: "1.0.0",
-        protocolVersion: "2024-11-05",
-        capabilities: { tools: {} },
+        jsonrpc: "2.0",
+        result: {
+          protocolVersion: "2024-11-05",
+          capabilities: { tools: {} },
+          serverInfo: { name: "raja-chatterjee-portfolio-mcp", version: "1.0.0" },
+        },
       });
   
       res.write(`event: endpoint\ndata: /api/mcp\n\n`);
