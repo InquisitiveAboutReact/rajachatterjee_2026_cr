@@ -1,4 +1,3 @@
-
 const PORTFOLIO_DATA = {
     profile: {
       name: "Raja Chatterjee",
@@ -23,6 +22,7 @@ const PORTFOLIO_DATA = {
   };
   
   export default async function handler(req, res) {
+    // Global CORS Headers
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version, authorization");
@@ -31,30 +31,37 @@ const PORTFOLIO_DATA = {
       return res.status(200).end();
     }
   
-    // Handle GET (Information or Handshake)
+    // Handle GET (MCP SSE Handshake & Streaming Session)
     if (req.method === "GET") {
-      const acceptHeader = req.headers["accept"] || "";
-      
-      if (acceptHeader.includes("text/event-stream")) {
-        res.setHeader("Content-Type", "text/event-stream");
-        res.setHeader("Cache-Control", "no-cache");
-        res.setHeader("Connection", "keep-alive");
-        res.write(`event: endpoint\ndata: /api/mcp\n\n`);
-        return res.end();
-      }
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache, no-transform");
+      res.setHeader("Connection", "keep-alive");
+      res.setHeader("X-Accel-Buffering", "no");
   
-      res.setHeader("Content-Type", "application/json; charset=utf-8");
-      return res.status(200).send(
-        JSON.stringify({
-          status: "online",
-          server: "raja-chatterjee-portfolio-mcp",
-          transport: "Streamable HTTP / JSON-RPC 2.0",
-          endpoint: "/api/mcp",
-        })
-      );
+      // Send initial MCP SSE endpoint handshake frame
+      res.write(`event: endpoint\ndata: /api/mcp\n\n`);
+  
+      // Clean keep-alive interval using standard SSE ping events
+      const keepAlive = setInterval(() => {
+        res.write(`event: ping\ndata: {}\n\n`);
+      }, 15000);
+  
+      // Clean up when client disconnects
+      req.on("close", () => {
+        clearInterval(keepAlive);
+        res.end();
+      });
+  
+      // Auto-close safely before Vercel serverless execution timeout limit
+      setTimeout(() => {
+        clearInterval(keepAlive);
+        res.end();
+      }, 25000);
+  
+      return;
     }
   
-    // Handle POST (JSON-RPC 2.0 Operations)
+    // Handle POST (JSON-RPC 2.0 Request Handling)
     if (req.method === "POST") {
       res.setHeader("Content-Type", "application/json; charset=utf-8");
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
