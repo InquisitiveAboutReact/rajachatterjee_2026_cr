@@ -22,7 +22,7 @@ const PORTFOLIO_DATA = {
   };
   
   export default async function handler(req, res) {
-    // Global CORS Headers
+    // Always set CORS headers first
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version, authorization");
@@ -31,93 +31,74 @@ const PORTFOLIO_DATA = {
       return res.status(200).end();
     }
   
-    // Handle GET (MCP SSE Handshake & Streaming Session)
-    if (req.method === "GET") {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache, no-transform");
-      res.setHeader("Connection", "keep-alive");
-      res.setHeader("X-Accel-Buffering", "no");
-  
-      // Send initial MCP SSE endpoint handshake frame
-      res.write(`event: endpoint\ndata: /api/mcp\n\n`);
-  
-      // Clean keep-alive interval using standard SSE ping events
-      const keepAlive = setInterval(() => {
-        res.write(`event: ping\ndata: {}\n\n`);
-      }, 15000);
-  
-      // Clean up when client disconnects
-      req.on("close", () => {
-        clearInterval(keepAlive);
-        res.end();
-      });
-  
-      // Auto-close safely before Vercel serverless execution timeout limit
-      setTimeout(() => {
-        clearInterval(keepAlive);
-        res.end();
-      }, 25000);
-  
-      return;
-    }
-  
-    // Handle POST (JSON-RPC 2.0 Request Handling)
+    // -------------------------------------------------------------
+    // 1. Handle POST Requests (JSON-RPC 2.0 Commands)
+    // -------------------------------------------------------------
     if (req.method === "POST") {
       res.setHeader("Content-Type", "application/json; charset=utf-8");
-      const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
-      const { id, method, params } = body;
+  
+      let body = req.body;
+      if (typeof body === "string") {
+        try {
+          body = JSON.parse(body);
+        } catch (e) {
+          return res.status(400).json({
+            jsonrpc: "2.0",
+            id: null,
+            error: { code: -32700, message: "Parse error" },
+          });
+        }
+      }
+  
+      const { id = null, method, params } = body || {};
   
       try {
         if (method === "initialize") {
-          return res.status(200).send(
-            JSON.stringify({
-              jsonrpc: "2.0",
-              id,
-              result: {
-                protocolVersion: "2024-11-05",
-                capabilities: { tools: {} },
-                serverInfo: { name: "raja-chatterjee-portfolio-mcp", version: "1.0.0" },
-              },
-            })
-          );
+          return res.status(200).json({
+            jsonrpc: "2.0",
+            id,
+            result: {
+              protocolVersion: "2024-11-05",
+              capabilities: { tools: {} },
+              serverInfo: { name: "raja-chatterjee-portfolio-mcp", version: "1.0.0" },
+            },
+          });
         }
   
         if (method === "notifications/initialized") {
-          return res.status(200).send(JSON.stringify({ jsonrpc: "2.0", result: {} }));
+          return res.status(200).json({ jsonrpc: "2.0", result: {} });
         }
   
         if (method === "tools/list") {
-          return res.status(200).send(
-            JSON.stringify({
-              jsonrpc: "2.0",
-              id,
-              result: {
-                tools: [
-                  {
-                    name: "get_candidate_profile",
-                    description: "Returns executive summary of Raja Chatterjee",
-                    inputSchema: { type: "object", properties: {} },
-                  },
-                  {
-                    name: "get_certifications",
-                    description: "Retrieves list of verified technical & AI certifications",
-                    inputSchema: { type: "object", properties: {} },
-                  },
-                  {
-                    name: "query_skills_and_projects",
-                    description: "Searches candidate skills and architectural focus areas",
-                    inputSchema: {
-                      type: "object",
-                      properties: {
-                        keyword: { type: "string", description: "Skill or domain keyword" },
-                      },
-                      required: ["keyword"],
+          return res.status(200).json({
+            jsonrpc: "2.0",
+            id,
+            result: {
+              tools: [
+                {
+                  name: "get_candidate_profile",
+                  description: "Returns executive summary of Raja Chatterjee",
+                  inputSchema: { type: "object", properties: {} },
+                },
+                {
+                  name: "get_certifications",
+                  description: "Retrieves list of verified technical & AI certifications",
+                  inputSchema: { type: "object", properties: {} },
+                },
+                {
+                  name: "query_skills_and_projects",
+                  description: "Searches candidate skills and architectural focus areas",
+                  inputSchema: {
+                    type: "object",
+                    properties: {
+                      keyword: { type: "string", description: "Skill or domain keyword" },
                     },
+                    required: ["keyword"],
                   },
-                ],
-              },
-            })
-          );
+                },
+              ],
+            },
+          });
         }
   
         if (method === "tools/call") {
@@ -139,35 +120,63 @@ const PORTFOLIO_DATA = {
               },
             ];
           } else {
-            throw new Error(`Tool not found: ${toolName}`);
-          }
-  
-          return res.status(200).send(
-            JSON.stringify({
+            return res.status(200).json({
               jsonrpc: "2.0",
               id,
-              result: { content },
-            })
-          );
-        }
+              error: { code: -32601, message: `Tool not found: ${toolName}` },
+            });
+          }
   
-        return res.status(200).send(
-          JSON.stringify({
+          return res.status(200).json({
             jsonrpc: "2.0",
             id,
-            error: { code: -32601, message: `Method not found: ${method}` },
-          })
-        );
+            result: { content },
+          });
+        }
+  
+        return res.status(200).json({
+          jsonrpc: "2.0",
+          id,
+          error: { code: -32601, message: `Method not found: ${method}` },
+        });
       } catch (err) {
-        return res.status(200).send(
-          JSON.stringify({
-            jsonrpc: "2.0",
-            id: id || null,
-            error: { code: -32000, message: err.message },
-          })
-        );
+        return res.status(200).json({
+          jsonrpc: "2.0",
+          id,
+          error: { code: -32000, message: err.message },
+        });
       }
     }
   
-    return res.status(405).send(JSON.stringify({ error: "Method Not Allowed" }));
+    // -------------------------------------------------------------
+    // 2. Handle GET Requests (MCP SSE Handshake)
+    // -------------------------------------------------------------
+    if (req.method === "GET") {
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache, no-transform");
+      res.setHeader("Connection", "keep-alive");
+      res.setHeader("X-Accel-Buffering", "no");
+  
+      // Write endpoint handshake
+      res.write(`event: endpoint\ndata: /api/mcp\n\n`);
+  
+      // Ping interval to keep socket alive
+      const keepAlive = setInterval(() => {
+        res.write(`event: ping\ndata: {}\n\n`);
+      }, 15000);
+  
+      req.on("close", () => {
+        clearInterval(keepAlive);
+        res.end();
+      });
+  
+      setTimeout(() => {
+        clearInterval(keepAlive);
+        res.end();
+      }, 25000);
+  
+      return;
+    }
+  
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
