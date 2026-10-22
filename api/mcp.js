@@ -1,4 +1,3 @@
-// Candidate Data
 const PORTFOLIO_DATA = {
     profile: {
       name: "Raja Chatterjee",
@@ -23,28 +22,28 @@ const PORTFOLIO_DATA = {
   };
   
   export default async function handler(req, res) {
-    // Set CORS and JSON Headers
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, mcp-version, authorization");
     res.setHeader("Content-Type", "application/json; charset=utf-8");
   
     if (req.method === "OPTIONS") {
       return res.status(200).end();
     }
   
-    // Handle GET (Protocol Handshake / Capabilities discovery)
+    // Handle GET (Handshake)
     if (req.method === "GET") {
-      const handshakeData = JSON.stringify({
-        name: "raja-chatterjee-portfolio-mcp",
-        version: "1.0.0",
-        protocolVersion: "2024-11-05",
-        capabilities: { tools: {} },
-      });
-      return res.status(200).send(handshakeData);
+      return res.status(200).send(
+        JSON.stringify({
+          name: "raja-chatterjee-portfolio-mcp",
+          version: "1.0.0",
+          protocolVersion: "2024-11-05",
+          capabilities: { tools: {} },
+        })
+      );
     }
   
-    // Handle POST (JSON-RPC Tool Requests)
+    // Handle POST (JSON-RPC 2.0 Requests)
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
       const { id, method, params } = body;
@@ -62,6 +61,11 @@ const PORTFOLIO_DATA = {
               },
             })
           );
+        }
+  
+        // Acknowledge client notification
+        if (method === "notifications/initialized") {
+          return res.status(200).send(JSON.stringify({ jsonrpc: "2.0", result: {} }));
         }
   
         if (method === "tools/list") {
@@ -132,7 +136,7 @@ const PORTFOLIO_DATA = {
         return res.status(200).send(
           JSON.stringify({
             jsonrpc: "2.0",
-            id,
+            id: id || null,
             error: { code: -32601, message: `Method not found: ${method}` },
           })
         );
