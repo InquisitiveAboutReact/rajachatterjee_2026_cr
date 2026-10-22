@@ -1,3 +1,4 @@
+
 const PORTFOLIO_DATA = {
     profile: {
       name: "Raja Chatterjee",
@@ -30,18 +31,30 @@ const PORTFOLIO_DATA = {
       return res.status(200).end();
     }
   
-    // Handle GET (MCP SSE Handshake)
+    // Handle GET (Information or Handshake)
     if (req.method === "GET") {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
+      const acceptHeader = req.headers["accept"] || "";
+      
+      if (acceptHeader.includes("text/event-stream")) {
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+        res.write(`event: endpoint\ndata: /api/mcp\n\n`);
+        return res.end();
+      }
   
-      // Emit standard endpoint event path expected by MCP SSE client
-      res.write(`event: endpoint\ndata: /api/mcp\n\n`);
-      return res.end();
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      return res.status(200).send(
+        JSON.stringify({
+          status: "online",
+          server: "raja-chatterjee-portfolio-mcp",
+          transport: "Streamable HTTP / JSON-RPC 2.0",
+          endpoint: "/api/mcp",
+        })
+      );
     }
   
-    // Handle POST (JSON-RPC 2.0 Requests)
+    // Handle POST (JSON-RPC 2.0 Operations)
     if (req.method === "POST") {
       res.setHeader("Content-Type", "application/json; charset=utf-8");
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
