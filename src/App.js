@@ -23,6 +23,7 @@ import { Analytics } from "@vercel/analytics/react";
 import n8nVideo from './images/n8n_jev_prod.mp4';
 import FeedbackCommandPalette from './components/FeedbackCommandPalette';
 import FeedbackReactionWidget from './components/FeedbackReactionWidget';
+import MCPWidgetModal from './components/MCPWidgetModal';
 import { ToastProvider } from './components/ToastNotifications/ToastContext';
 // Robust global interceptor to stop ResizeObserver development overlay errors
 // if (typeof window !== 'undefined') {
@@ -776,6 +777,9 @@ function App() {
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
       <AnalyticsModal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} />
       <FeedbackCommandPalette isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
+    
+    {/* Floating Recruiter MCP Widget */}
+    <MCPWidgetModal />
 
       {/* n8n Image Zoom Modal Lightbox Overlay */}
       {selectedN8nImage && (
