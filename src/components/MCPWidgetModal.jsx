@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Cpu,
   Sparkles,
@@ -6,18 +6,23 @@ import {
   Check,
   X,
   MessageSquare,
-  Move
+  Move,
+  Minimize2
 } from 'lucide-react';
 
 export default function MCPWidgetModal() {
   const [isOpen, setIsOpen] = useState(false);
+  // Default to squeezed/minimized launcher state on page load
+  const [isExpanded, setIsExpanded] = useState(false); 
   const [selectedTab, setSelectedTab] = useState('cursor');
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Dragging state variables
-  const [position, setPosition] = useState({ x: 24, y: window.innerHeight - 100 });
+  // Position initialized inside the CYAN box area (Left side, bottom ~220px)
+  const [position, setPosition] = useState({ x: 24, y: 220 });
   const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef({ startX: 0, startY: 0, initialX: 24, initialY: 24 });
+  
+  const dragRef = useRef({ startX: 0, startY: 0, initialX: 24, initialY: 220 });
+  const hasDraggedRef = useRef(false);
 
   const mcpUrl = "https://raj-portfolio-custom-mcp.onrender.com/mcp";
   const sseUrl = "https://raj-portfolio-custom-mcp.onrender.com/sse";
@@ -29,14 +34,14 @@ export default function MCPWidgetModal() {
   };
 
   const recruiterPrompts = [
-        "Ask MCP: 'Give me my portfolio profile summary'",
-        "Ask MCP: 'What certifications does the portfolio list?'",
-        "Ask MCP: 'Which portfolio projects use Ollama?'",
-        "Ask MCP: 'List all the architecture focus areas in the portfolio?'",
-        "Ask MCP: 'What are Raja's key qualifications in Oracle Cloud HCM & Fast Formula?'",
-        "Ask MCP: 'Summarize Raja's 18+ years of experience and enterprise leadership impact.'",
-        "Ask MCP: 'What AI and Cloud Certifications does Raja Chatterjee currently hold?'",
-        "Ask MCP: 'Does Raja have experience with multi-country Global HR rollouts?'"
+    "Ask MCP: 'Give me my portfolio profile summary'",
+    "Ask MCP: 'What certifications does the portfolio list?'",
+    "Ask MCP: 'Which portfolio projects use Ollama?'",
+    "Ask MCP: 'List all the architecture focus areas in the portfolio.'",
+    "Ask MCP: 'What are Raja's key skills in Oracle Cloud Infrastructure (OCI) and Fast Formulas?'",
+    "Ask MCP: 'Summarize Raja's 18+ years of experience in enterprise delivery.'",
+    "Ask MCP: 'What AI and Cloud Certifications does Raja Chatterjee currently hold?'",
+    "Ask MCP: 'Which of Raja's portfolio projects are in progress or still in prototype?'",
   ];
 
   const platformTabs = [
@@ -46,157 +51,264 @@ export default function MCPWidgetModal() {
     { id: 'claude_desktop', label: 'Claude Desktop', icon: '🖥️' },
     { id: 'cline_roo', label: 'Cline / Roo', icon: '⚙️' },
     { id: 'chatgpt', label: 'ChatGPT', icon: '💬' },
-    { id: 'gemini', label: 'Gemini CLI', icon: '✨' },
+    { id: 'gemini', label: 'Gemini', icon: '✨' },
   ];
 
-  // Drag handlers for mouse & touch support
-  const handleMouseDown = (e) => {
-    // Don't trigger drag if clicking action buttons inside the modal/pill
-    if (e.target.closest('button') && !e.target.closest('.drag-handle')) return;
+  // Drag Handlers - Uses global Pointer Events for butter-smooth movement across the entire DOM
+  const handlePointerDown = (e) => {
+    // If user clicked the close/minimize button, don't trigger drag
+    if (e.target.closest('.no-drag')) return;
+
     setIsDragging(true);
+    hasDraggedRef.current = false;
+
     dragRef.current = {
-      startX: e.clientX || e.touches?.[0].clientX,
-      startY: e.clientY || e.touches?.[0].clientY,
+      startX: e.clientX,
+      startY: e.clientY,
       initialX: position.x,
       initialY: position.y
     };
   };
 
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    const clientX = e.clientX || e.touches?.[0].clientX;
-    const clientY = e.clientY || e.touches?.[0].clientY;
-    
-    const deltaX = clientX - dragRef.current.startX;
-    const deltaY = clientY - dragRef.current.startY;
+  useEffect(() => {
+    const handlePointerMove = (e) => {
+      if (!isDragging) return;
 
-    setPosition({
-      x: Math.max(10, Math.min(window.innerWidth - 280, dragRef.current.initialX + deltaX)),
-      y: Math.max(10, Math.min(window.innerHeight - 80, dragRef.current.initialY - deltaY))
-    });
-  };
+      const deltaX = e.clientX - dragRef.current.startX;
+      const deltaY = e.clientY - dragRef.current.startY;
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
+      // Track if mouse moved significantly to distinguish click vs drag
+      if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+        hasDraggedRef.current = true;
+      }
+
+      setPosition({
+        x: Math.max(10, Math.min(window.innerWidth - 220, dragRef.current.initialX + deltaX)),
+        y: Math.max(10, Math.min(window.innerHeight - 60, dragRef.current.initialY - deltaY))
+      });
+    };
+
+    const handlePointerUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+    }
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, [isDragging]);
+
+  const handleLauncherClick = () => {
+    // Only open/expand if user did NOT drag the widget around
+    if (!hasDraggedRef.current) {
+      setIsExpanded(true);
+    }
   };
 
   return (
-    <div 
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onTouchMove={handleMouseMove}
-      onTouchEnd={handleMouseUp}
-    >
+    <>
       {/* ========================================================= */}
-      {/* 1. DRAGGABLE FLOATING TRIGGER BUTTON (With Grab Icon)     */}
+      {/* 1. DRAGGABLE FLOATING WIDGET                              */}
       {/* ========================================================= */}
       <div 
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
+        onPointerDown={handlePointerDown}
         style={{
           position: 'fixed',
           left: `${position.x}px`,
           bottom: `${position.y}px`,
           zIndex: 99998,
           cursor: isDragging ? 'grabbing' : 'grab',
-          touchAction: 'none'
+          touchAction: 'none',
+          userSelect: 'none'
         }}
         className="group"
       >
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-cyan-500 to-emerald-500 rounded-full blur-md opacity-70 group-hover:opacity-100 transition duration-500 animate-pulse pointer-events-none"></div>
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-cyan-500 to-emerald-500 rounded-2xl blur-md opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse pointer-events-none"></div>
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: '10px',
-            backgroundColor: '#090d16',
-            color: '#f8fafc',
-            border: '1px solid rgba(6, 182, 212, 0.4)',
-            padding: '10px 14px',
-            borderRadius: '9999px',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.7)',
-            backdropFilter: 'blur(12px)',
-            whiteSpace: 'nowrap',
-            userSelect: 'none'
-          }}
-        >
-          {/* Drag Handle Icon Indicator (Hand / Move icon) */}
-          <div 
-            className="drag-handle text-cyan-400 hover:text-cyan-300 cursor-grab active:cursor-grabbing p-1 flex items-center justify-center bg-cyan-950/40 rounded-full border border-cyan-500/30 transition-transform group-hover:scale-105" 
-            title="Grab & move anywhere"
-          >
-            <Move size={14} className="animate-pulse" />
-          </div>
-
-          {/* Clickable Button Target to open modal */}
-          <button
-            onClick={() => setIsOpen(true)}
+        {isExpanded ? (
+          /* EXPANDED FULL PILL WIDGET */
+          <div
             style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'inherit',
               display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               gap: '10px',
-              cursor: 'pointer',
-              padding: 0,
-              textAlign: 'left'
+              backgroundColor: '#090d16',
+              color: '#f8fafc',
+              border: '1px solid rgba(6, 182, 212, 0.5)',
+              padding: '10px 14px',
+              borderRadius: '9999px',
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.8)',
+              backdropFilter: 'blur(12px)',
+              whiteSpace: 'nowrap'
             }}
-            aria-label="Connect MCP Server API"
           >
+            {/* Move Grab Icon */}
+            <div 
+              className="text-cyan-400 hover:text-cyan-300 p-1 flex items-center justify-center bg-cyan-950/50 rounded-full border border-cyan-500/40" 
+              title="Grab & drag anywhere"
+            >
+              <Move size={14} className="animate-pulse" />
+            </div>
+
+            {/* Clickable Action to open MCP Config Modal */}
+            <button
+              onClick={() => {
+                if (!hasDraggedRef.current) setIsOpen(true);
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                cursor: 'pointer',
+                padding: 0,
+                textAlign: 'left'
+              }}
+              aria-label="Connect MCP Server API"
+            >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(8, 51, 68, 0.8)',
+                border: '1px solid rgba(6, 182, 212, 0.6)',
+                color: '#22d3ee',
+                flexShrink: 0,
+                position: 'relative'
+              }}>
+                <Cpu size={16} />
+                <span style={{
+                  position: 'absolute',
+                  top: '-2px',
+                  right: '-2px',
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#10b981',
+                  borderRadius: '50%',
+                  boxShadow: '0 0 6px #10b981'
+                }}></span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#f8fafc' }}>
+                    ⚡ Connect MCP Server
+                  </span>
+                  <span style={{
+                    fontSize: '8px',
+                    fontFamily: 'monospace',
+                    fontWeight: 'bold',
+                    backgroundColor: 'rgba(99, 102, 241, 0.25)',
+                    color: '#818cf8',
+                    padding: '1px 4px',
+                    borderRadius: '3px'
+                  }}>
+                    LIVE
+                  </span>
+                </div>
+                <span style={{ fontSize: '9px', color: '#38bdf8', fontFamily: 'monospace' }}>
+                  ✋ Grab & drag anywhere
+                </span>
+              </div>
+
+              <Sparkles size={14} style={{ color: '#22d3ee', marginLeft: '2px', flexShrink: 0 }} />
+            </button>
+
+            {/* Minimize / Squeeze Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsExpanded(false);
+              }}
+              title="Minimize widget"
+              className="no-drag"
+              style={{
+                background: 'rgba(30, 41, 59, 0.7)',
+                border: '1px solid rgba(100, 116, 139, 0.5)',
+                color: '#94a3b8',
+                borderRadius: '50%',
+                width: '22px',
+                height: '22px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                marginLeft: '4px'
+              }}
+            >
+              <Minimize2 size={12} />
+            </button>
+          </div>
+        ) : (
+          /* SQUEEZED / MINIMIZED LAUNCHER (Default State on Load) */
+          <div
+            onClick={handleLauncherClick}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              backgroundColor: '#090d16',
+              border: '1px solid rgba(6, 182, 212, 0.6)',
+              borderRadius: '9999px',
+              padding: '6px 14px 6px 8px',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.9)',
+              backdropFilter: 'blur(12px)',
+              cursor: 'pointer'
+            }}
+            title="Click to open Raja's MCP Widget"
+          >
+            {/* Logo Icon */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '32px',
-              height: '32px',
+              width: '28px',
+              height: '28px',
               borderRadius: '50%',
-              backgroundColor: 'rgba(8, 51, 68, 0.8)',
-              border: '1px solid rgba(6, 182, 212, 0.5)',
+              backgroundColor: 'rgba(8, 51, 68, 0.9)',
+              border: '1px solid rgba(6, 182, 212, 0.6)',
               color: '#22d3ee',
-              flexShrink: 0,
-              position: 'relative'
+              position: 'relative',
+              flexShrink: 0
             }}>
-              <Cpu size={16} />
+              <Cpu size={15} className="animate-pulse" />
               <span style={{
                 position: 'absolute',
-                top: '-2px',
-                right: '-2px',
-                width: '8px',
-                height: '8px',
+                top: '-1px',
+                right: '-1px',
+                width: '7px',
+                height: '7px',
                 backgroundColor: '#10b981',
                 borderRadius: '50%',
                 boxShadow: '0 0 6px #10b981'
               }}></span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '700', color: '#f8fafc' }}>
-                  ⚡ Connect MCP Server
-                </span>
-                <span style={{
-                  fontSize: '8px',
-                  fontFamily: 'monospace',
-                  fontWeight: 'bold',
-                  backgroundColor: 'rgba(99, 102, 241, 0.25)',
-                  color: '#818cf8',
-                  padding: '1px 4px',
-                  borderRadius: '3px'
-                }}>
-                  LIVE
-                </span>
-              </div>
-              <span style={{ fontSize: '9px', color: '#38bdf8', fontFamily: 'monospace' }}>
-                ✋ Grab & drag anywhere
-              </span>
-            </div>
+            {/* Squeezed Label */}
+            <span style={{
+              fontSize: '11px',
+              fontWeight: '700',
+              color: '#38bdf8',
+              letterSpacing: '0.02em',
+              whiteSpace: 'nowrap'
+            }}>
+              Check Raja's MCP
+            </span>
 
-            <Sparkles size={14} style={{ color: '#22d3ee', marginLeft: '2px', flexShrink: 0 }} />
-          </button>
-        </div>
+            <Sparkles size={12} style={{ color: '#22d3ee', flexShrink: 0 }} />
+          </div>
+        )}
       </div>
 
       {/* ========================================================= */}
@@ -301,7 +413,7 @@ export default function MCPWidgetModal() {
             }}>
               <div style={{ padding: '10px 14px', borderRadius: '8px', backgroundColor: '#0b132b', border: '1px solid #1e293b', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ minWidth: 0, paddingRight: '8px' }}>
-                  <span style={{ fontSize: '10px', fontFamily: 'monospace', color: '#22d3ee', display: 'block', textTransform: 'uppercase' }}>HTTP Endpoint</span>
+                  <span style={{ fontSize: '10px', fontFamily: 'monospace', color: '#22d3ee', display: 'block', textTransform: 'uppercase' }}>HTTP · Claude &amp; Gemini</span>
                   <code style={{ fontSize: '11px', fontFamily: 'monospace', color: '#cbd5e1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{mcpUrl}</code>
                 </div>
                 <button onClick={() => handleCopy(mcpUrl, 'mcp')} style={{ background: '#1e293b', border: 'none', color: '#cbd5e1', padding: '6px 10px', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
@@ -311,7 +423,7 @@ export default function MCPWidgetModal() {
 
               <div style={{ padding: '10px 14px', borderRadius: '8px', backgroundColor: '#0b132b', border: '1px solid #1e293b', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ minWidth: 0, paddingRight: '8px' }}>
-                  <span style={{ fontSize: '10px', fontFamily: 'monospace', color: '#818cf8', display: 'block', textTransform: 'uppercase' }}>SSE Endpoint</span>
+                  <span style={{ fontSize: '10px', fontFamily: 'monospace', color: '#818cf8', display: 'block', textTransform: 'uppercase' }}>SSE · Cursor &amp; VS Code</span>
                   <code style={{ fontSize: '11px', fontFamily: 'monospace', color: '#cbd5e1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{sseUrl}</code>
                 </div>
                 <button onClick={() => handleCopy(sseUrl, 'sse')} style={{ background: '#1e293b', border: 'none', color: '#cbd5e1', padding: '6px 10px', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
@@ -358,28 +470,28 @@ export default function MCPWidgetModal() {
 
               {selectedTab === 'vscode' && (
                 <div>
-                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Add to your workspace <code style={{ color: '#22d3ee' }}>.copilot/mcp-config.json</code>:</p>
-                  <CodeBlock code={`{\n  "mcpServers": {\n    "raja-portfolio": {\n      "type": "http",\n      "url": "${mcpUrl}"\n    }\n  }\n}`} copiedKey={copiedKey} copyId="c_vs" onCopy={handleCopy} />
+                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Add to your user config <code style={{ color: '#22d3ee' }}>~/.copilot/mcp-config.json</code>:</p>
+                  <CodeBlock code={`{\n  "mcpServers": {\n    "raja-portfolio": {\n      "type": "http",\n      "url": "${mcpUrl}",\n      "tools": ["*"]\n    }\n  }\n}`} copiedKey={copiedKey} copyId="c_vs" onCopy={handleCopy} />
                 </div>
               )}
 
               {selectedTab === 'claude_code' && (
                 <div>
-                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Run this command in your terminal:</p>
+                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Run this in your terminal (Claude web is tested; Claude Code CLI is still to test):</p>
                   <CodeBlock code={`claude mcp add raja-portfolio ${mcpUrl} --transport http`} copiedKey={copiedKey} copyId="c_cc" onCopy={handleCopy} />
                 </div>
               )}
 
               {selectedTab === 'claude_desktop' && (
                 <div>
-                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Add to your <code style={{ color: '#22d3ee' }}>claude_desktop_config.json</code> file:</p>
-                  <CodeBlock code={`{\n  "mcpServers": {\n    "raja-portfolio": {\n      "type": "http",\n      "url": "${mcpUrl}"\n    }\n  }\n}`} copiedKey={copiedKey} copyId="c_cd" onCopy={handleCopy} />
+                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Same steps as Claude on the web (tested):</p>
+                  <div style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: '1.6' }}><p style={{ margin: '0 0 8px 0' }}>1. Go to <strong>Settings → Connectors</strong>.</p><p style={{ margin: '0 0 8px 0' }}>2. Select <strong>Add custom connector</strong>.</p><p style={{ margin: 0 }}>3. Paste: <code style={{ color: '#22d3ee' }}>{mcpUrl}</code></p></div>
                 </div>
               )}
 
               {selectedTab === 'cline_roo' && (
                 <div>
-                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Configure SSE mode in your extension settings:</p>
+                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Use SSE mode in your extension settings (not yet tested):</p>
                   <div style={{ backgroundColor: '#030712', padding: '14px', borderRadius: '8px', border: '1px solid #1e293b', fontFamily: 'monospace', fontSize: '12px', color: '#cbd5e1', lineHeight: '1.6' }}>
                     <div><span style={{ color: '#64748b' }}>Name:</span> raja-portfolio</div>
                     <div><span style={{ color: '#64748b' }}>Transport:</span> sse</div>
@@ -391,15 +503,15 @@ export default function MCPWidgetModal() {
               {selectedTab === 'chatgpt' && (
                 <div style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: '1.6' }}>
                   <p style={{ margin: '0 0 8px 0' }}>1. Go to <strong>Settings → Integrations → MCP Servers</strong>.</p>
-                  <p style={{ margin: '0 0 8px 0' }}>2. Select <strong>Add Custom Server</strong> (Streamable HTTP).</p>
-                  <p style={{ margin: 0 }}>3. Paste Endpoint URL: <code style={{ color: '#22d3ee' }}>{mcpUrl}</code></p>
+                  <p style={{ margin: '0 0 8px 0' }}>2. Select <strong>Add Custom Server</strong>, then choose SSE as the transport.</p>
+                  <p style={{ margin: 0 }}>3. Paste Endpoint URL: <code style={{ color: '#22d3ee' }}>{sseUrl}</code></p>
                 </div>
               )}
 
               {selectedTab === 'gemini' && (
                 <div>
-                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Configure in your Gemini CLI agent config:</p>
-                  <CodeBlock code={`{\n  "mcpServers": {\n    "raja-portfolio": {\n      "type": "http",\n      "url": "${mcpUrl}"\n    }\n  }\n}`} copiedKey={copiedKey} copyId="c_gem" onCopy={handleCopy} />
+                  <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 10px 0' }}>Add the HTTP endpoint in Gemini (web app):</p>
+                  <div style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: '1.6' }}><p style={{ margin: '0 0 8px 0' }}>1. Open <strong>Connected apps</strong> in Gemini.</p><p style={{ margin: '0 0 8px 0' }}>2. Select <strong>Connect to an MCP server</strong>.</p><p style={{ margin: '0 0 8px 0' }}>3. Paste: <code style={{ color: '#22d3ee' }}>{mcpUrl}</code></p><p style={{ margin: 0, color: '#94a3b8' }}>Gemini connects to this endpoint. Tool-call testing is still in progress.</p></div>
                 </div>
               )}
 
@@ -410,7 +522,7 @@ export default function MCPWidgetModal() {
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {recruiterPrompts.map((prompt, idx) => (
-                    <div key={idx} style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: '#030712', border: '1px solid #1e293b', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', fontSize: '12px', color: '#cbd5e1' }}>
+                    <div key={idx} style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: '#030712', border: '1px solid #1e293b', display: 'flex', alignItems: 'center', justifyBetween: 'space-between', gap: '10px', fontSize: '12px', color: '#cbd5e1' }}>
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{prompt}</span>
                       <button
                         onClick={() => handleCopy(prompt, `p_${idx}`)}
@@ -457,7 +569,7 @@ export default function MCPWidgetModal() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
