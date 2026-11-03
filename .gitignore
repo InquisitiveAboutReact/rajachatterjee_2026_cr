@@ -30,3 +30,6 @@ yarn-error.log*
 
 .vercel
 .env*
+.cursor/
+deploy-ui-widget.sh
+backup-uncommitted-changes.patch
