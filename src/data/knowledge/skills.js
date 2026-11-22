@@ -18,5 +18,26 @@ export const SKILLS = [
     id: 'skill-delivery-tools',
     category: 'Tools & Process',
     text: "Raja focuses on operational excellence using CI/CD pipelines, Webpack optimization, and AI-driven delivery copilots to reduce technical debt and accelerate time-to-market for enterprise platforms."
-  }
+  },
+  {
+    id: 'skill-ui-full-stack',
+    category: 'skill',
+    tier: 'primary',
+    lastUsed: 2026,
+    text: 'UI full stack development: HTML5, CSS3, JavaScript, React and Redux on the front end, with Node.js and Express on the back end. Built UI architecture and performance work using React and micro-frontend strategies for modular web applications. Last used: 2026.',
+  },
+  {
+    id: 'skill-docker',
+    category: 'skill',
+    tier: 'primary',
+    lastUsed: 2026,
+    text: 'Docker container services. Built containerised local AI workflows using Docker, n8n and Ollama. Also worked with Kubernetes (K8S) container services. Last used: 2026.',
+  },
+  {
+    id: 'skill-mcp-server',
+    category: 'skill',
+    tier: 'secondary',
+    lastUsed: 2026,
+    text: 'Model Context Protocol (MCP). Built and run a custom MCP server for this portfolio (api/mcp.js) that exposes profile information to AI clients, with a recruiter MCP widget on the site. Last used: 2026.',
+  },
 ];

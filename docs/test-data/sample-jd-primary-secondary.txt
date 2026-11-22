@@ -1,0 +1,29 @@
+﻿Senior Technical Delivery Manager and UI Architect
+
+About the role
+We are looking for a senior technical leader to run multi-team delivery programmes and to shape the user interface architecture of our customer-facing platform. You will combine delivery leadership with hands-on front-end architecture and AI-enabled engineering.
+
+Responsibilities
+- Lead technical delivery across several Agile teams, owning the roadmap, resourcing, transition planning and executive reporting.
+- Act as programme manager for multi-stream delivery, managing escalations and customer relationships.
+- Define UI architecture for the platform, including component design, performance and micro-frontend strategy.
+- Build and review full-stack features across the UI and Node.js services.
+- Introduce generative AI and retrieval-augmented generation workflows into delivery.
+- Containerise services and local AI tooling with Docker.
+- Work with Oracle Cloud Fusion HCM teams on HR and payroll configuration.
+
+Requirements
+- Must have at least 12 years of experience in IT delivery, with 5 years leading technical programmes.
+- Must have hands-on UI full stack experience with HTML, CSS, JavaScript, React and Redux.
+- Must have experience as a UI architect or consultant on enterprise web applications.
+- Must have working knowledge of generative AI and retrieval-augmented generation, and a current Claude certification.
+- Must have Docker experience.
+- Should have Oracle Cloud Fusion HCM implementation experience.
+- Should have Kubernetes, MongoDB or SQL experience.
+- Should have Agile delivery experience, including Scrum Master or Scaled Agile practice.
+- Should have Guidewire ClaimCenter delivery experience.
+- Nice to have: PMP certification.
+- Nice to have: Java and Spring Boot experience.
+
+Preferred
+Experience with Node.js and Express. Candidates should apply with a summary of their largest programme and examples of UI architecture work.
