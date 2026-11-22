@@ -5,8 +5,6 @@ import { Index } from '@upstash/vector';
 import { Redis } from '@upstash/redis';
 import { createHash } from 'node:crypto';
 
-console.log('[ENV CHECK]', Object.keys(process.env).filter((k) => /KV_|UPSTASH|GROQ|GEMINI/.test(k)).join(', '));
-
 /* ---------- Configuration ---------- */
 
 const MAX_JD_CHARS = 8000;
