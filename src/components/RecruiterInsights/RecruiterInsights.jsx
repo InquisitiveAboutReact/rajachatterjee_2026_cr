@@ -33,19 +33,23 @@ export default function RecruiterInsights() {
 
   useEffect(() => {
     let alive = true;
-    fetch('/api/insights')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (alive) setData(d);
-      })
-      .catch(() => {
-        if (alive) setData(null);
-      })
-      .finally(() => {
-        if (alive) setLoading(false);
-      });
+    const load = () =>
+      fetch('/api/insights', { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          if (alive) setData(d);
+        })
+        .catch(() => {
+          if (alive) setData(null);
+        })
+        .finally(() => {
+          if (alive) setLoading(false);
+        });
+    load();
+    const timer = setInterval(load, 60000);
     return () => {
       alive = false;
+      clearInterval(timer);
     };
   }, []);
 

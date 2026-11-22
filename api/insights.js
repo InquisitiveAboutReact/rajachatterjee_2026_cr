@@ -53,7 +53,7 @@ async function buildSummary(stats) {
           {
             role: 'system',
             content:
-              'You write short, factual summaries for a public portfolio. Use only the numbers and names provided. Plain text, two sentences at most, no markdown.',
+            'You write short, factual summaries about job descriptions that visitors analysed on a public portfolio. Write in the third person and never in the first person. Use only the numbers and names provided. Plain text, two sentences at most, no markdown.',
           },
           { role: 'user', content: JSON.stringify(stats) },
         ],
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
       redis.hgetall('jd-stats:req-missing'),
     ]);
 
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600');
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
 
     const n = Number(total) || 0;
     if (n === 0) return res.status(200).json({ ready: false, total: 0 });
