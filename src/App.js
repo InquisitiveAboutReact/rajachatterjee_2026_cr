@@ -12,6 +12,8 @@ import claudeCCARPBadge from './images/CCAR-P.png';
 import claudeCCDVFBadge from './images/CCDV-F.png';
 import n8nWorkflowImage from './images/n8n.png';
 import vercelGitCicdImage from './images/Vercel-Git-cicd.png';
+import ragchatbotpipeline from './images/Chatbot-RAG-Pipeline.png';
+import custommcpserver from './images/custom-mcp-server.png';
 import CVModal from './components/CVManager/CVModal';
 import RAGChatbot from './components/Chatbot/RAGChatbot';
 import MobileNav from './components/Navigation/MobileNav';
@@ -28,6 +30,7 @@ import FeedbackCommandPalette from './components/FeedbackCommandPalette';
 import FeedbackReactionWidget from './components/FeedbackReactionWidget';
 import MCPWidgetModal from './components/MCPWidgetModal';
 import { ToastProvider } from './components/ToastNotifications/ToastContext';
+import RecruiterInsights from './components/RecruiterInsights/RecruiterInsights';
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
 
@@ -556,6 +559,38 @@ function App() {
               </div>
               <p>Debugging multi-branch deployments, gh-pages isolation, and CI environment build rules.</p>
             </a>
+            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/building-a-production-rag-pipeline-from-a-fake-chatbot-to-a-verified-resilient-ai-assistant-1c89dce279c4" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}> ARTICLE • RAG Pipeline </div>
+              <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
+                <img
+                  src={ragchatbotpipeline}
+                  alt="Building a Production RAG Pipeline: From a Fake Chatbot to a Verified, Resilient AI Assistant ; using, React, Node, Upstash (Redis & Vector DB) , Groq, GEMINI & Vercel."
+                  loading="lazy"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block', background: '#0b1220' }}
+                />
+              </div>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+                <h3>Building a Production RAG Pipeline: From a Fake Chatbot to a Verified, Resilient AI Assistant</h3>
+                <Arrow />
+              </div>
+              <p>How I replaced a keyword-matching chatbot with real retrieval-augmented generation — then proved it actually survives failure, instead of assuming it does.</p>
+            </a>
+            <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/why-my-portfolio-custom-mcp-server-failed-on-vercel-and-worked-on-render-a-debugging-log-across-d2cb2151a07a" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
+              <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}> ARTICLE • Custom MCP Server </div>
+              <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
+                <img
+                  src={custommcpserver}
+                  alt="Why My portfolio custom MCP Server Failed on Vercel and Worked on Render: A Debugging Log Across Claude, Cursor, VS Code Copilot and ChatGPT"
+                  loading="lazy"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block', background: '#0b1220' }}
+                />
+              </div>
+              <div className="project-footer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+                <h3>Why My portfolio custom MCP Server Failed on Vercel and Worked on Render?</h3>
+                <Arrow />
+              </div>
+              <p>four MCP clients connect over HTTPS to a Render web service running server.js with Express. Two transports sit inside it, SSE at /sse for production and Streamable HTTP at /mcp as an experimental path, followed by per-transport session maps, one MCP server per session and static portfolio data. The failed Vercel attempt is shown on the left with an arrow labelled “moved to Render.”</p>
+            </a>
             <a className="project-card article-card-custom" href="https://medium.com/@i.gooner168/i-benchmarked-a-direct-llm-call-against-an-ai-agent-in-n8n-inspired-by-typesafe-ais-jev-a00281fa762e" target="_blank" rel="noreferrer" onClick={() => trackAnalyticsEvent('ref_others')}>
               <div className="project-type" style={{ color: '#10b981', fontWeight: 600 }}> ARTICLE • AI & Automation</div>
               <div className="project-visual" style={{ color: '#2b24fb', borderColor: '#1f293d' }}>
@@ -642,36 +677,8 @@ function App() {
       </section>
 
       <section className="ai-section reveal-section" id="about">
-        <div className="shell ai-grid">
-          <div>
-            <div className="section-kicker"><span>05</span> Intelligence, applied</div>
-            <h2>Human judgement,<br /><em>AI momentum.</em></h2>
-            <p className="ai-copy">
-              I&apos;m exploring thoughtful ways to make delivery teams sharper: clearer signals, less manual overhead, and more time for human decisions.
-            </p>
-            <div className="ai-links">
-              <a className="btn-secondary" href="https://www.salesforce.com/trailblazer/rajachatterjee2024" target="_blank" rel="noreferrer">Salesforce Trailblazer <Arrow /></a>
-              <a className="btn-secondary" href="#certifications">Oracle HCM &amp; OIC Path <Arrow /></a>
-            </div>
-          </div>
-
-          <div className="ai-window">
-            <div className="window-top">
-              <span /><span /><span />
-              <label>RAJA / Enterprise AI builder</label>
-            </div>
-            <div className="prompt-box">
-              <b>Ask the delivery copilot</b>
-              <p>&ldquo;How does Raja lead enterprise AI and cloud architecture programs?&rdquo;</p>
-            </div>
-            <div className="response-box">
-              <div className="spark-icon" aria-hidden="true">✦</div>
-              <div>
-                <b>Grounded execution, zero noise.</b>
-                <p>Combines 18+ years of cloud delivery leadership with modular UI pipelines.</p>
-              </div>
-            </div>
-          </div>
+        <div className="shell">
+          <RecruiterInsights />
         </div>
       </section>
 

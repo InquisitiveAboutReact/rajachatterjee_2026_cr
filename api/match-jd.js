@@ -550,6 +550,44 @@ function buildResult(requirements, summary, evidence) {
   };
 }
 
+/* ---------- Aggregate statistics (counts only, never job description text) ---------- */
+
+const STAT_NAME_MAX = 40;
+
+const statName = (name) => {
+  const n = String(name || '').toLowerCase().trim();
+  return n.length >= 2 && n.length <= STAT_NAME_MAX ? n : null;
+};
+
+async function recordStats(result) {
+  if (!redis || !result || result.verdict === 'Insufficient evidence') return;
+
+  const ops = [
+    redis.incr('jd-stats:total'),
+    redis.hincrby('jd-stats:verdict', result.verdict, 1),
+    redis.hincrby('jd-stats:score-buckets', String(Math.min(9, Math.floor(result.score / 10))), 1),
+  ];
+
+  for (const m of result.matchedSkills || []) {
+    const name = statName(m.skill);
+    if (name) ops.push(redis.hincrby('jd-stats:req-checked', name, 1));
+  }
+
+  for (const g of result.gaps || []) {
+    const name = statName(g.skill);
+    if (name) {
+      ops.push(redis.hincrby('jd-stats:req-checked', name, 1));
+      ops.push(redis.hincrby('jd-stats:req-missing', name, 1));
+    }
+  }
+
+  try {
+    await Promise.all(ops);
+  } catch (err) {
+    console.error('[JD-RAG] Stats write failed:', err.message);
+  }
+}
+
 /* ---------- Handler ---------- */
 
 export default async function handler(req, res) {
@@ -631,6 +669,7 @@ export default async function handler(req, res) {
 
     const result = buildResult(requirements, parsed.summary, evidence);
     await cacheSet(cacheKey, result);
+    await recordStats(result);
     return res.status(200).json(result);
   } catch (err) {
     if (err.status) return res.status(err.status).json({ error: err.message });
