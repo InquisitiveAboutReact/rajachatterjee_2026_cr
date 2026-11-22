@@ -6,7 +6,10 @@ import profileImage from './images/raja-profile-2026.jpg';
 import oracleHrBadge from './images/oracle-hr-2025.jpg';
 import oracleAiBadge from './images/oracle-ai-2026.jpg';
 import oraclePayrollBadge from './images/oracle-payroll-2026.jpg';
-import claudeCCAFBadge from './images/CCAF-O.jpg';
+import claudeCCARFBadge from './images/CCAR-F.png';
+import claudeCCAFOBadge from './images/CCAF-O.jpg';
+import claudeCCARPBadge from './images/CCAR-P.png';
+import claudeCCDVFBadge from './images/CCDV-F.png';
 import n8nWorkflowImage from './images/n8n.png';
 import vercelGitCicdImage from './images/Vercel-Git-cicd.png';
 import CVModal from './components/CVManager/CVModal';
@@ -16,7 +19,7 @@ import ScrollToTop from './components/common/ScrollToTop';
 import ScrollProgress from './components/common/ScrollProgress';
 import Timeline from './components/Timeline/Timeline';
 import AnalyticsModal from './components/AnalyticsModal/AnalyticsModal';
-import SkillMatcherWidget from './SkillMatcherWidget'; 
+import SkillMatcherWidget from './components/SkillMatcherWidget'; 
 import { RAJA_PROFILE } from './data/profileData';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
@@ -25,24 +28,6 @@ import FeedbackCommandPalette from './components/FeedbackCommandPalette';
 import FeedbackReactionWidget from './components/FeedbackReactionWidget';
 import MCPWidgetModal from './components/MCPWidgetModal';
 import { ToastProvider } from './components/ToastNotifications/ToastContext';
-// Robust global interceptor to stop ResizeObserver development overlay errors
-// if (typeof window !== 'undefined') {
-//   const originalError = console.error;
-//   console.error = (...args) => {
-//     if (typeof args[0] === 'string' && args[0].includes('ResizeObserver loop completed with undelivered notifications')) {
-//       return;
-//     }
-//     originalError(...args);
-//   };
-
-//   window.addEventListener('error', (e) => {
-//     if (e.message && e.message.includes('ResizeObserver loop completed with undelivered notifications')) {
-//       e.stopImmediatePropagation();
-//       e.preventDefault();
-//     }
-//   }, true);
-// }
-
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
 
@@ -79,10 +64,14 @@ const STATUS_OPTIONS = [
 ];
 
 const certifications = [
-  { image: claudeCCAFBadge, title: 'Claude Certified Associate Foundation', detail: 'Claude Certified Associates - Foundation', year: '2026' },
+  { image: claudeCCAFOBadge, title: 'Claude Certified Associate', detail: 'Issued by Anthropic', year: '2026' },
+  { image: claudeCCDVFBadge, title: 'Claude Certified Developer - Foundations', detail: 'Issued by Anthropic', year: 'Nov 2026' },
+  { image: claudeCCARFBadge, title: 'Claude Certified Architect', detail: 'Issued by Anthropic', year: '2026' },
+  { image: claudeCCARPBadge, title: 'Claude Certified Architect - Professional', detail: 'Issued by Anthropic', year: 'Nov 2026' },
   { image: oracleAiBadge, title: 'Oracle Cloud Infrastructure', detail: 'Certified Enterprise AI Professional', year: '2026' },
   { image: oraclePayrollBadge, title: 'Oracle Payroll Cloud', detail: '2026 Certified Implementation Professional', year: '2026' },
   { image: oracleHrBadge, title: 'Oracle Global Human Resources Cloud', detail: '2025 Certified Implementation Professional', year: '2025' },
+
 ];
 
 const trackAnalyticsEvent = async (metricName, value = null) => {
