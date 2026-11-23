@@ -1,5 +1,6 @@
 // api/insights.js
 import { Redis } from '@upstash/redis';
+import { normaliseKeyword } from '../lib/requirements.js';
 
 const SUMMARY_KEY = 'jd-stats:summary';
 const SUMMARY_TTL_MS = 24 * 60 * 60 * 1000;
@@ -17,6 +18,17 @@ const sortedEntries = (obj) =>
     .map(([name, count]) => [name, Number(count)])
     .filter(([, count]) => count > 0)
     .sort((a, b) => b[1] - a[1]);
+
+// Adds together counts that differ only by casing or spelling, so old and new entries combine.
+function mergedRequirements(obj) {
+  const merged = new Map();
+  for (const [name, count] of Object.entries(obj || {})) {
+    const key = normaliseKeyword(name);
+    if (!key) continue;
+    merged.set(key, (merged.get(key) || 0) + Number(count));
+  }
+  return [...merged.entries()].filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]);
+}
 
 // Estimates the median score from 10-point buckets (0-9 up to 90-100).
 function medianFromBuckets(buckets, total) {
@@ -93,12 +105,12 @@ export default async function handler(req, res) {
       total: n,
       medianScore: medianFromBuckets(buckets || {}, n),
       topVerdict: verdictList[0]?.[0] ?? 'Not yet',
-      topRequirements: sortedEntries(checked)
-        .slice(0, TOP_REQUIREMENTS)
-        .map(([name, count]) => ({ name, pct: (count / n) * 100 })),
-      topMissing: sortedEntries(missing)
-        .slice(0, TOP_MISSING)
-        .map(([name, count]) => ({ name, pct: (count / n) * 100 })),
+      topRequirements: mergedRequirements(checked)
+      .slice(0, TOP_REQUIREMENTS)
+      .map(([name, count]) => ({ name, pct: (count / n) * 100 })),
+    topMissing: mergedRequirements(missing)
+      .slice(0, TOP_MISSING)
+      .map(([name, count]) => ({ name, pct: (count / n) * 100 })),
     };
 
     let entry = await redis.get(SUMMARY_KEY);

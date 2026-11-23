@@ -4,6 +4,7 @@ import { getDocumentProxy, extractText as extractPdfText } from 'unpdf';
 import { Index } from '@upstash/vector';
 import { Redis } from '@upstash/redis';
 import { createHash } from 'node:crypto';
+import { normaliseKeyword } from '../lib/requirements.js';
 
 /* ---------- Configuration ---------- */
 
@@ -19,7 +20,7 @@ const MIN_REQUIREMENTS = 3;
 const MIN_JD_WORDS = 80;
 const MIN_JD_SIGNALS = 4;
 const KEYWORD_MAX_CHARS = 400;
-const CACHE_VERSION = 'v10'; // bump this when the profile data or scoring rules change
+const CACHE_VERSION = 'v11'; // bump this when the profile data or scoring rules change
 const CACHE_TTL_SECONDS = 60 * 60 * 24 * 30;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 
@@ -555,7 +556,7 @@ function buildResult(requirements, summary, evidence) {
 const STAT_NAME_MAX = 40;
 
 const statName = (name) => {
-  const n = String(name || '').toLowerCase().trim();
+  const n = normaliseKeyword(name);
   return n.length >= 2 && n.length <= STAT_NAME_MAX ? n : null;
 };
 
@@ -599,7 +600,7 @@ export default async function handler(req, res) {
     const rawText = fromFile
       ? await extractText({ fileName: body.fileName, fileBase64: body.fileBase64 })
       : String(body.jd || '');
-    const text = canonicalText(normaliseText(rawText)).slice(0, MAX_JD_CHARS);
+      let text = canonicalText(normaliseText(rawText)).slice(0, MAX_JD_CHARS);
 
     if (text.length < 40) {
       return res
@@ -619,6 +620,10 @@ export default async function handler(req, res) {
     } else {
       return res.status(422).json({ error: NOT_JD_MESSAGE });
     }
+            // Keyword lists are normalised before caching and scoring, so "tech dm" and "Tech DM" get the same result.
+            if (mode === 'keywords') {
+              text = [...new Set(keywordsFrom(text).map(normaliseKeyword).filter(Boolean))].join(', ');
+            }
 
     // Same content, same result: check the cache first.
     const cacheKey = `jd-match:${CACHE_VERSION}:${mode}:${sha256(text)}`;
