@@ -1,10 +1,12 @@
-// api/match-jd.js
+﻿// api/match-jd.js
 import mammoth from 'mammoth';
 import { getDocumentProxy, extractText as extractPdfText } from 'unpdf';
 import { Index } from '@upstash/vector';
 import { Redis } from '@upstash/redis';
 import { createHash } from 'node:crypto';
 import { normaliseKeyword } from '../lib/requirements.js';
+
+const STATS_PREFIX = process.env.STATS_PREFIX || '';
 
 /* ---------- Configuration ---------- */
 
@@ -63,7 +65,7 @@ const DOCUMENT_ANCHORS = [
   /responsibilit/i,
   /requirements?/i,
   /qualifications?/i,
-  /about the role|we are looking|join (our|us)|what you('|’)ll/i,
+  /about the role|we are looking|join (our|us)|what you('|â€™)ll/i,
 ];
 
 const vectorIndex = new Index({
@@ -536,8 +538,8 @@ function buildResult(requirements, summary, evidence) {
     }));
 
   const sources = evidence.slice(0, 6).map((e) => ({
-    title: `${e.category} · ${e.id}`,
-    snippet: e.text.length > 160 ? `${e.text.slice(0, 160)}…` : e.text,
+    title: `${e.category} Â· ${e.id}`,
+    snippet: e.text.length > 160 ? `${e.text.slice(0, 160)}â€¦` : e.text,
   }));
 
   return {
@@ -564,21 +566,21 @@ async function recordStats(result) {
   if (!redis || !result || result.verdict === 'Insufficient evidence') return;
 
   const ops = [
-    redis.incr('jd-stats:total'),
-    redis.hincrby('jd-stats:verdict', result.verdict, 1),
-    redis.hincrby('jd-stats:score-buckets', String(Math.min(9, Math.floor(result.score / 10))), 1),
+    redis.incr(STATS_PREFIX + 'jd-stats:total'),
+    redis.hincrby(STATS_PREFIX + 'jd-stats:verdict', result.verdict, 1),
+    redis.hincrby(STATS_PREFIX + 'jd-stats:score-buckets', String(Math.min(9, Math.floor(result.score / 10))), 1),
   ];
 
   for (const m of result.matchedSkills || []) {
     const name = statName(m.skill);
-    if (name) ops.push(redis.hincrby('jd-stats:req-checked', name, 1));
+    if (name) ops.push(redis.hincrby(STATS_PREFIX + 'jd-stats:req-checked', name, 1));
   }
 
   for (const g of result.gaps || []) {
     const name = statName(g.skill);
     if (name) {
-      ops.push(redis.hincrby('jd-stats:req-checked', name, 1));
-      ops.push(redis.hincrby('jd-stats:req-missing', name, 1));
+      ops.push(redis.hincrby(STATS_PREFIX + 'jd-stats:req-checked', name, 1));
+      ops.push(redis.hincrby(STATS_PREFIX + 'jd-stats:req-missing', name, 1));
     }
   }
 
@@ -683,3 +685,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Analysis failed. Please try again.' });
   }
 }
+

@@ -1,8 +1,8 @@
-// api/insights.js
+﻿// api/insights.js
 import { Redis } from '@upstash/redis';
 import { normaliseKeyword } from '../lib/requirements.js';
-
-const SUMMARY_KEY = 'jd-stats:summary';
+const STATS_PREFIX = process.env.STATS_PREFIX || '';
+const SUMMARY_KEY = STATS_PREFIX + 'jd-stats:summary';
 const SUMMARY_TTL_MS = 24 * 60 * 60 * 1000;
 const TOP_REQUIREMENTS = 5;
 const TOP_MISSING = 3;
@@ -88,11 +88,11 @@ export default async function handler(req, res) {
 
   try {
     const [total, verdicts, buckets, checked, missing] = await Promise.all([
-      redis.get('jd-stats:total'),
-      redis.hgetall('jd-stats:verdict'),
-      redis.hgetall('jd-stats:score-buckets'),
-      redis.hgetall('jd-stats:req-checked'),
-      redis.hgetall('jd-stats:req-missing'),
+      redis.get(STATS_PREFIX + 'jd-stats:total'),
+      redis.hgetall(STATS_PREFIX + 'jd-stats:verdict'),
+      redis.hgetall(STATS_PREFIX + 'jd-stats:score-buckets'),
+      redis.hgetall(STATS_PREFIX + 'jd-stats:req-checked'),
+      redis.hgetall(STATS_PREFIX + 'jd-stats:req-missing'),
     ]);
 
     res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
@@ -130,3 +130,5 @@ export default async function handler(req, res) {
     return res.status(503).json({ ready: false, error: 'Statistics are temporarily unavailable.' });
   }
 }
+
+
