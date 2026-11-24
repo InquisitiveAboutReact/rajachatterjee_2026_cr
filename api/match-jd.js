@@ -22,7 +22,7 @@ const MIN_REQUIREMENTS = 3;
 const MIN_JD_WORDS = 80;
 const MIN_JD_SIGNALS = 4;
 const KEYWORD_MAX_CHARS = 400;
-const CACHE_VERSION = 'v11'; // bump this when the profile data or scoring rules change
+const CACHE_VERSION = 'v12'; // bump this when the profile data or scoring rules change
 const CACHE_TTL_SECONDS = 60 * 60 * 24 * 30;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 
@@ -472,7 +472,16 @@ function normaliseRequirements(parsed, byId, mode) {
       const src = byId.get(r.sourceId);
 
       // A met or partial judgement needs a real source from the retrieved set.
-      if (status !== 'missing' && (!src || !evidence)) status = 'missing';
+      if (status !== 'missing' && (!src || !evidence)) {
+        console.warn(
+          '[JD-RAG] downgraded to missing:',
+          String(r.requirement || '').slice(0, 60),
+          '| sourceId:', r.sourceId,
+          '| known:', Boolean(src),
+          '| evidence:', evidence ? 'yes' : 'empty'
+        );
+        status = 'missing';
+      }
       status = recencyCap(status, src?.text);
 
       return {
@@ -564,6 +573,8 @@ const statName = (name) => {
 
 async function recordStats(result) {
   if (!redis || !result || result.verdict === 'Insufficient evidence') return;
+  // A run with no matches usually means the model's output was malformed, so it doesn't count toward the statistics.
+  if (result.scoring && result.scoring.met + result.scoring.partial === 0) return;
 
   const ops = [
     redis.incr(STATS_PREFIX + 'jd-stats:total'),
@@ -675,8 +686,11 @@ export default async function handler(req, res) {
     }
 
     const result = buildResult(requirements, parsed.summary, evidence);
-    await cacheSet(cacheKey, result);
-    await recordStats(result);
+       // Only cache results with at least one match, so a bad model response can't be served again.
+       if (result.scoring && result.scoring.met + result.scoring.partial > 0) {
+        await cacheSet(cacheKey, result);
+      }
+      await recordStats(result);
     return res.status(200).json(result);
   } catch (err) {
     if (err.status) return res.status(err.status).json({ error: err.message });
