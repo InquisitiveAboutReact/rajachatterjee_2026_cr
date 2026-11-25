@@ -40,4 +40,18 @@ export const SKILLS = [
     lastUsed: 2026,
     text: 'Model Context Protocol (MCP). Built and run a custom MCP server for this portfolio (api/mcp.js) that exposes profile information to AI clients, with a recruiter MCP widget on the site. Last used: 2026.',
   },
+  {
+    id: 'skill-agile-scrum',
+    category: 'skill',
+    tier: 'primary',
+    lastUsed: 2026,
+    text: 'Agile delivery and Scrum. Expert in Agile and Scaled Agile (SAFe) methodologies. Served as Technical Scrum Master and Manager of Projects in 2020-2021, running Agile teams with JIRA, Confluence and MURAL, and using Kanban. Holds no Agile certification. Last used: 2021.',
+  },
+  {
+    id: 'skill-oracle-hcm',
+    category: 'skill',
+    tier: 'primary',
+    lastUsed: 2026,
+    text: 'Oracle HCM Cloud (Oracle Cloud Fusion HCM R13) implementation, including US and Global Payroll engines and Absence Management configuration. Oracle Global HR Cloud and Oracle Payroll Cloud certified implementation professional. Currently setting up an Oracle Apps team. Last used: 2026.',
+  },
 ];

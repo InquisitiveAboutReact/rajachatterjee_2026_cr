@@ -22,7 +22,7 @@ const MIN_REQUIREMENTS = 3;
 const MIN_JD_WORDS = 80;
 const MIN_JD_SIGNALS = 4;
 const KEYWORD_MAX_CHARS = 400;
-const CACHE_VERSION = 'v13'; // bump this when the profile data or scoring rules change
+const CACHE_VERSION = 'v14'; // bump this when the profile data or scoring rules change
 const CACHE_TTL_SECONDS = 60 * 60 * 24 * 30;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 
