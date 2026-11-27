@@ -442,7 +442,6 @@ const AgentSandboxWidget = ({ isOpen: externalIsOpen, setIsOpen: externalSetIsOp
                         >
                           <span style={{ fontSize: '13px', fontWeight: 500, color: '#e2e8f0' }}>{step.node}</span>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#94a3b8' }}>{step.timeMs}ms</span>
                             <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: isError ? '#f43f5e' : '#34d399' }} />
                           </div>
                         </div>
