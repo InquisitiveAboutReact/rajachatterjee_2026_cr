@@ -38,8 +38,11 @@ const AgentSandboxWidget = ({ isOpen: externalIsOpen, setIsOpen: externalSetIsOp
         body: JSON.stringify({ prompt: activeQuery }),
       });
 
+      if (res.status === 429) {
+        throw new Error('This demo has reached its hourly limit. Please try again later.');
+      }
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        throw new Error('The sandbox is temporarily unavailable. Please try again shortly.');
       }
 
       const rawData = await res.json();
@@ -62,7 +65,7 @@ const AgentSandboxWidget = ({ isOpen: externalIsOpen, setIsOpen: externalSetIsOp
     } catch (err) {
       console.error('Sandbox Execution Error:', err);
       setResponse({
-        output: `Execution Error: ${err.message}. Ensure your n8n workflow is published and active.`,
+        output: err.message,
         executionSteps: [{ node: 'Webhook Request', timeMs: 0, status: 'error' }]
       });
     } finally {
