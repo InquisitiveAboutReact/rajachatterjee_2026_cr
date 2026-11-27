@@ -31,6 +31,7 @@ import FeedbackReactionWidget from './components/FeedbackReactionWidget';
 import MCPWidgetModal from './components/MCPWidgetModal';
 import { ToastProvider } from './components/ToastNotifications/ToastContext';
 import RecruiterInsights from './components/RecruiterInsights/RecruiterInsights';
+import AgentSandboxWidget from './components/AgentSandboxWidget';
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
 
@@ -799,6 +800,7 @@ function App() {
       
       <RAGChatbot onQuery={() => trackAnalyticsEvent('copilotQueries')} />
       <SpeedInsights />
+      <AgentSandboxWidget />
       <Analytics /> 
       <ScrollToTop />
     </main>
